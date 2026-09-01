@@ -143,11 +143,10 @@
   .capture {
     margin-top: 44px;
     display: flex;
+    flex-direction: column;
     gap: 12px;
     max-width: 480px;
     width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
   }
 
   .capture input[type="email"],
@@ -168,6 +167,7 @@
   .capture input[type="text"]:focus { border-color: var(--deep-blue); }
 
   .capture button {
+    width: 100%;
     padding: 16px 30px;
     border-radius: 2px;
     border: 2px solid var(--deep-blue);
