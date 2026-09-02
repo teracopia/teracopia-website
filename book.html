@@ -41,6 +41,11 @@
   .chapter-list h3 { font-size: 1.05rem; margin-bottom: 4px; }
   .chapter-list p { margin: 0; color: var(--ink-soft); font-size: 0.98rem; }
 
+  @media (max-width: 480px) {
+    .chapter-list li { grid-template-columns: 1fr; gap: 6px; }
+    .chapter-num { font-size: 1.1rem; }
+  }
+
   .waitlist-note {
     display: block;
     margin-top: 14px;
