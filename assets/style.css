@@ -83,6 +83,7 @@ nav.site-nav {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -311,7 +312,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 @media (max-width: 720px) {
   nav.site-nav { justify-content: center; text-align: center; }
   .nav-right { justify-content: center; }
-  .nav-links { gap: 20px; justify-content: center; }
+  .nav-links { gap: 16px 20px; justify-content: center; flex-wrap: wrap; }
   footer.site-footer { flex-direction: column; text-align: center; }
   .about-grid { grid-template-columns: 1fr; gap: 16px; }
   .pillar-grid { grid-template-columns: 1fr; gap: 48px; }
