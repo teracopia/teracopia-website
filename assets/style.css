@@ -326,9 +326,9 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 .blog-card {
   display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line);
-  padding: 32px 28px; text-decoration: none; transition: border-color 0.2s ease;
+  padding: 32px 28px; text-decoration: none; transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
-.blog-card:hover { border-color: var(--deep-blue); }
+.blog-card:hover { border-color: var(--deep-blue); transform: translateY(-3px); box-shadow: 0 12px 24px -16px rgba(10,13,20,0.25); }
 .blog-card .blog-tag {
   font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.76rem; letter-spacing: 0.1em;
   text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
