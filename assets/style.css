@@ -8,8 +8,7 @@
   --mid-blue: #3654C4;
   --night: #0B1330;
   --night-panel: #131C42;
-  --gold: #B9863A;
-  --gold-soft: #D9B579;
+  --sky: #B9C2DD;
   --line: #DCE1EA;
   --max: 1040px;
 }
@@ -100,7 +99,7 @@ nav.site-nav {
 }
 
 .nav-links a:hover,
-.nav-links a[aria-current="page"] { color: var(--deep-blue); border-color: var(--gold); }
+.nav-links a[aria-current="page"] { color: var(--deep-blue); border-color: var(--deep-blue); }
 
 .nav-cta {
   font-family: 'Jost', sans-serif;
@@ -146,11 +145,9 @@ nav.site-nav {
 .btn-primary { background: var(--deep-blue); color: var(--white); border: 2px solid var(--deep-blue); }
 .btn-primary:hover { background: var(--white); color: var(--deep-blue); }
 
-.btn-gold { background: var(--gold); color: var(--white); border: 2px solid var(--gold); }
-.btn-gold:hover { background: var(--white); color: var(--gold); }
 
 .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
-.btn-ghost:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
+.btn-ghost:hover { border-color: var(--sky); color: var(--sky); }
 
 .btn-outline-dark { background: transparent; color: var(--ink); border: 2px solid var(--line); }
 .btn-outline-dark:hover { border-color: var(--deep-blue); color: var(--deep-blue); }
@@ -168,14 +165,11 @@ nav.site-nav {
   padding: 6px;
 }
 
-/* STARFIELD */
-.stars { position: absolute; inset: 0; pointer-events: none; }
-
 /* NIGHT SECTION */
 .night-section { position: relative; background: var(--night); color: var(--bg); overflow: hidden; }
-.night-section .eyebrow { color: var(--gold-soft); }
+.night-section .eyebrow { color: var(--sky); }
 .night-section h1, .night-section h2, .night-section h3 { color: var(--white); }
-.night-section p { color: #B9C2DD; }
+.night-section p { color: var(--sky); }
 .night-section .content { position: relative; z-index: 1; }
 
 /* GENERIC PAGE HERO (about / book) */
@@ -186,7 +180,7 @@ nav.site-nav {
   margin: 24px auto 0;
   max-width: 38em;
   font-size: 1.15rem;
-  color: #B9C2DD;
+  color: var(--sky);
 }
 
 /* FORM (signup capture) */
@@ -224,7 +218,7 @@ nav.site-nav {
 .pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
 .pillar { padding: 0 36px; text-align: center; }
 .pillar:not(:last-child) { border-right: 1px solid var(--line); }
-.pillar-num { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--gold); letter-spacing: 0.1em; }
+.pillar-num { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--deep-blue); letter-spacing: 0.1em; }
 .pillar h3 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.25rem; margin: 14px 0 14px 0; }
 .pillar p { font-family: 'Manrope', sans-serif; color: var(--ink-soft); font-size: 1rem; font-weight: 400; margin: 0; }
 
@@ -242,7 +236,7 @@ nav.site-nav {
 .timeline { padding: 20px 0 96px; }
 .timeline-row { display: grid; grid-template-columns: 90px 1fr; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
 .timeline-row:last-child { border-bottom: 1px solid var(--line); }
-.timeline-year { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--gold); letter-spacing: 0.06em; padding-top: 4px; }
+.timeline-year { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--deep-blue); letter-spacing: 0.06em; padding-top: 4px; }
 .timeline-body h3 { font-size: 1.2rem; margin-bottom: 8px; }
 .timeline-body p { margin: 0; color: var(--ink-soft); max-width: 42em; }
 
@@ -256,7 +250,7 @@ nav.site-nav {
 .offer-price .was { font-family: 'Manrope', sans-serif; font-size: 1.1rem; color: var(--ink-soft); text-decoration: line-through; margin-right: 10px; }
 .offer-list { list-style: none; margin: 20px 0 28px; padding: 0; }
 .offer-list li { position: relative; padding-left: 28px; margin-bottom: 12px; color: var(--ink); }
-.offer-list li::before { content: "✓"; position: absolute; left: 0; color: var(--gold); font-weight: 700; }
+.offer-list li::before { content: "✓"; position: absolute; left: 0; color: var(--deep-blue); font-weight: 700; }
 .offer-fine { margin-top: 18px; font-size: 0.88rem; color: var(--ink-soft); }
 
 /* BOOK COVER MOCKUP */
@@ -276,7 +270,7 @@ nav.site-nav {
 .book-cover .bc-title {
   font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.5rem; line-height: 1.28; color: var(--white);
 }
-.book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--gold-soft); margin-top: 10px; }
+.book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--sky); margin-top: 10px; }
 .book-cover .bc-foot { font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.16em; color: #8E9BC4; text-transform: uppercase; }
 
 /* TESTIMONIAL GRID */
@@ -331,7 +325,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .blog-card:hover { border-color: var(--deep-blue); transform: translateY(-3px); box-shadow: 0 12px 24px -16px rgba(10,13,20,0.25); }
 .blog-card .blog-tag {
   font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.76rem; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  text-transform: uppercase; color: var(--deep-blue); margin-bottom: 14px;
 }
 .blog-card h3 { font-size: 1.2rem; margin-bottom: 12px; color: var(--ink); }
 .blog-card p { margin: 0; color: var(--ink-soft); font-size: 0.98rem; flex-grow: 1; }
@@ -345,7 +339,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .article-hero { padding: 88px 0 40px; }
 .article-hero .article-meta {
   font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--gold);
+  text-transform: uppercase; color: var(--deep-blue);
 }
 .article-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin-top: 14px; max-width: 16em; }
 .article-hero .article-dek { margin-top: 20px; font-size: 1.15rem; color: var(--ink-soft); max-width: 38em; }
@@ -358,7 +352,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .article-content ul, .article-content ol { margin: 0 0 22px; padding-left: 24px; color: var(--ink); }
 .article-content li { margin-bottom: 10px; }
 .article-content blockquote {
-  margin: 36px 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--gold);
+  margin: 36px 0; padding: 4px 0 4px 24px; border-left: 3px solid var(--deep-blue);
   font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--deep-blue);
 }
 .article-cta {
@@ -373,8 +367,8 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--night); color: var(--white); }
 .stat { padding: 44px 32px; text-align: center; }
 .stat:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.12); }
-.stat-num { font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--gold-soft); white-space: nowrap; }
-.stat-label { margin-top: 8px; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: #B9C2DD; }
+.stat-num { font-family: 'Playfair Display', serif; font-weight: 700; font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--white); white-space: nowrap; }
+.stat-label { margin-top: 8px; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); }
 
 @media (max-width: 720px) {
   .stats-grid { grid-template-columns: 1fr; }
@@ -405,7 +399,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .related-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -16px rgba(10,13,20,0.25); }
 .related-card .blog-tag {
   display: block; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  text-transform: uppercase; color: var(--deep-blue); margin-bottom: 8px;
 }
 .related-card h4 {
   font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.02rem; color: var(--ink); margin: 0;
