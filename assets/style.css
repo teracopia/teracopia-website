@@ -379,3 +379,11 @@ footer .foot-links a:hover { color: var(--deep-blue); }
   .stats-grid { grid-template-columns: 1fr; }
   .stat:not(:last-child) { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); }
 }
+
+/* ARTICLE BACK LINK */
+.article-back {
+  display: inline-block; margin-bottom: 18px; font-family: 'Jost', sans-serif; font-weight: 500;
+  font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft);
+  text-decoration: none;
+}
+.article-back:hover { color: var(--deep-blue); }
