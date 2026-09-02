@@ -3,13 +3,15 @@
 Teracopia site builder.
 
 Source of truth lives under src/ — each page there is the full HTML file
-with the nav and footer replaced by two markers:
+with shared pieces replaced by markers:
   {{NAV:<active>}}   e.g. {{NAV:about}}, {{NAV:home}}, {{NAV:none}}
   {{FOOTER}}
+  {{THEME_INIT}}
 
-This script renders partials/nav.html and partials/footer.html into those
-markers and writes the finished, deployable HTML to the matching path at
-the repo root (the same files Cloudflare serves).
+This script renders partials/nav.html, partials/footer.html, and
+partials/theme-init.html into those markers and writes the finished,
+deployable HTML to the matching path at the repo root (the same files
+Cloudflare serves).
 
 Usage:
     python3 build.py
@@ -37,9 +39,11 @@ ACTIVE_MAP = {
 
 NAV_TEMPLATE = (PARTIALS / "nav.html").read_text()
 FOOTER_HTML = (PARTIALS / "footer.html").read_text()
+THEME_INIT_HTML = (PARTIALS / "theme-init.html").read_text()
 
 NAV_MARKER_RE = re.compile(r"\{\{NAV:(\w+)\}\}\n")
 FOOTER_MARKER_RE = re.compile(r"\{\{FOOTER\}\}\n")
+THEME_INIT_MARKER_RE = re.compile(r"\{\{THEME_INIT\}\}\n")
 
 
 def render_nav(active):
@@ -65,10 +69,15 @@ def build_file(src_path: Path, out_path: Path):
     if footer_count != 1:
         print(f"ERROR: {src_path} has {footer_count} FOOTER markers (expected 1)")
         return False
+    theme_init_count = len(THEME_INIT_MARKER_RE.findall(content))
+    if theme_init_count != 1:
+        print(f"ERROR: {src_path} has {theme_init_count} THEME_INIT markers (expected 1)")
+        return False
 
     active = nav_matches[0]
     content = NAV_MARKER_RE.sub(lambda m: render_nav(active), content, count=1)
     content = FOOTER_MARKER_RE.sub(FOOTER_HTML, content, count=1)
+    content = THEME_INIT_MARKER_RE.sub(THEME_INIT_HTML, content, count=1)
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(content)
