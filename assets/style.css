@@ -388,3 +388,28 @@ footer .foot-links a:hover { color: var(--deep-blue); }
   text-decoration: none;
 }
 .article-back:hover { color: var(--deep-blue); }
+
+/* RELATED ARTICLES */
+.related-articles {
+  max-width: 700px; margin: 56px auto 0; padding-top: 40px; border-top: 1px solid var(--line);
+}
+.related-articles h3 {
+  font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-soft); margin: 0 0 18px;
+}
+.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.related-card {
+  display: block; padding: 18px 20px; background: var(--bg-panel); border: 1px solid var(--line);
+  text-decoration: none; transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.related-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -16px rgba(10,13,20,0.25); }
+.related-card .blog-tag {
+  display: block; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.72rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+}
+.related-card h4 {
+  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.02rem; color: var(--ink); margin: 0;
+}
+@media (max-width: 640px) {
+  .related-grid { grid-template-columns: 1fr; }
+}
