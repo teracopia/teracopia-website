@@ -71,13 +71,16 @@
     </svg>
     <span class="brand-word">TERACOPIA</span>
   </a>
-  <div class="nav-right">
+  <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-right" id="nav-menu">
     <ul class="nav-links">
       <li><a href="/">Home</a></li>
       <li><a href="/about.html">About</a></li>
       <li><a href="/blog/">Blog</a></li>
       <li><a href="/faq.html">FAQ</a></li>
-      <li><a href="/book.html">Get the Book</a></li>
+      <li><a href="/book.html" class="nav-cta">Get the Book</a></li>
     </ul>
   </div>
 </nav>
@@ -174,5 +177,6 @@
   <span>&copy; 2026 Teracopia. Unlocking your highest self.</span>
 </footer>
 
+<script src="/assets/nav.js" defer></script>
 </body>
 </html>
