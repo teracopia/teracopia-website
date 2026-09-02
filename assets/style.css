@@ -122,6 +122,10 @@ nav.site-nav {
 }
 .theme-toggle:hover { color: var(--deep-blue); }
 .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
+}
 :root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
 
