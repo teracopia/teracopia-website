@@ -6,8 +6,8 @@
   --ink-soft: #5A6478;
   --deep-blue: #102EA0;
   --mid-blue: #3654C4;
-  --night: #0B1330;
-  --night-panel: #131C42;
+  --night: var(--deep-blue);
+  --night-panel: var(--mid-blue);
   --sky: #B9C2DD;
   --line: #DCE1EA;
   --max: 1040px;
