@@ -1,0 +1,30 @@
+<nav class="wrap site-nav">
+  <a class="brand" href="/">
+    <svg viewBox="-50 -50 260 260" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="navGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#102EA0" stop-opacity="0.702"/>
+          <stop offset="45%" stop-color="#102EA0" stop-opacity="0.234"/>
+          <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="80" cy="80" r="150" fill="url(#navGlow)"/>
+      <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
+        stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
+      <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
+    </svg>
+    <span class="brand-word">TERACOPIA</span>
+  </a>
+  <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-right" id="nav-menu">
+    <ul class="nav-links">
+      <li><a href="/"{{ACTIVE_HOME}}>Home</a></li>
+      <li><a href="/about.html"{{ACTIVE_ABOUT}}>About</a></li>
+      <li><a href="/blog/"{{ACTIVE_BLOG}}>Blog</a></li>
+      <li><a href="/faq.html"{{ACTIVE_FAQ}}>FAQ</a></li>
+      <li><a href="/book.html"{{ACTIVE_BOOK}} class="nav-cta">Get the Book</a></li>
+    </ul>
+  </div>
+</nav>
