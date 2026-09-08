@@ -1,47 +1,20 @@
 :root {
+  /* Navy is the site's single, permanent theme (no light mode / toggle). */
   --white: #FFFFFF;
-  --surface: #FFFFFF;
-  --bg: #F5F9FC;
-  --bg-panel: #EAF1F8;
-  --ink: #0A0D14;
-  --ink-soft: #5A6478;
-  --deep-blue: #102EA0;
-  --mid-blue: #3654C4;
-  --night: var(--deep-blue);
-  --night-panel: var(--mid-blue);
-  --sky: #B9C2DD;
-  --line: #DCE1EA;
-  --max: 1040px;
-  color-scheme: light;
-}
-
-/* DARK THEME — applied automatically for a system dark-mode preference
-   (unless the visitor has explicitly chosen light), and always when the
-   toggle sets data-theme="dark". */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --surface: #0B0E16;
-    --bg: #141826;
-    --bg-panel: #1B2036;
-    --ink: #EDEFF6;
-    --ink-soft: #9AA3C0;
-    --deep-blue: #6C8CEE;
-    --night: #102EA0;
-    --night-panel: #3654C4;
-    --line: #262B42;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
   --surface: #0B0E16;
   --bg: #141826;
   --bg-panel: #1B2036;
   --ink: #EDEFF6;
   --ink-soft: #9AA3C0;
   --deep-blue: #6C8CEE;
+  --logo-blue: #102EA0;
+  --mid-blue: #3654C4;
   --night: #102EA0;
   --night-panel: #3654C4;
+  --sky: #B9C2DD;
   --line: #262B42;
+  --on-night: #F5F9FC;
+  --max: 1040px;
   color-scheme: dark;
 }
 
@@ -107,27 +80,7 @@ nav.site-nav {
 
 .nav-controls { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px; height: 30px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: var(--ink-soft);
-  flex-shrink: 0;
-  transition: color 0.2s ease;
-}
-.theme-toggle:hover { color: var(--deep-blue); }
-.theme-toggle .icon-moon { display: none; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: none; }
-  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: block; }
-}
-:root[data-theme="dark"] .theme-toggle .icon-sun { display: none; }
-:root[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
 
 .nav-right { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; }
 
@@ -164,13 +117,13 @@ nav.site-nav {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--white) !important;
-  background: var(--deep-blue);
+  background: var(--logo-blue);
   padding: 10px 20px;
-  border: 2px solid var(--deep-blue);
+  border: 2px solid var(--logo-blue);
   text-decoration: none;
 }
 
-.nav-cta:hover { background: var(--white); color: var(--deep-blue) !important; }
+.nav-cta:hover { background: var(--white); color: var(--logo-blue) !important; }
 
 .nav-toggle {
   display: none;
@@ -222,8 +175,8 @@ nav.site-nav {
   white-space: nowrap;
 }
 
-.btn-primary { background: var(--deep-blue); color: var(--white); border: 2px solid var(--deep-blue); }
-.btn-primary:hover { background: var(--white); color: var(--deep-blue); }
+.btn-primary { background: var(--logo-blue); color: var(--white); border: 2px solid var(--logo-blue); }
+.btn-primary:hover { background: var(--white); color: var(--logo-blue); }
 
 
 .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
@@ -246,7 +199,7 @@ nav.site-nav {
 }
 
 /* NIGHT SECTION */
-.night-section { position: relative; background: var(--night); color: var(--bg); overflow: hidden; }
+.night-section { position: relative; background: var(--night); color: var(--on-night); overflow: hidden; }
 .night-section .eyebrow { color: var(--sky); }
 .night-section h1, .night-section h2, .night-section h3 { color: var(--white); }
 .night-section p { color: var(--sky); }
@@ -272,11 +225,11 @@ nav.site-nav {
 }
 .capture input[type="email"]:focus, .capture input[type="text"]:focus { border-color: var(--deep-blue); }
 .capture button {
-  width: 100%; padding: 16px 30px; border-radius: 2px; border: 2px solid var(--deep-blue); background: var(--deep-blue);
+  width: 100%; padding: 16px 30px; border-radius: 2px; border: 2px solid var(--logo-blue); background: var(--logo-blue);
   color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.06em;
   cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap;
 }
-.capture button:hover { background: var(--white); color: var(--deep-blue); }
+.capture button:hover { background: var(--white); color: var(--logo-blue); }
 .capture-note { margin-top: 16px; font-family: 'Manrope', sans-serif; font-size: 0.92rem; color: var(--ink-soft); font-weight: 400; }
 .capture-note strong { font-weight: 700; color: var(--ink); }
 .capture-errors { width: 100%; list-style: none; margin: 12px 0 0 0; padding: 0; }

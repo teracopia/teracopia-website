@@ -2,16 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') {
-        document.documentElement.setAttribute('data-theme', saved);
-      }
-    } catch (e) {}
-  })();
-</script>
+<!-- navy is the site's single theme; no runtime theme switching needed -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://teracopia.com/404.html">
 <title>Page Not Found — Teracopia</title>
@@ -52,10 +43,6 @@
     <span class="brand-word">TERACOPIA</span>
   </a>
   <div class="nav-controls">
-    <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
-      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
     <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
       <span></span><span></span><span></span>
     </button>
@@ -74,6 +61,14 @@
 <section class="notfound wrap">
   <span class="eyebrow">404</span>
   <svg class="notfound-mark" viewBox="-50 -50 260 260" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="notfoundGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#102EA0" stop-opacity="0.702"/>
+        <stop offset="45%" stop-color="#102EA0" stop-opacity="0.234"/>
+        <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="80" cy="80" r="150" fill="url(#notfoundGlow)"/>
     <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
       stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
     <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
