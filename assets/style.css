@@ -111,6 +111,10 @@ nav.site-nav {
 .nav-links a[aria-current="page"] { color: var(--deep-blue); border-color: var(--deep-blue); }
 
 .nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   font-family: 'Jost', sans-serif;
   font-weight: 500;
   font-size: 0.8rem !important;
@@ -225,6 +229,7 @@ nav.site-nav {
 }
 .capture input[type="email"]:focus, .capture input[type="text"]:focus { border-color: var(--deep-blue); }
 .capture button {
+  display: flex; align-items: center; justify-content: center; line-height: 1;
   width: 100%; padding: 16px 30px; border-radius: 2px; border: 2px solid var(--logo-blue); background: var(--logo-blue);
   color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.06em;
   cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap;
