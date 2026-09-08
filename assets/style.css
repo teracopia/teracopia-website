@@ -163,7 +163,11 @@ nav.site-nav {
   color: var(--deep-blue);
 }
 
-/* BUTTONS */
+/* BUTTONS
+   Standing pattern for every button on the site (nav CTA, capture form, and .btn):
+   uppercase, 0.08em letter-spacing, line-height: 1, flex-centered.
+   Filled/primary buttons hover with brightness(1.25) + a blue box-shadow glow
+   + border-color: var(--deep-blue). Keep new buttons consistent with this. */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -173,7 +177,9 @@ nav.site-nav {
   font-family: 'Jost', sans-serif;
   font-size: 0.92rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
@@ -181,7 +187,7 @@ nav.site-nav {
 }
 
 .btn-primary { background: var(--logo-blue); color: var(--white); border: 2px solid var(--logo-blue); }
-.btn-primary:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); }
+.btn-primary:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); border-color: var(--deep-blue); }
 
 
 .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
