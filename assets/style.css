@@ -232,7 +232,8 @@ nav.site-nav {
 .capture button {
   display: flex; align-items: center; justify-content: center; line-height: 1;
   width: 100%; padding: 16px 30px; border-radius: 2px; border: 2px solid var(--logo-blue); background: var(--logo-blue);
-  color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.06em;
+  color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap;
 }
 .capture button:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); }
