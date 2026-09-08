@@ -194,7 +194,7 @@ nav.site-nav {
 .btn-ghost:hover { border-color: var(--sky); color: var(--sky); }
 
 .btn-outline-dark { background: transparent; color: var(--ink); border: 2px solid rgba(255,255,255,0.35); }
-.btn-outline-dark:hover { border-color: var(--deep-blue); color: var(--deep-blue); }
+.btn-outline-dark:hover { border-color: var(--deep-blue); color: var(--deep-blue); box-shadow: 0 0 20px rgba(108,140,238,0.45); }
 
 /* DIVIDER + ORNAMENT */
 .divider-wrap { display: flex; justify-content: center; position: relative; }
