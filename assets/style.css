@@ -193,7 +193,7 @@ nav.site-nav {
 .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
 .btn-ghost:hover { border-color: var(--sky); color: var(--sky); }
 
-.btn-outline-dark { background: transparent; color: var(--ink); border: 2px solid var(--line); }
+.btn-outline-dark { background: transparent; color: var(--ink); border: 2px solid rgba(255,255,255,0.35); }
 .btn-outline-dark:hover { border-color: var(--deep-blue); color: var(--deep-blue); }
 
 /* DIVIDER + ORNAMENT */
