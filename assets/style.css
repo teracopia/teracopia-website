@@ -128,7 +128,7 @@ nav.site-nav {
   text-decoration: none;
 }
 
-.nav-cta:hover { background: var(--white); color: var(--logo-blue) !important; }
+.nav-cta:hover { filter: brightness(1.25); box-shadow: 0 0 22px rgba(54,84,196,0.65); }
 
 .nav-toggle {
   display: none;
@@ -181,7 +181,7 @@ nav.site-nav {
 }
 
 .btn-primary { background: var(--logo-blue); color: var(--white); border: 2px solid var(--logo-blue); }
-.btn-primary:hover { background: var(--white); color: var(--logo-blue); }
+.btn-primary:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); }
 
 
 .btn-ghost { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.4); }
@@ -235,7 +235,7 @@ nav.site-nav {
   color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.06em;
   cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap;
 }
-.capture button:hover { background: var(--white); color: var(--logo-blue); }
+.capture button:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); }
 .capture-note { margin-top: 16px; font-family: 'Manrope', sans-serif; font-size: 0.92rem; color: var(--ink-soft); font-weight: 400; }
 .capture-note strong { font-weight: 700; color: var(--ink); }
 .capture-errors { width: 100%; list-style: none; margin: 12px 0 0 0; padding: 0; }
