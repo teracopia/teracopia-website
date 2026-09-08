@@ -23,7 +23,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #0B0E16 0%, #162042 50%, #213169 100%);
+  background: linear-gradient(180deg, #0B0E16 0%, #0F193A 50%, #13245E 100%);
   background-attachment: scroll;
   color: var(--ink);
   font-family: 'Manrope', sans-serif;
