@@ -68,7 +68,7 @@ nav.site-nav {
   text-decoration: none;
 }
 
-.brand svg { width: 40px; height: 40px; flex-shrink: 0; }
+.brand svg { width: 34px; height: 34px; flex-shrink: 0; }
 
 .brand-word {
   font-family: 'Jost', sans-serif;
