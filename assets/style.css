@@ -279,7 +279,7 @@ nav.site-nav {
 .pillar-icon { display: flex; justify-content: center; margin-bottom: 18px; }
 .pillar-icon svg { width: 40px; height: 40px; filter: drop-shadow(0 0 10px rgba(108,140,238,0.55)); }
 .pillar:not(:last-child) { border-right: 1px solid var(--line); }
-.pillar-num { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--deep-blue); letter-spacing: 0.1em; }
+.pillar-num { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--deep-blue); }
 .pillar h3 { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.25rem; margin: 14px 0 14px 0; }
 .pillar p { font-family: 'Manrope', sans-serif; color: var(--ink-soft); font-size: 1rem; font-weight: 400; margin: 0; }
 
@@ -377,7 +377,7 @@ footer.site-footer::before {
 }
 footer.site-footer .brand-word { font-size: 1rem; }
 footer .foot-links { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }
-footer .foot-links a { text-decoration: none; color: var(--ink-soft); }
+footer .foot-links a { text-decoration: none; color: var(--ink-soft); white-space: nowrap; }
 footer .foot-links a:hover { color: var(--deep-blue); }
 
 @media (max-width: 860px) {
