@@ -262,7 +262,8 @@ nav.site-nav {
 .about-body p.pull { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: var(--deep-blue); line-height: 1.5; }
 
 /* PILLARS / 3-UP FEATURE GRID */
-.pillars { padding: 96px 0; }
+.pillars { padding: 96px 0 56px; }
+.about.firsthand { padding-top: 40px; }
 .pillars-head { text-align: center; margin-bottom: 64px; }
 .pillars-head h2 { font-size: 2rem; }
 .pillar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
