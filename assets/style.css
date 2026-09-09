@@ -400,6 +400,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
   .nav-links a { font-size: 0.95rem; }
   .nav-cta { display: inline-block; margin-top: 4px; }
   footer.site-footer { flex-direction: column; text-align: center; }
+  footer .foot-links { flex-wrap: wrap; justify-content: center; row-gap: 10px; }
   .about-grid { grid-template-columns: 1fr; gap: 16px; }
   .pillar-grid { grid-template-columns: 1fr; gap: 48px; }
   .pillar:not(:last-child) { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 40px; }
