@@ -311,7 +311,7 @@ nav.site-nav {
   position: relative;
   width: 100%;
   aspect-ratio: 5 / 7;
-  background: linear-gradient(160deg, var(--night) 0%, var(--night-panel) 100%);
+  background: var(--logo-blue);
   color: var(--white);
   padding: 30px 24px;
   display: flex;
@@ -319,14 +319,17 @@ nav.site-nav {
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  box-shadow: -10px 10px 0 var(--white), -12px 12px 0 var(--white), 0 30px 50px -20px rgba(10,13,20,0.45);
+  border-radius: 10px;
+  box-shadow: -10px 10px 0 #C9D2E8, -12px 12px 0 #C9D2E8, 0 30px 50px -20px rgba(10,13,20,0.45);
 }
-.book-cover .bc-mark { width: 40px; height: 40px; }
+.book-cover .bc-mark { width: 40px; height: 40px; filter: drop-shadow(0 0 8px rgba(108,140,238,0.7)); }
+.book-cover .bc-mark path, .book-cover .bc-mark circle { stroke: var(--deep-blue); }
 .book-cover .bc-title {
   font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.5rem; line-height: 1.28; color: var(--white);
 }
 .book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--sky); margin-top: 10px; }
-.book-cover .bc-foot { font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.16em; color: #8E9BC4; text-transform: uppercase; }
+.book-cover .bc-divider { width: 60%; height: 1px; background: var(--deep-blue); box-shadow: 0 0 8px rgba(108,140,238,0.6); }
+.book-cover .bc-foot { font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.16em; color: var(--deep-blue); text-transform: uppercase; }
 
 /* TESTIMONIAL GRID */
 .testimonials { padding: 20px 0 100px; }
