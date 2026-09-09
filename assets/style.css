@@ -217,7 +217,7 @@ nav.site-nav {
 .night-section p { color: var(--sky); }
 .night-section .content { position: relative; z-index: 1; }
 
-/* GENERIC PAGE HERO (about / book) */
+/* GENERIC PAGE HERO (about / book / faq) */
 .page-hero { position: relative; padding: 84px 0 96px; overflow: hidden; }
 .page-hero .content { position: relative; z-index: 1; text-align: center; }
 .page-hero h1 { font-size: clamp(2.3rem, 5vw, 3.6rem); max-width: 16em; margin: 0 auto; }
@@ -225,8 +225,14 @@ nav.site-nav {
   margin: 24px auto 0;
   max-width: 38em;
   font-size: 1.15rem;
-  color: var(--sky);
+  color: var(--ink-soft);
 }
+
+/* CTA BAND (reused across about / faq / blog index / 404) */
+.cta-band { padding: 20px 0 100px; text-align: center; }
+.cta-band h2 { font-size: 1.9rem; max-width: 18em; margin: 0 auto 18px; }
+.cta-band p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
+.cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
 /* FORM (signup capture) */
 .capture { margin-top: 44px; display: flex; flex-direction: column; gap: 12px; max-width: 480px; width: 100%; }
