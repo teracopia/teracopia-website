@@ -338,7 +338,7 @@ nav.site-nav {
   font-family: 'Jost', sans-serif; font-weight: 500; font-size: 1.5rem; line-height: 1.28; color: var(--white);
 }
 .book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.66rem; line-height: 1.5; color: var(--sky); margin-top: 10px; }
-.book-cover .bc-foot { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--white); text-transform: uppercase; }
+.book-cover .bc-foot { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--white); text-transform: uppercase; margin-top: 24px; }
 
 /* TESTIMONIAL GRID */
 .testimonials { padding: 20px 0 100px; }
