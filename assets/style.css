@@ -297,7 +297,7 @@ nav.site-nav {
 .timeline { padding: 20px 0 96px; }
 .timeline-row { display: grid; grid-template-columns: 90px 1fr; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
 .timeline-row:last-child { border-bottom: 1px solid var(--line); }
-.timeline-year { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--deep-blue); letter-spacing: 0.06em; padding-top: 4px; }
+.timeline-year { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--deep-blue); padding-top: 2px; }
 .timeline-body h3 { font-size: 1.2rem; margin-bottom: 8px; }
 .timeline-body p { margin: 0; color: var(--ink-soft); max-width: 42em; }
 
