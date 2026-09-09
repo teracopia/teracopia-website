@@ -83,12 +83,12 @@
     grid-template-columns: 200px 1fr;
     gap: 48px;
     align-items: center;
-    background: var(--bg-panel);
+    background: var(--white);
     padding: 48px;
-    border: 1px solid var(--line);
+    border: 1px solid rgba(11,14,22,0.08);
   }
-  .book-teaser-grid h2 { font-size: 1.7rem; margin-bottom: 14px; }
-  .book-teaser-grid p { color: var(--ink-soft); max-width: 40em; margin: 0 0 22px; }
+  .book-teaser-grid h2 { font-size: 1.7rem; margin-bottom: 14px; color: var(--bg-panel); }
+  .book-teaser-grid p { color: #4A5170; max-width: 40em; margin: 0 0 22px; }
 
   @media (max-width: 720px) {
     .book-teaser-grid { grid-template-columns: 1fr; text-align: center; }
@@ -140,7 +140,7 @@
       <input name="email_address" aria-label="Email Address" placeholder="you@email.com" required type="email">
       <button data-element="submit" type="submit">Send Me the Guide</button>
     </form>
-    <p class="capture-note">Your Lucid Dreaming Quick-Start Guide, free. No spam, unsubscribe any time.</p>
+    <p class="capture-note">Your Lucid Dreaming Quick-Start Guide, for free. No spam, unsubscribe any time.</p>
   </div>
 </section>
 
