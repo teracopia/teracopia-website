@@ -252,10 +252,11 @@ nav.site-nav {
 
 /* ABOUT-STYLE TWO COLUMN BLOCK (eyebrow + body) — reused across pages */
 .about { padding: 88px 0; }
+.about:not(.firsthand) { padding-top: 48px; }
 .about-grid { display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
 .about-grid.centered { grid-template-columns: 1fr; text-align: center; gap: 20px; }
 .about-grid.centered .about-eyebrow { margin-bottom: 0; }
-.about-grid.centered .about-eyebrow span { font-size: 1.35rem; }
+.about-grid.centered .about-eyebrow span { font-size: 1.55rem; }
 .about-grid.centered .about-body p { margin-left: auto; margin-right: auto; max-width: 56em; color: var(--ink-soft); }
 .about-eyebrow span { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.16em; color: var(--deep-blue); }
 .about-body p { font-family: 'Manrope', sans-serif; font-size: 1.08rem; font-weight: 400; color: var(--ink); max-width: 42em; margin: 0 0 22px 0; }
@@ -280,7 +281,7 @@ nav.site-nav {
 .excerpt-section { padding: 40px 0 40px; }
 .excerpt-panel { background: var(--surface); padding: 64px 72px; text-align: center; border: 2px solid var(--deep-blue); border-radius: 8px; box-shadow: 0 0 40px rgba(108,140,238,0.35); }
 .excerpt-panel .eyebrow-alt {
-  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: 0.16em;
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.55rem; letter-spacing: 0.16em;
   color: var(--deep-blue); display: block; margin-bottom: 24px;
 }
 .excerpt-quote { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.5rem; line-height: 1.55; color: var(--ink); max-width: 40em; margin: 0 auto; }
@@ -364,9 +365,9 @@ footer.site-footer::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 1px;
+  height: 2px;
   background: var(--deep-blue);
-  box-shadow: 0 0 10px rgba(108,140,238,0.5);
+  box-shadow: 0 0 12px rgba(108,140,238,0.6);
 }
 footer.site-footer .brand-word { font-size: 1rem; }
 footer .foot-links { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; }
