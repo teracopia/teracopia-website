@@ -282,7 +282,7 @@ nav.site-nav {
   font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: 0.16em;
   color: var(--deep-blue); display: block; margin-bottom: 24px;
 }
-.excerpt-quote { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.5rem; line-height: 1.55; color: var(--ink); max-width: 26em; margin: 0 auto; }
+.excerpt-quote { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.5rem; line-height: 1.55; color: var(--ink); max-width: 40em; margin: 0 auto; }
 .excerpt-quote cite { display: block; margin-top: 24px; font-family: 'Manrope', sans-serif; font-style: normal; font-weight: 500; font-size: 0.88rem; color: var(--ink-soft); }
 
 /* TIMELINE (about page journey) */
