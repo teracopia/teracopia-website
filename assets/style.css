@@ -163,7 +163,7 @@ nav.site-nav {
   color: var(--deep-blue);
 }
 
-/* BUTTONS
+/* BUTTONS (redeploy trigger)
    Standing pattern for every button on the site (nav CTA, capture form, and .btn):
    uppercase, 0.08em letter-spacing, line-height: 1, flex-centered.
    Filled/primary buttons hover with brightness(1.25) + a blue box-shadow glow
