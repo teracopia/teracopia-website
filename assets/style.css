@@ -276,10 +276,10 @@ nav.site-nav {
 .pillar p { font-family: 'Manrope', sans-serif; color: var(--ink-soft); font-size: 1rem; font-weight: 400; margin: 0; }
 
 /* EXCERPT / QUOTE PANEL */
-.excerpt-section { padding-bottom: 100px; }
-.excerpt-panel { background: var(--bg-panel); padding: 64px 72px; text-align: center; }
+.excerpt-section { padding: 40px 0 100px; }
+.excerpt-panel { background: var(--surface); padding: 64px 72px; text-align: center; }
 .excerpt-panel .eyebrow-alt {
-  font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.82rem; letter-spacing: 0.14em;
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.35rem; letter-spacing: 0.16em;
   color: var(--deep-blue); display: block; margin-bottom: 24px;
 }
 .excerpt-quote { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 1.5rem; line-height: 1.55; color: var(--ink); max-width: 26em; margin: 0 auto; }
