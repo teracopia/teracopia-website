@@ -34,7 +34,7 @@ body {
 }
 
 h1, h2, h3, .display {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Jost', sans-serif;
   font-weight: 600;
   line-height: 1.18;
   margin: 0;
@@ -265,7 +265,7 @@ nav.site-nav {
 .pillar { padding: 0 36px; text-align: center; }
 .pillar:not(:last-child) { border-right: 1px solid var(--line); }
 .pillar-num { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--deep-blue); letter-spacing: 0.1em; }
-.pillar h3 { font-family: 'Playfair Display', serif; font-weight: 600; font-size: 1.25rem; margin: 14px 0 14px 0; }
+.pillar h3 { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.25rem; margin: 14px 0 14px 0; }
 .pillar p { font-family: 'Manrope', sans-serif; color: var(--ink-soft); font-size: 1rem; font-weight: 400; margin: 0; }
 
 /* EXCERPT / QUOTE PANEL */
@@ -316,7 +316,7 @@ nav.site-nav {
 }
 .book-cover .bc-mark { width: 40px; height: 40px; }
 .book-cover .bc-title {
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.5rem; line-height: 1.28; color: var(--white);
+  font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.5rem; line-height: 1.28; color: var(--white);
 }
 .book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.85rem; color: var(--sky); margin-top: 10px; }
 .book-cover .bc-foot { font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.16em; color: #8E9BC4; text-transform: uppercase; }
@@ -459,7 +459,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
   text-transform: uppercase; color: var(--deep-blue); margin-bottom: 8px;
 }
 .related-card h4 {
-  font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.02rem; color: var(--ink); margin: 0;
+  font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.02rem; color: var(--ink); margin: 0;
 }
 @media (max-width: 640px) {
   .related-grid { grid-template-columns: 1fr; }
