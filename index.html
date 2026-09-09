@@ -73,7 +73,7 @@
     font-size: 1.2rem;
     font-weight: 400;
     color: var(--ink-soft);
-    max-width: 34em;
+    max-width: 40em;
   }
 
   /* BOOK TEASER STRIP */
@@ -83,12 +83,12 @@
     grid-template-columns: 200px 1fr;
     gap: 48px;
     align-items: center;
-    background: var(--white);
+    background: var(--bg-panel);
     padding: 48px;
-    border: 1px solid rgba(11,14,22,0.08);
+    border: 1px solid var(--line);
   }
-  .book-teaser-grid h2 { font-size: 1.7rem; margin-bottom: 14px; color: var(--bg-panel); }
-  .book-teaser-grid p { color: #4A5170; max-width: 40em; margin: 0 0 22px; }
+  .book-teaser-grid h2 { font-size: 1.7rem; margin-bottom: 14px; }
+  .book-teaser-grid p { color: var(--ink-soft); max-width: 40em; margin: 0 0 22px; }
 
   @media (max-width: 720px) {
     .book-teaser-grid { grid-template-columns: 1fr; text-align: center; }

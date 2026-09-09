@@ -312,7 +312,7 @@ nav.site-nav {
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  box-shadow: -10px 10px 0 var(--bg), -12px 12px 0 var(--line), 0 30px 50px -20px rgba(10,13,20,0.45);
+  box-shadow: -10px 10px 0 var(--white), -12px 12px 0 var(--white), 0 30px 50px -20px rgba(10,13,20,0.45);
 }
 .book-cover .bc-mark { width: 40px; height: 40px; }
 .book-cover .bc-title {
