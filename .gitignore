@@ -1,0 +1,14 @@
+# OS/editor cruft
+.DS_Store
+.vscode/
+*.swp
+
+# Secrets and local env files, never commit these
+.env
+.env.*
+*.pem
+*.key
+
+# Build tooling caches
+.wrangler/
+node_modules/
