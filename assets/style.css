@@ -332,7 +332,7 @@ nav.site-nav {
   position: absolute;
   inset: 0;
   background: #C9D2E8;
-  border-radius: 3px;
+  border-radius: 0;
 }
 .bc-depth-1 { transform: translate(-10px, 10px); }
 .bc-depth-2 { transform: translate(-12px, 12px); }
