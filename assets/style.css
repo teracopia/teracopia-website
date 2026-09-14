@@ -304,6 +304,7 @@ nav.site-nav {
 .excerpt-quote cite { display: block; margin-top: 24px; font-family: 'Manrope', sans-serif; font-style: normal; font-weight: 500; font-size: 0.88rem; color: var(--ink-soft); }
 .excerpt-quote p { margin: 0 0 20px 0; }
 .excerpt-quote p:last-child { margin-bottom: 0; }
+.excerpt-quote.hero-font { font-family: 'Manrope', sans-serif; font-size: 1.2rem; font-weight: 400; line-height: 1.65; color: var(--ink-soft); }
 
 /* TIMELINE (about page journey) */
 .timeline { padding: 20px 0 96px; }
