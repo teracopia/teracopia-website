@@ -332,7 +332,7 @@ nav.site-nav {
   position: absolute;
   inset: 0;
   background: #C9D2E8;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 .bc-depth-1 { transform: translate(-10px, 10px); }
 .bc-depth-2 { transform: translate(-12px, 12px); }
@@ -348,7 +348,7 @@ nav.site-nav {
   align-items: center;
   justify-content: space-between;
   text-align: center;
-  border-radius: 6px;
+  border-radius: 10px;
   box-shadow: 0 30px 50px -20px rgba(10,13,20,0.45);
 }
 .book-cover .bc-mark { width: 40px; height: 40px; filter: drop-shadow(0 0 8px rgba(108,140,238,0.7)); }
