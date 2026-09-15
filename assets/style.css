@@ -322,8 +322,11 @@ nav.site-nav {
 .offer-price { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--deep-blue); margin: 18px 0 6px; }
 .offer-price .was { font-family: 'Manrope', sans-serif; font-size: 1.1rem; color: var(--ink-soft); text-decoration: line-through; margin-right: 10px; }
 .offer-list { list-style: none; margin: 20px 0 28px; padding: 0; }
-.offer-list li { position: relative; padding-left: 28px; margin-bottom: 12px; color: var(--ink); }
-.offer-list li::before { content: "✓"; position: absolute; left: 0; color: var(--deep-blue); font-weight: 700; }
+.offer-list li { position: relative; padding-left: 32px; margin-bottom: 12px; color: var(--ink); }
+.offer-list .check-icon {
+  position: absolute; left: 0; top: 2px; width: 22px; height: 22px;
+  filter: drop-shadow(0 0 10px rgba(108,140,238,0.55));
+}
 .offer-fine { margin-top: 18px; font-size: 0.88rem; color: var(--ink-soft); }
 
 /* BOOK COVER MOCKUP */
