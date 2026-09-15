@@ -27,10 +27,11 @@ ROOT = Path(__file__).parent
 SRC = ROOT / "src"
 PARTIALS = ROOT / "partials"
 
-NAV_KEYS = ["HOME", "ABOUT", "BLOG", "FAQ", "BOOK"]
+NAV_KEYS = ["HOME", "ABOUT", "COACHING", "BLOG", "FAQ", "BOOK"]
 ACTIVE_MAP = {
     "home": "HOME",
     "about": "ABOUT",
+    "coaching": "COACHING",
     "blog": "BLOG",
     "faq": "FAQ",
     "book": "BOOK",
