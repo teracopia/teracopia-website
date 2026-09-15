@@ -317,7 +317,8 @@ nav.site-nav {
 .offer { padding: 20px 0 100px; }
 .offer-card {
   display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: center;
-  background: var(--bg-panel); padding: 56px; border: 1px solid var(--line);
+  background: var(--bg-panel); padding: 56px; border: 2px solid var(--deep-blue);
+  border-radius: 8px; box-shadow: 0 0 40px rgba(108,140,238,0.35);
 }
 .offer-price { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--deep-blue); margin: 18px 0 6px; }
 .offer-price .was { font-family: 'Manrope', sans-serif; font-size: 1.1rem; color: var(--ink-soft); text-decoration: line-through; margin-right: 10px; }
@@ -359,7 +360,7 @@ nav.site-nav {
 .book-cover .bc-title {
   font-family: 'Jost', sans-serif; font-weight: 500; font-size: 1.5rem; line-height: 1.28; color: var(--white);
 }
-.book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.66rem; line-height: 1.5; color: var(--sky); margin-top: 10px; }
+.book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.66rem; line-height: 1.5; color: var(--sky); margin-top: 22px; }
 .book-cover .bc-foot { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--white); text-transform: uppercase; margin-top: 24px; }
 
 /* TESTIMONIAL GRID */
