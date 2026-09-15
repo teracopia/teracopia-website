@@ -32,7 +32,28 @@
   .book-hero h1 { max-width: 15em; }
   .book-hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
 
-  .book-cover-wrap { cursor: pointer; }
+  .book-cover-wrap {
+    cursor: pointer;
+    transition: transform 0.25s ease;
+  }
+  .book-cover-wrap:hover { transform: translateY(-4px); }
+  .bc-hover-overlay {
+    position: absolute; inset: 0; border-radius: 10px;
+    background: var(--panel-navy);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    opacity: 0; transition: opacity 0.25s ease;
+    text-align: center; padding: 20px;
+  }
+  .book-cover-wrap:hover .bc-hover-overlay,
+  .book-cover-wrap:focus-visible .bc-hover-overlay { opacity: 1; }
+  .bc-hover-overlay svg {
+    width: 30px; height: 30px;
+    filter: drop-shadow(0 0 10px rgba(108,140,238,0.55));
+  }
+  .bc-hover-overlay span {
+    font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.85rem;
+    letter-spacing: 0.04em; color: var(--white);
+  }
   .bc-peek-hint {
     text-align: center; margin-top: 16px; font-size: 0.82rem; color: var(--ink-soft);
   }
@@ -140,6 +161,13 @@
             <div class="bc-sub">Building a Consistent Practice<br>for Mastering Your Dreams</div>
           </div>
           <div class="bc-foot">Teracopia</div>
+        </div>
+        <div class="bc-hover-overlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6C8CEE" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+            <circle cx="12" cy="12" r="3.2"/>
+          </svg>
+          <span>See what's inside</span>
         </div>
       </div>
       <p class="bc-peek-hint">Click the cover for a peek inside</p>
