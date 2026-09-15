@@ -36,6 +36,19 @@
     color: var(--deep-blue); text-transform: uppercase; margin: 56px 0 4px;
   }
   .faq-group-label:first-child { margin-top: 0; }
+
+  .cta-card {
+    background: var(--panel-navy);
+    padding: 56px;
+    border: 1px solid rgba(108,140,238,0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(108,140,238,0.15);
+    text-align: center;
+  }
+  .cta-card h2 { font-size: 1.9rem; max-width: 18em; margin: 0 auto 18px; }
+  .cta-card p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
+  .cta-section { padding-bottom: 80px; }
+
   script[type="application/ld+json"] { display: none; }
 </style>
 <script type="application/ld+json">
@@ -108,14 +121,14 @@
   </div>
 </section>
 
-<div class="divider-wrap"><div class="divider"></div></div>
-
-<section class="cta-band wrap">
-  <h2>Ready to start tonight?</h2>
-  <p>Grab the free Quick-Start Guide, or go all in with the complete method in the full book.</p>
-  <div class="cta-buttons">
-    <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
-    <a class="btn btn-primary" href="/book.html">Get the Full Book</a>
+<section class="excerpt-section wrap cta-section">
+  <div class="cta-card">
+    <h2>Your Journey Begins Here</h2>
+    <p>Grab the free Quick-Start Guide, or go all in with the complete method in the full book.</p>
+    <div class="cta-buttons">
+      <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
+      <a class="btn btn-primary" href="/book.html">Get the Full Book</a>
+    </div>
   </div>
 </section>
 
