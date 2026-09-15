@@ -28,8 +28,28 @@
 <link rel="alternate" type="application/rss+xml" title="Teracopia Blog" href="/rss.xml">
 <style>
   .blog-hero { padding: 96px 0 20px; text-align: center; }
+  .blog-hero .eyebrow { font-size: 1rem; }
   .blog-hero h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+  .blog-hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
   .blog-hero p { margin: 20px auto 0; max-width: 34em; color: var(--ink-soft); font-size: 1.1rem; }
+
+  .blog-card {
+    background: var(--surface); border: 2px solid var(--deep-blue); border-radius: 8px;
+    box-shadow: 0 0 40px rgba(108,140,238,0.35);
+  }
+  .blog-card:hover { transform: translateY(-3px); }
+
+  .cta-card {
+    background: var(--panel-navy);
+    padding: 56px;
+    border: 1px solid rgba(108,140,238,0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(108,140,238,0.15);
+    text-align: center;
+  }
+  .cta-card h2 { font-size: 1.9rem; max-width: 20em; margin: 0 auto 18px; }
+  .cta-card p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
+  .cta-section { padding-bottom: 80px; }
 </style>
 </head>
 <body>
@@ -72,8 +92,8 @@
 
 <section class="blog-hero wrap">
   <span class="eyebrow">THE TERACOPIA BLOG</span>
-  <h1 style="margin-top: 14px;">Notes from the practice</h1>
-  <p>Short, practical writing on lucid dreaming, dream recall, and the small habits that make noticing you're dreaming a skill instead of an accident.</p>
+  <h1 style="margin-top: 14px;"><span class="hl">Notes</span> from the practice</h1>
+  <p>Stay up to date with new and simple articles on all things lucid dreaming.</p>
 </section>
 
 <section class="blog-list wrap">
@@ -117,14 +137,14 @@
   </div>
 </section>
 
-<div class="divider-wrap"><div class="divider"></div></div>
-
-<section class="cta-band wrap">
-  <h2>Want the complete method, not just the highlights?</h2>
-  <p>The blog covers the ideas. The guide and the full book cover the practice.</p>
-  <div class="cta-buttons">
-    <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
-    <a class="btn btn-primary" href="/book.html">Get the Full Book</a>
+<section class="excerpt-section wrap cta-section">
+  <div class="cta-card">
+    <h2>Want the complete method, not just the highlights?</h2>
+    <p>The blog covers new ideas. The free start guide and the full ebook cover the practice.</p>
+    <div class="cta-buttons">
+      <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
+      <a class="btn btn-primary" href="/book.html">Get the Full Book</a>
+    </div>
   </div>
 </section>
 
