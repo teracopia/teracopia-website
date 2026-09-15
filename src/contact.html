@@ -30,17 +30,16 @@
   .contact-hero h1 { font-size: clamp(2.2rem, 5vw, 3rem); }
   .contact-hero p { margin: 20px auto 0; max-width: 34em; color: var(--ink-soft); font-size: 1.1rem; }
 
-  .contact-panel { padding: 40px 0 100px; }
-  .contact-card {
-    max-width: 620px; margin: 0 auto; background: var(--bg-panel); border: 1px solid var(--line);
-    padding: 56px; text-align: center;
-  }
+  .contact-panel .excerpt-panel { max-width: 620px; margin: 0 auto; }
   .contact-email {
     display: inline-block; margin-top: 8px; font-family: 'Playfair Display', serif; font-size: 1.5rem;
     color: var(--deep-blue); text-decoration: none; border-bottom: 2px solid var(--deep-blue);
   }
   .contact-email:hover { color: var(--mid-blue); }
-  .contact-note { margin-top: 28px; color: var(--ink-soft); font-size: 0.95rem; max-width: 34em; margin-left: auto; margin-right: auto; }
+  .contact-note {
+    margin-top: 28px; font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 1.2rem;
+    line-height: 1.65; color: var(--ink-soft); max-width: 34em; margin-left: auto; margin-right: auto;
+  }
 </style>
 </head>
 <body>
@@ -53,9 +52,9 @@
   <p>Whether it's about the free guide, the full book, an order, or something else entirely, a real person reads every message.</p>
 </section>
 
-<section class="contact-panel wrap">
-  <div class="contact-card">
-    <span class="eyebrow">EMAIL</span>
+<section class="excerpt-section contact-panel wrap">
+  <div class="excerpt-panel">
+    <span class="eyebrow-alt">EMAIL</span>
     <div><a class="contact-email" href="mailto:hello@teracopia.com">hello@teracopia.com</a></div>
     <p class="contact-note">Most questions about the guide or the book are already answered on the <a href="/faq.html" style="color: var(--deep-blue);">FAQ page</a>, worth a quick look first. Otherwise, expect a reply within a day or two.</p>
   </div>
