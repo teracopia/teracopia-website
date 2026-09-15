@@ -40,8 +40,16 @@
   .pillars .pillar-icon svg { width: 30px; height: 30px; }
   .pillars { padding-bottom: 88px; }
 
-  .cta-section .excerpt-panel h2 { font-size: 1.9rem; max-width: 18em; margin: 0 auto 18px; }
-  .cta-section .excerpt-panel p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
+  .cta-card {
+    background: var(--panel-navy);
+    padding: 56px;
+    border: 1px solid rgba(108,140,238,0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(108,140,238,0.15);
+    text-align: center;
+  }
+  .cta-card h2 { font-size: 1.9rem; max-width: 18em; margin: 0 auto 18px; }
+  .cta-card p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
 
 </style>
 </head>
@@ -104,8 +112,8 @@
 
 <div class="divider-wrap"><div class="divider"></div></div>
 
-<section class="excerpt-section wrap cta-section">
-  <div class="excerpt-panel">
+<section class="excerpt-section wrap">
+  <div class="cta-card">
     <h2>Ready to see it for yourself?</h2>
     <p>Start with the free Quick-Start Guide, or go all in with the complete method in the full book.</p>
     <div class="cta-buttons">
