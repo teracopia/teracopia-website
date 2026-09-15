@@ -35,9 +35,9 @@
 
   .blog-card {
     background: var(--surface); border: 2px solid var(--deep-blue); border-radius: 8px;
-    box-shadow: 0 0 40px rgba(108,140,238,0.35);
+    box-shadow: none; transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
-  .blog-card:hover { transform: translateY(-3px); }
+  .blog-card:hover { transform: translateY(-3px); box-shadow: 0 0 40px rgba(108,140,238,0.35); }
 
   .cta-card {
     background: var(--panel-navy);
