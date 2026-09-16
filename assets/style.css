@@ -362,6 +362,15 @@ nav.site-nav {
 }
 .book-cover .bc-sub { font-family: 'Manrope', sans-serif; font-size: 0.66rem; line-height: 1.5; color: var(--sky); margin-top: 22px; }
 .book-cover .bc-foot { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 0.68rem; letter-spacing: 0.14em; color: var(--white); text-transform: uppercase; margin-top: 24px; }
+.book-cover-img {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 7;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 30px 50px -20px rgba(10,13,20,0.45);
+}
 
 /* TESTIMONIAL GRID */
 .testimonials { padding: 20px 0 100px; }
