@@ -446,11 +446,20 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 @media (max-width: 720px) {
   nav.site-nav { flex-wrap: nowrap; justify-content: space-between; align-items: center; }
   .nav-toggle { display: flex; }
+  .nav-controls { position: static; }
   .nav-right {
     display: none;
-    width: 100%;
-    order: 3;
-    margin-top: 22px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: auto;
+    margin-top: 0;
+    padding: 24px 32px 28px;
+    background: #0B0E16;
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 16px 28px rgba(0,0,0,0.35);
+    z-index: 50;
   }
   .nav-right.open { display: block; }
   .nav-links { flex-direction: column; align-items: flex-start; gap: 20px; flex-wrap: nowrap; width: 100%; }
