@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Teracopia Lucid Dreaming Quick-Start Guide</title>
+<style>
+  @page {
+    size: Letter;
+    margin: 0;
+  }
+  @page cover {
+    margin: 0;
+  }
+  @page content {
+    margin: 44px 60px 54px 60px;
+    @bottom-center {
+      content: counter(page);
+      font-family: 'Manrope', sans-serif;
+      font-size: 10px;
+      color: #9AA3C0;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Manrope', sans-serif;
+    color: #2b2f3a;
+  }
+
+  /* ---------- Cover page ---------- */
+  .cover {
+    page: cover;
+    width: 8.5in;
+    height: 11in;
+    background: linear-gradient(180deg, #0B0E16 0%, #0F193A 50%, #13245E 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 150px;
+  }
+  .cover .mark-wrap {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover .brand-word {
+    margin-top: 28px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.32em;
+    color: #97A6E8;
+  }
+  .cover .tagline {
+    margin-top: 10px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    color: #B9C2DD;
+  }
+  .cover .title {
+    margin-top: 56px;
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.18;
+    color: #FFFFFF;
+    text-align: center;
+    width: 500px;
+  }
+  .cover .subtitle {
+    margin-top: 26px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #B9C2DD;
+    text-align: center;
+    width: 430px;
+  }
+  .cover .byline {
+    margin-top: 70px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: #FFFFFF;
+    text-align: center;
+  }
+  .cover .site-link {
+    margin-top: 6px;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #97A6E8;
+    text-decoration: underline;
+    text-align: center;
+  }
+
+  /* ---------- Content pages ---------- */
+  .content-page {
+    page: content;
+    break-before: page;
+    page-break-before: always;
+  }
+  .page-header {
+    text-align: right;
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    color: #B9C2DD;
+    margin-bottom: 26px;
+  }
+  .eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #182D9A;
+    margin-bottom: 8px;
+  }
+  h1.section-title {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.2;
+    color: #102EA0;
+    margin: 0 0 14px 0;
+  }
+  p.lede {
+    font-family: 'Manrope', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #4A5170;
+    margin: 0 0 16px 0;
+  }
+  h2.sub-heading {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 15.5px;
+    color: #14206B;
+    margin: 16px 0 6px 0;
+  }
+  p.body-text {
+    font-family: 'Manrope', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #4A5170;
+    margin: 0 0 10px 0;
+  }
+  p.body-text strong { color: #23283A; font-weight: 700; }
+  ul.checklist {
+    margin: 6px 0 12px 0;
+    padding-left: 0;
+    list-style: none;
+  }
+  ul.checklist li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 7px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #4A5170;
+  }
+  ul.checklist li::before {
+    content: "•";
+    position: absolute;
+    left: 2px;
+    color: #182D9A;
+    font-weight: 700;
+  }
+  ul.checklist li strong { color: #23283A; font-weight: 700; }
+
+  .callout {
+    background: #F1F3FA;
+    border-left: 4px solid #182D9A;
+    padding: 14px 20px;
+    margin: 14px 0;
+  }
+  .callout .eyebrow { margin-bottom: 8px; }
+  .callout p.body-text { margin: 0 0 8px 0; }
+  .callout p.body-text:last-child { margin-bottom: 0; }
+
+  .footnote {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #9AA3C0;
+    margin: 10px 0 0 0;
+  }
+  hr.divider {
+    border: none;
+    border-top: 1px solid #E3E6F0;
+    margin: 14px 0;
+  }
+
+  .closing-callout {
+    background: #F1F3FA;
+    border-left: 4px solid #182D9A;
+    padding: 18px 26px;
+    margin: 12px 0 0 0;
+    text-align: center;
+  }
+  .closing-callout h3 {
+    font-family: 'Jost', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #14206B;
+    margin: 0 0 8px 0;
+  }
+  .closing-callout p {
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #4A5170;
+    margin: 0 0 8px 0;
+  }
+  .closing-callout p.cta {
+    font-family: 'Jost', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #102EA0;
+    margin-bottom: 0;
+  }
+  .closing-callout a { color: #102EA0; }
+
+  .copyright {
+    margin-top: 20px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 10px;
+    color: #B4BAD0;
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="mark-wrap">
+    <svg width="150" height="150" viewBox="-20 -35 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="navGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3654C4" stop-opacity="0.95"/>
+          <stop offset="45%" stop-color="#102EA0" stop-opacity="0.45"/>
+          <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="80" cy="75" r="115" fill="url(#navGlow)"/>
+      <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
+        stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
+      <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
+    </svg>
+  </div>
+  <div class="brand-word">TERACOPIA</div>
+  <div class="tagline">unlocking your higher self</div>
+  <div class="title">The Lucid Dreaming<br>Quick-Start Guide</div>
+  <div class="subtitle">Your guide to start preparing for your first lucid dream, without needing to read a whole book on the topic.</div>
+  <div class="byline">Quinton Capretta</div>
+  <div class="site-link">teracopia.com</div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="content-page">
+  <div class="page-header">TERACOPIA</div>
+
+  <div class="eyebrow">Step One</div>
+  <h1 class="section-title">Building the Foundation</h1>
+  <p class="lede">Let&rsquo;s start with the basics, giving you a toolkit of practices to start doing today.</p>
+
+  <h2 class="sub-heading">The Dream Journal</h2>
+  <p class="body-text">The first step to lucid dream is to keep a journal by your bedside and make it a priority to write down whatever dreams you can recall the moment you wake up, before you check your phone or start your day. Make sure to write by hand instead of on a screen: when you physically write you&rsquo;re rewarding your mind for remembering in the first place, reinforcing a positive feedback loop. At first, you may only recall fragments, a feeling, a color, a face. Totally fine. Write it down anyway, and the details you remember will grow the more consistently you continue to log each dream.</p>
+
+  <h2 class="sub-heading">Writing Intentions</h2>
+  <p class="body-text">Your subconscious mind is highly malleable, and it takes its cues directly from the information your conscious mind feeds it. The most direct way to imprint on your subconscious mind is to actually tell it what you want, over and over. Each night, shortly before going to bed, write down a short intention about ten times, something like <strong>&ldquo;I am in control of my dreams whenever I want.&rdquo;</strong> It sounds simple because it is: you&rsquo;re giving your subconscious mind a direct instruction to follow.</p>
+
+  <h2 class="sub-heading">Reality Checks</h2>
+  <p class="body-text">If you haven&rsquo;t noticed before, your dream state will feel very similar to your waking life, that is, unless you&rsquo;ve built a framework for telling the two apart. Throughout the day, pause and genuinely ask yourself: <strong>am I dreaming right now?</strong> Then test it. Certain patterns behave differently in dreams than they do in our waking life, so use them to your advantage:</p>
+  <ul class="checklist">
+    <li><strong>Light switches:</strong> often won&rsquo;t turn on or off in dreams</li>
+    <li><strong>Clocks:</strong> time will often appear distorted or incorrect</li>
+    <li><strong>Hands:</strong> your hands will usually change shape or morph</li>
+  </ul>
+  <p class="body-text">There isn&rsquo;t necessarily an ideal number of reality checks to complete each day, instead, focus on quality over quantity. Pick a couple options and perform them throughout the day. The goal is to build a habit that becomes so ingrained in your waking life it will continue through your subconscious into your dreams.</p>
+
+  <div class="callout">
+    <div class="eyebrow">A Note on Consistency</div>
+    <p class="body-text">The work here compounds over time, so give yourself some grace. A daily practice over thirty to fifty days is realistic to reprogram your habits before you can really judge the outcome. Missing a day here and there is normal, we&rsquo;re all human and have busy lives. However, missing two days in a row creates a new, weaker habit that gets reinforced. So if that happens, don&rsquo;t stress, but do start back at day one.</p>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="content-page">
+  <div class="page-header">TERACOPIA</div>
+
+  <div class="eyebrow">Step Two</div>
+  <h1 class="section-title">Your First Method: Mnemonic-Induced Lucid Dreaming (MILD)</h1>
+  <p class="lede">Once the dream journal, intentions, and reality checks are running daily, this is the technique to start actively working on. If you&rsquo;re starting from zero, MILD is the easiest place to begin: it&rsquo;s repeatable, and it builds directly on the reality checks you&rsquo;re already practicing.</p>
+
+  <div class="callout">
+    <div class="eyebrow">The MILD Method</div>
+    <p class="body-text">The idea here is to combine setting an intention with a repeated mantra while falling asleep. Take one reality check you&rsquo;re already using, say, flipping a light switch when you walk into a room, and pair it with a mantra: <strong>&ldquo;the next time I&rsquo;m dreaming, I will realize I&rsquo;m dreaming.&rdquo;</strong></p>
+    <p class="body-text">When you lie down to sleep, imagine yourself walking into a room, seeing a light switch, and naturally flipping it. Say the mantra to yourself as you do. Something clicks in your mind as you say this: you&rsquo;re not performing a reality check, you&rsquo;re simply observing that you&rsquo;re in a dream, and at this moment, you finally realize it.</p>
+    <p class="body-text">Run that same scenario in your mind a few times as you drift off, pairing the action with the verbal intention. You&rsquo;re training your subconscious mind to arrive at the same conclusion your conscious mind just rehearsed.</p>
+  </div>
+
+  <p class="footnote">MILD is just one of five induction methods we cover in the full guide: WBTB, RILD, SSILD and WILD each have their own place once you&rsquo;re ready to layer in more.</p>
+
+  <hr class="divider">
+
+  <div class="eyebrow">Step Three</div>
+  <h1 class="section-title">Your Quick Reference Guide</h1>
+  <p class="lede">Here&rsquo;s the steps in a nutshell to start now:</p>
+
+  <h2 class="sub-heading">The Daily Practice</h2>
+  <ul class="checklist">
+    <li><strong>Reality checks:</strong> several throughout the day, quality over quantity</li>
+    <li><strong>Written intentions:</strong> ten shortly before going to bed for the night</li>
+    <li><strong>Dream journal entry:</strong> at least one upon waking, progress to several</li>
+    <li><strong>MILD:</strong> every night as you fall asleep, pairing a reality check with your mantra</li>
+  </ul>
+
+  <div class="closing-callout">
+    <h3>Consider this just the starting point.</h3>
+    <p>Your Simple Guide to Lucid Dreaming goes deeper: four more induction methods, identifying dream signs, sleep cycle timing, sleep paralysis safety, and much more on how to become lucid and start leveling up in your dreams.</p>
+    <p class="cta">Get the full guide at <a href="https://teracopia.com/book.html">teracopia.com</a></p>
+  </div>
+
+  <div class="copyright">&copy; 2026 Teracopia. All rights reserved.</div>
+</div>
+
+</body>
+</html>
