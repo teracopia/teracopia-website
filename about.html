@@ -52,6 +52,15 @@
   .cta-card p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
   .cta-section { padding-bottom: 80px; }
 
+  .coach-grid { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: center; }
+  .coach-photo { width: 280px; height: 280px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(108,140,238,0.5); box-shadow: 0 0 26px rgba(108,140,238,0.25); }
+  .coach-grid .about-eyebrow { margin-bottom: 12px; }
+  .coach-grid .about-body p { max-width: 46em; }
+  @media (max-width: 720px) {
+    .coach-grid { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+    .coach-photo { width: 200px; height: 200px; }
+  }
+
 </style>
 </head>
 <body>
@@ -95,7 +104,7 @@
 <section class="page-hero about-hero">
   <div class="wrap content">
     <span class="eyebrow">MY STORY</span>
-    <h1 style="margin-top: 18px;">It took me months<br>to have my <span class="hl">first lucid dream</span>.</h1>
+    <h1 style="margin-top: 18px;">It took me months<br>to <span class="hl">learn lucid dreaming</span>.</h1>
     <p class="lede">I've had thousands of lucid dreams over the years, but I didn't start out that way.<br>I wrote this book for a version of my younger self, what I wish I had when I was first beginning on my journey.</p>
   </div>
 </section>
@@ -111,11 +120,11 @@
 </section>
 
 <section class="about-lead wrap">
-  <div class="about-grid centered">
-    <div class="about-eyebrow"><span>ORIGIN STORY</span></div>
+  <div class="coach-grid">
+    <img class="coach-photo" src="/assets/quinton-about.jpg" alt="Quinton, founder of Teracopia" width="280" height="280" loading="lazy">
     <div class="about-body">
-      <p>I first found out about lucid dreaming when I was 13, and after months of trying, I had my first real experience.<br>I was immediately hooked and started consuming everything I could on the topic, reading books, research studies,<br>and personal stories before developing my own lucid dreaming practice.</p>
-      <p>Most of the information available on lucid dreaming is overly clinical, and difficult to implement.<br>My goal in building Teracopia is to combine my knowledge from years of research alongside my own personal experience,<br>all in a digestible and simple practice for anyone to start lucid dreaming.</p>
+      <div class="about-eyebrow"><span>MEET YOUR COACH</span></div>
+      <p>My name is Quinton, and I started exactly where you are now. My first lucid dream happened by chance, but it took me months of trial and error before I could repeat it on my own. There's something about becoming lucid in a dream that's so unique, but it just feels right. The stillness, the peace, the clarity is unlike anything I've ever felt. I want to help you have your first lucid dream, and then build a sustainable practice that works for your life. Get ready, it's one of the coolest things you'll ever do.</p>
     </div>
   </div>
 </section>
