@@ -1,0 +1,130 @@
+@page {
+  size: 6.5in 9in;
+  margin: 0.75in 0.7in 0.8in 0.7in;
+  @top-right { content: element(header-eyebrow); }
+  @bottom-center { content: counter(page); font-family: 'Manrope', sans-serif; font-size: 9pt; color: #9AA3C0; }
+}
+@page cover { margin: 0; @top-right { content: none; } @bottom-center { content: none; } }
+@page closing { margin: 0; @top-right { content: none; } @bottom-center { content: none; } }
+@page toc { size: 6.5in 9in; margin: 0.55in 0.7in 0.55in 0.7in; @bottom-center { content: "\00a9 2026 Teracopia. All rights reserved.   " counter(page); font-family: 'Manrope', sans-serif; font-size: 8pt; color: #9AA3C0; } }
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Manrope', sans-serif; color: #5A6478; }
+
+.header-eyebrow {
+  position: running(header-eyebrow);
+  font-family: 'Jost', sans-serif;
+  font-size: 7.5pt;
+  letter-spacing: 0.14em;
+  color: #B7BFD6;
+}
+
+/* ---------- Cover ---------- */
+.cover {
+  page: cover;
+  width: 6.5in; height: 9in;
+  background: linear-gradient(180deg, #0B0E16 0%, #0F193A 50%, #13245E 100%);
+  display: flex; flex-direction: column; align-items: center;
+  padding-top: 1.55in;
+  color: #FFFFFF;
+}
+.logo-mark { width: 62px; height: 62px; }
+.brand-word { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 13pt; letter-spacing: 0.3em; margin-top: 14px; }
+.brand-tag { font-family: 'Manrope', sans-serif; font-size: 9pt; color: #9AA3C0; margin-top: 4px; }
+.cover-title { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 25pt; text-align: center; line-height: 1.25; margin: 40px 0 0 0; }
+.cover-subtitle { font-family: 'Manrope', sans-serif; font-size: 10.5pt; color: #9AA3C0; text-align: center; line-height: 1.5; margin: 18px 40px 0 40px; }
+.cover-byline { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 9.5pt; color: #FFFFFF; text-align: center; margin: 46px 0 0 0; }
+.cover-link { font-family: 'Manrope', sans-serif; font-size: 9pt; color: #7C93E0; text-align: center; margin: 2px 0 0 0; }
+
+/* ---------- TOC ---------- */
+.toc-page { page: toc; }
+.toc-category { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 8pt; letter-spacing: 0.12em; color: #3654C4; margin: 7px 0 3px 0; }
+.toc-category:first-child { margin-top: 0; }
+.toc-list { list-style: none; margin: 0; padding: 0; }
+.toc-list li { display: flex; align-items: baseline; font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 8.8pt; color: #3A4256; padding: 0; line-height: 1.55; }
+.toc-title { white-space: nowrap; }
+.toc-dots { flex: 1; border-bottom: 1px dotted #C7CEDF; margin: 0 8px 3px 8px; }
+.toc-page { }
+.toc-list li .toc-page { color: #7C879E; font-weight: 700; }
+
+/* ---------- Headings ---------- */
+.part-eyebrow {
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 8.6pt;
+  letter-spacing: 0.16em; text-transform: uppercase; color: #3654C4;
+  margin: 6px 0 10px 0;
+}
+h1.chapter-title {
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 16.5pt;
+  color: #102EA0; margin: 0 0 12px 0; line-height: 1.25;
+}
+h2.sub-heading {
+  font-family: 'Jost', sans-serif; font-weight: 600; font-size: 11pt;
+  color: #102EA0; margin: 20px 0 8px 0;
+}
+p.body-text { font-family: 'Manrope', sans-serif; font-size: 10.6pt; line-height: 1.62; margin: 0 0 12px 0; color: #5A6478; }
+
+/* ---------- Callouts ---------- */
+.callout { background: #F4F6FC; border-radius: 5px; padding: 16px 20px; margin: 16px 0; }
+.callout-label {
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 8pt; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #102EA0; padding-bottom: 9px; margin-bottom: 9px;
+  border-bottom: 0.75pt solid #A9BBEE;
+}
+.callout-text { font-family: 'Manrope', sans-serif; font-size: 10.4pt; line-height: 1.58; color: #2A3566; margin: 0; }
+
+/* ---------- Tables ---------- */
+table.data-table { width: 100%; border-collapse: collapse; margin: 10px 0 18px 0; }
+table.data-table thead th {
+  font-family: 'Jost', sans-serif; font-weight: 700; font-size: 8pt; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #102EA0; text-align: left; padding: 0 10px 8px 0;
+  border-bottom: 1px solid #C7CEDF;
+}
+table.data-table tbody td {
+  font-family: 'Manrope', sans-serif; font-size: 9.6pt; color: #4A5170; padding: 9px 10px 9px 0;
+  border-bottom: 0.5pt solid #EAEDF6; vertical-align: top;
+}
+table.data-table tbody tr td:first-child { font-weight: 700; color: #102EA0; white-space: nowrap; }
+
+/* ---------- Journal template ---------- */
+.journal-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.journal-field { border: 1px solid #C7CEDF; border-radius: 4px; padding: 10px 12px; }
+.journal-field.wide { width: calc(50% - 5px); height: 0.85in; }
+.journal-field.full { width: 100%; }
+.journal-field.tall { height: 0.95in; }
+.jf-label { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 7.6pt; letter-spacing: 0.1em; color: #3654C4; }
+.jf-options { font-family: 'Manrope', sans-serif; font-size: 9pt; color: #9AA3C0; margin-top: 8px; }
+
+/* ---------- Checklist ---------- */
+ul.checklist { margin: 10px 0; padding-left: 20px; }
+ul.checklist li { font-family: 'Manrope', sans-serif; font-size: 10.6pt; line-height: 1.6; color: #5A6478; margin-bottom: 8px; }
+
+/* ---------- FAQ ---------- */
+p.faq-q { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10.6pt; line-height: 1.5; color: #14206B; margin: 16px 0 6px 0; }
+p.faq-a { font-family: 'Manrope', sans-serif; font-size: 10.6pt; line-height: 1.62; color: #5A6478; margin: 0 0 6px 0; }
+
+p.signoff { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 10.2pt; color: #102EA0; margin-top: 22px; }
+
+/* ---------- Chart ---------- */
+.chart-figure { margin: 16px 0 20px 0; }
+.rem-chart-svg { width: 100%; height: auto; margin: 8px 0; }
+.chart-figure figcaption { font-family: 'Manrope', sans-serif; font-size: 9pt; font-style: italic; color: #9AA3C0; text-align: center; margin-top: 4px; }
+
+/* ---------- Glossary ---------- */
+h2.glossary-term { font-family: 'Jost', sans-serif; font-weight: 600; font-size: 10.5pt; color: #102EA0; margin: 14px 0 4px 0; }
+p.glossary-def { margin-bottom: 4px; }
+
+/* ---------- Closing page ---------- */
+.closing-page {
+  page: closing;
+  width: 6.5in; height: 9in;
+  background: linear-gradient(180deg, #0B0E16 0%, #0F193A 50%, #13245E 100%);
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  padding: 1.3in 0.9in 0 0.9in; color: #FFFFFF;
+}
+.closing-title { font-family: 'Jost', sans-serif; font-weight: 700; font-size: 19pt; margin-bottom: 40px; }
+.closing-page .logo-mark { width: 48px; height: 48px; margin-bottom: 34px; }
+.closing-body { font-family: 'Manrope', sans-serif; font-size: 10.5pt; line-height: 1.65; color: #C7CEE6; margin-bottom: 16px; }
+
+/* ---------- Content page wrapper ---------- */
+.content-page { break-before: page; page-break-before: always; }
+.content-page:first-of-type { break-before: auto; page-break-before: auto; }
