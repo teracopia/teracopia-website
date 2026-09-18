@@ -1,6 +1,9 @@
 name = "teracopia"
 compatibility_date = "2026-08-31"
+main = "worker.js"
 
 [assets]
 directory = "./"
 not_found_handling = "404-page"
+binding = "ASSETS"
+run_worker_first = ["/download/*", "/secure/*"]

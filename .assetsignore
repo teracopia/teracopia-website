@@ -8,7 +8,12 @@ src
 src/**
 partials
 partials/**
+ebook-src
+ebook-src/**
+guide-src
+guide-src/**
 build.py
+worker.js
 wrangler.toml
 README.md
 .assetsignore
