@@ -185,10 +185,15 @@ async function handleStripeWebhook(request, env, ctx) {
   const email = session.customer_details?.email;
   if (!email) return new Response("ok", { status: 200 });
 
+  // Requires "Collect customer names" to be enabled on the Stripe Payment
+  // Link, otherwise this is undefined and MailerLite just falls back to no
+  // name (the automation's merge tag renders blank in that case).
+  const name = session.customer_details?.name || "";
+
   const downloadUrl = new URL(`/download/ebook?session_id=${encodeURIComponent(sessionId)}`, request.url).toString();
 
   if (env.MAILERLITE_API_KEY) {
-    ctx.waitUntil(addEbookBuyerToMailerLite(env, email, downloadUrl));
+    ctx.waitUntil(addEbookBuyerToMailerLite(env, email, name, downloadUrl));
   }
 
   return new Response("ok", { status: 200 });
@@ -228,14 +233,19 @@ async function verifyStripeSignature(payload, sigHeader, secret) {
   return diff === 0;
 }
 
-async function addEbookBuyerToMailerLite(env, toEmail, downloadUrl) {
+async function addEbookBuyerToMailerLite(env, toEmail, toName, downloadUrl) {
   // Upsert the subscriber with their personal download link in a custom
   // field, and drop them into the "Ebook Buyers" group. Joining that
   // group is what triggers the MailerLite automation which actually
   // sends the confirmation email (and, on the steps you add later, the
   // review request and the coaching pitch) — same mechanism as the
-  // homepage signup form feeding "Free Guide Signups".
+  // homepage signup form feeding "Free Guide Signups". "name" is the same
+  // field key the homepage form uses (fields[name]), so {$name} works in
+  // both automations.
   try {
+    const fields = { ebook_download_link: downloadUrl };
+    if (toName) fields.name = toName;
+
     await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
       headers: {
@@ -245,7 +255,7 @@ async function addEbookBuyerToMailerLite(env, toEmail, downloadUrl) {
       },
       body: JSON.stringify({
         email: toEmail,
-        fields: { ebook_download_link: downloadUrl },
+        fields,
         groups: [MAILERLITE_EBOOK_BUYERS_GROUP_ID],
       }),
     });
