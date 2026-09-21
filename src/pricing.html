@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="/assets/style.css">
 <style>
   .pricing-hero .content { max-width: 900px; margin: 0 auto; }
+  .pricing-hero .eyebrow { font-size: 1rem; }
   .pricing-hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
 
   .pricing-steps { padding: 20px 0 40px; }
@@ -36,7 +37,8 @@
     background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
     padding: 40px 32px; text-align: center;
   }
-  .pricing-card.is-featured { border-color: var(--deep-blue); box-shadow: 0 0 40px rgba(108,140,238,0.3); }
+  .pricing-card { transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
+  .pricing-card:hover { border-color: var(--deep-blue); transform: translateY(-3px); box-shadow: 0 12px 24px -16px rgba(10,13,20,0.25); }
   .pricing-card .step-num {
     font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.14em;
     color: var(--deep-blue); margin-bottom: 8px;
@@ -95,8 +97,8 @@
 <section class="page-hero pricing-hero">
   <div class="wrap content">
     <span class="eyebrow">PRICING</span>
-    <h1 style="margin-top: 18px;">Start Free, Go As<br><span class="hl">Deep As You Want</span></h1>
-    <p class="lede">Everything I offer is laid out here: no pressure, no upsells you didn't ask for. Start with the free guide, get the full book when you're ready for more, and bring in 1:1 coaching if you want direct support along the way.</p>
+    <h1 style="margin-top: 18px;">Find the Right<br><span class="hl">Level of Support</span></h1>
+    <p class="lede">Everything is laid out here: no pressure, no upsells you didn't ask for. Start with the free guide, get the full book if you want to dive deep, and opt for 1:1 coaching when you want to build a customized game plan.</p>
   </div>
 </section>
 
@@ -108,14 +110,14 @@
       <h3>Free Quick-Start Guide</h3>
       <div class="price">Free</div>
       <ul>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The core reality-check method to start with tonight</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A quick primer on why lucid dreaming actually works</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>One core reality-check method to start with tonight</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A quick primer on why lucid dreaming mechanics work</li>
         <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Delivered straight to your inbox, no strings attached</li>
       </ul>
       <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
     </div>
 
-    <div class="pricing-card is-featured">
+    <div class="pricing-card">
       <span class="step-num">STEP 2</span>
       <h3>The Full Book</h3>
       <div class="price">$15 <span>one-time</span></div>
