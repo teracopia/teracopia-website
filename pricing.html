@@ -4,48 +4,57 @@
 <meta charset="UTF-8">
 <!-- navy is the site's single theme; no runtime theme switching needed -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="canonical" href="https://teracopia.com/coaching.html">
-<title>1:1 Coaching - Teracopia</title>
-<meta name="description" content="One-on-one lucid dreaming coaching with Quinton: a custom practice, direct feedback, and real accountability.">
+<link rel="canonical" href="https://teracopia.com/pricing.html">
+<title>Pricing - Teracopia</title>
+<meta name="description" content="Three ways to work with Teracopia: a free guide, the full book for $15, and 1:1 coaching starting at $179.">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#102EA0">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://teracopia.com/coaching.html">
-<meta property="og:title" content="1:1 Coaching - Teracopia">
-<meta property="og:description" content="One-on-one lucid dreaming coaching with Quinton: a custom practice, direct feedback, and real accountability.">
+<meta property="og:url" content="https://teracopia.com/pricing.html">
+<meta property="og:title" content="Pricing - Teracopia">
+<meta property="og:description" content="Three ways to work with Teracopia: a free guide, the full book for $15, and 1:1 coaching starting at $179.">
 <meta property="og:image" content="https://teracopia.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="1:1 Coaching - Teracopia">
-<meta name="twitter:description" content="One-on-one lucid dreaming coaching with Quinton: a custom practice, direct feedback, and real accountability.">
+<meta name="twitter:title" content="Pricing - Teracopia">
+<meta name="twitter:description" content="Three ways to work with Teracopia: a free guide, the full book for $15, and 1:1 coaching starting at $179.">
 <meta name="twitter:image" content="https://teracopia.com/assets/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=Jost:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/style.css">
 <style>
-  .pillars-head h2 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
-  .coaching-hero .content { max-width: 1300px; margin: 0 auto; }
-  .coaching-hero .lede { max-width: 1300px; }
-  .coaching-hero .eyebrow { font-size: 1rem; }
-  .coaching-hero h1 { max-width: 16em; }
-  .coaching-hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
+  .pricing-hero .content { max-width: 900px; margin: 0 auto; }
+  .pricing-hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
 
-  .coaching-fit { padding: 20px 0 40px; }
-
-  .coaching-panel { padding: 40px 0 100px; }
-  .coaching-panel .excerpt-panel { max-width: 820px; margin: 0 auto; }
-  .coaching-list { list-style: none; margin: 20px auto 32px; padding: 0; max-width: 700px; text-align: left; }
-  .coaching-list li { position: relative; padding-left: 32px; margin-bottom: 14px; color: var(--ink); }
-  .coaching-list .check-icon {
-    position: absolute; left: 0; top: 2px; width: 22px; height: 22px;
+  .pricing-steps { padding: 20px 0 40px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .pricing-card {
+    display: flex; flex-direction: column;
+    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 40px 32px; text-align: center;
+  }
+  .pricing-card.is-featured { border-color: var(--deep-blue); box-shadow: 0 0 40px rgba(108,140,238,0.3); }
+  .pricing-card .step-num {
+    font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.14em;
+    color: var(--deep-blue); margin-bottom: 8px;
+  }
+  .pricing-card h3 { font-size: 1.35rem; margin-bottom: 4px; }
+  .pricing-card .price {
+    font-family: 'Playfair Display', serif; font-size: 2.1rem; color: var(--deep-blue); margin: 14px 0 18px;
+  }
+  .pricing-card .price span { font-family: 'Manrope', sans-serif; font-size: 0.95rem; color: var(--ink-soft); font-weight: 400; }
+  .pricing-card ul { list-style: none; margin: 0 0 28px; padding: 0; text-align: left; flex-grow: 1; }
+  .pricing-card li { position: relative; padding-left: 30px; margin-bottom: 12px; color: var(--ink); font-size: 0.98rem; }
+  .pricing-card .check-icon {
+    position: absolute; left: 0; top: 2px; width: 20px; height: 20px;
     filter: drop-shadow(0 0 10px rgba(108,140,238,0.55));
   }
-  .coaching-fine { margin-top: 22px; font-size: 0.9rem; color: var(--ink-soft); }
+  .pricing-card .btn { width: 100%; }
 
-  .tier-section { padding: 0 0 40px; }
+  .tier-section { padding: 40px 0 60px; }
   .tier-head { text-align: center; margin-bottom: 48px; }
   .tier-head h2 { font-size: 1.9rem; }
   .tier-head p { color: var(--ink-soft); max-width: 40em; margin: 14px auto 0; }
@@ -74,6 +83,7 @@
   .tier-fine { text-align: center; margin-top: 32px; font-size: 0.9rem; color: var(--ink-soft); }
 
   @media (max-width: 860px) {
+    .pricing-grid { grid-template-columns: 1fr; }
     .tier-grid { grid-template-columns: 1fr; }
   }
 </style>
@@ -106,8 +116,8 @@
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/about.html">About</a></li>
-        <li><a href="/coaching.html" aria-current="page">Coaching</a></li>
-        <li><a href="/pricing.html">Pricing</a></li>
+        <li><a href="/coaching.html">Coaching</a></li>
+        <li><a href="/pricing.html" aria-current="page">Pricing</a></li>
         <li><a href="/blog/">Blog</a></li>
         <li><a href="/faq.html">FAQ</a></li>
         <li><a href="/book.html" class="nav-cta">Buy the Book</a></li>
@@ -117,55 +127,61 @@
 </nav>
 </div>
 
-<section class="page-hero coaching-hero">
+<section class="page-hero pricing-hero">
   <div class="wrap content">
-    <span class="eyebrow">1:1 COACHING</span>
-    <h1 style="margin-top: 18px;">Let's build a practice<br><span class="hl">that works for you</span>.</h1>
-    <p class="lede">The <a href="/#signup-form">free Quick-Start Guide</a> and the <a href="/book.html">full book</a> give you the fundamentals to succeed.<br>Personal coaching gives you direct feedback on your own practice, plus the accountability to keep you on track.</p>
+    <span class="eyebrow">PRICING</span>
+    <h1 style="margin-top: 18px;">Start Free, Go As<br><span class="hl">Deep As You Want</span></h1>
+    <p class="lede">Everything I offer is laid out here: no pressure, no upsells you didn't ask for. Start with the free guide, get the full book when you're ready for more, and bring in 1:1 coaching if you want direct support along the way.</p>
   </div>
 </section>
 
+<section class="pricing-steps wrap">
+  <div class="pricing-grid">
 
-<section class="pillars coaching-fit wrap">
-  <div class="pillars-head">
-    <h2>Is This <span class="hl">You</span>?</h2>
-  </div>
-  <div class="pillar-grid">
-    <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="14" width="30" height="20" rx="2"/><path d="M9 24h30"/><path d="M17 14v10M25 14v10M33 14v10"/><path d="M13 24v10M21 24v10M29 24v10M37 24v10"/></svg></div>
-      <h3>You've Hit a Wall</h3>
-      <p>You've read the guide or the book, but something still isn't clicking. You need someone to see what's actually happening and adjust it with you.</p>
+    <div class="pricing-card">
+      <span class="step-num">STEP 1</span>
+      <h3>Free Quick-Start Guide</h3>
+      <div class="price">Free</div>
+      <ul>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The core reality-check method to start with tonight</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A quick primer on why lucid dreaming actually works</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Delivered straight to your inbox, no strings attached</li>
+      </ul>
+      <a class="btn btn-outline-dark" href="/#signup-form">Get the Free Guide</a>
     </div>
-    <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="12" width="30" height="26" rx="3"/><path d="M9 20h30"/><path d="M16 8v8M32 8v8"/><path d="M17 29l5 5 10-11"/></svg></div>
-      <h3>You Want Accountability</h3>
-      <p>Most people quit before the habit actually sticks. Regular check-ins keep you consistent even after motivation runs out.</p>
-    </div>
-    <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="15"/><circle cx="24" cy="24" r="8"/><circle cx="24" cy="24" r="1.6" fill="#6C8CEE"/></svg></div>
-      <h3>You Want It Built Around You</h3>
-      <p>Generic advice doesn't know your schedule, your sleep, or your specific goals. A customized coaching plan is your next step.</p>
-    </div>
-  </div>
-</section>
 
-<section class="coaching-panel wrap">
-  <div class="excerpt-panel">
-    <span class="eyebrow-alt">WHAT'S INCLUDED</span>
-    <ul class="coaching-list">
-      <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A custom practice built around your schedule, goals, and where you're starting from</li>
-      <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>One-on-one sessions with me to answer your questions as they come up</li>
-      <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Troubleshooting tips to address any obstacles standing in your way</li>
-      <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Ongoing check-ins to keep you consistent and moving forward in your practice</li>
-    </ul>
+    <div class="pricing-card is-featured">
+      <span class="step-num">STEP 2</span>
+      <h3>The Full Book</h3>
+      <div class="price">$15 <span>one-time</span></div>
+      <ul>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Every induction technique, not just the one in the free guide</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The sleep science behind why it works, explained simply</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A full troubleshooting FAQ and a one-page reference sheet</li>
+      </ul>
+      <a class="btn btn-primary" href="/book.html">Get the Book</a>
+    </div>
+
+    <div class="pricing-card">
+      <span class="step-num">STEP 3</span>
+      <h3>1:1 Coaching</h3>
+      <div class="price">From $179</div>
+      <ul>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A free 15-minute call first, to see if it's a good fit</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Direct, personal feedback on your own practice</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Two options below, depending on how much support you want</li>
+      </ul>
+      <a class="btn btn-outline-dark" href="#coaching-tiers">See Coaching Options</a>
+    </div>
+
   </div>
 </section>
 
 <div class="divider-wrap"><div class="divider"></div></div>
 
-<section class="tier-section wrap" id="pricing">
+<section class="tier-section wrap" id="coaching-tiers">
   <div class="tier-head">
-    <h2>Pricing, <span class="hl">Two Ways</span></h2>
+    <h2>Coaching, <span class="hl">Two Ways</span></h2>
     <p>Both start the same way: a free 15-minute call so I can hear where you're at and you can ask me anything, no commitment either way.</p>
   </div>
   <div class="tier-grid">
