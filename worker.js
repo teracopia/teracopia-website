@@ -26,18 +26,26 @@
  *                           create pointing at
  *                           https://teracopia.com/webhook/stripe, listening
  *                           for checkout.session.completed).
- *   RESEND_API_KEY        - Resend API key, used to email buyers their
- *                           download link right after purchase.
+ *   MAILERLITE_API_KEY    - MailerLite API token. Used to upsert the buyer
+ *                           as a subscriber with their personal download
+ *                           link, and drop them into the "Ebook Buyers"
+ *                           group, which is what actually triggers the
+ *                           MailerLite automation that emails them (the
+ *                           same pattern as the homepage free-guide
+ *                           signup -> "Free Guide Signups" group flow).
  *
  *   /webhook/stripe   - Stripe webhook. On checkout.session.completed for
  *                       the ebook, verifies the event signature, then
- *                       emails the buyer their download link via Resend.
+ *                       upserts the buyer into MailerLite so its
+ *                       automation can take over (confirmation email now,
+ *                       review request in a few weeks, coaching pitch
+ *                       later — all as steps in that one automation).
  */
 
 const EBOOK_PRODUCT_ID = "prod_VGxRwAg1J1BU13"; // "Your Simple Guide to Lucid Dreaming"
 const EBOOK_FILE_PATH = "/secure/your-simple-guide-to-lucid-dreaming.pdf";
 const EBOOK_DOWNLOAD_NAME = "Your-Simple-Guide-to-Lucid-Dreaming.pdf";
-const CONFIRMATION_FROM_EMAIL = "Teracopia <hello@teracopia.com>";
+const MAILERLITE_EBOOK_BUYERS_GROUP_ID = "199232136794867305"; // "Ebook Buyers" group
 
 export default {
   async fetch(request, env, ctx) {
@@ -179,8 +187,8 @@ async function handleStripeWebhook(request, env, ctx) {
 
   const downloadUrl = new URL(`/download/ebook?session_id=${encodeURIComponent(sessionId)}`, request.url).toString();
 
-  if (env.RESEND_API_KEY) {
-    ctx.waitUntil(sendConfirmationEmail(env, email, downloadUrl));
+  if (env.MAILERLITE_API_KEY) {
+    ctx.waitUntil(addEbookBuyerToMailerLite(env, email, downloadUrl));
   }
 
   return new Response("ok", { status: 200 });
@@ -220,37 +228,29 @@ async function verifyStripeSignature(payload, sigHeader, secret) {
   return diff === 0;
 }
 
-async function sendConfirmationEmail(env, toEmail, downloadUrl) {
-  const html = `
-    <div style="font-family: Georgia, 'Times New Roman', serif; max-width: 560px; margin: 0 auto; color: #1a1a2e;">
-      <h1 style="font-size: 22px;">Your book is ready</h1>
-      <p>Thanks for picking up <em>Your Simple Guide to Lucid Dreaming</em>. Here's your download link:</p>
-      <p style="margin: 28px 0;">
-        <a href="${downloadUrl}" style="background:#102EA0;color:#fff;padding:14px 24px;border-radius:6px;text-decoration:none;font-weight:600;">Download the ebook</a>
-      </p>
-      <p>If that button doesn't work, copy and paste this link into your browser:<br>
-      <a href="${downloadUrl}">${downloadUrl}</a></p>
-      <p>Hold onto this email — this link is tied to your purchase and works any time you need it again.</p>
-      <p>Sweet dreams,<br>Quinton</p>
-    </div>
-  `;
-
+async function addEbookBuyerToMailerLite(env, toEmail, downloadUrl) {
+  // Upsert the subscriber with their personal download link in a custom
+  // field, and drop them into the "Ebook Buyers" group. Joining that
+  // group is what triggers the MailerLite automation which actually
+  // sends the confirmation email (and, on the steps you add later, the
+  // review request and the coaching pitch) — same mechanism as the
+  // homepage signup form feeding "Free Guide Signups".
   try {
-    await fetch("https://api.resend.com/emails", {
+    await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify({
-        from: CONFIRMATION_FROM_EMAIL,
-        to: [toEmail],
-        subject: "Your Simple Guide to Lucid Dreaming — download link inside",
-        html,
+        email: toEmail,
+        fields: { ebook_download_link: downloadUrl },
+        groups: [MAILERLITE_EBOOK_BUYERS_GROUP_ID],
       }),
     });
   } catch (err) {
     // Best-effort: the download link is also shown on Stripe's own
-    // success-page redirect, so a failed email isn't a lost sale.
+    // success-page redirect, so a failed sync isn't a lost sale.
   }
 }
