@@ -6,4 +6,4 @@ main = "worker.js"
 directory = "./"
 not_found_handling = "404-page"
 binding = "ASSETS"
-run_worker_first = ["/download/*", "/secure/*"]
+run_worker_first = ["/download/*", "/secure/*", "/webhook/*"]
