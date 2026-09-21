@@ -45,37 +45,10 @@
   }
   .coaching-fine { margin-top: 22px; font-size: 0.9rem; color: var(--ink-soft); }
 
-  .tier-section { padding: 0 0 40px; }
-  .tier-head { text-align: center; margin-bottom: 48px; }
-  .tier-head h2 { font-size: 1.9rem; }
-  .tier-head p { color: var(--ink-soft); max-width: 40em; margin: 14px auto 0; }
-  .tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-  .tier-card {
-    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 40px 36px; display: flex; flex-direction: column;
-  }
-  .tier-card.is-featured { border-color: var(--deep-blue); box-shadow: 0 0 40px rgba(108,140,238,0.3); position: relative; }
-  .tier-badge {
-    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-    background: var(--logo-blue); color: var(--white); font-family: 'Jost', sans-serif;
-    font-weight: 600; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 6px 16px; border-radius: 2px; white-space: nowrap;
-  }
-  .tier-card .eyebrow { font-size: 0.85rem; }
-  .tier-card .price { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--deep-blue); margin: 14px 0 6px; }
-  .tier-card .price span { font-family: 'Manrope', sans-serif; font-size: 1rem; color: var(--ink-soft); font-weight: 400; }
-  .tier-card .tier-fit { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 22px; }
-  .tier-card ul { list-style: none; margin: 0 0 28px; padding: 0; flex-grow: 1; }
-  .tier-card li { position: relative; padding-left: 32px; margin-bottom: 14px; color: var(--ink); }
-  .tier-card .check-icon {
-    position: absolute; left: 0; top: 2px; width: 22px; height: 22px;
-    filter: drop-shadow(0 0 10px rgba(108,140,238,0.55));
-  }
-  .tier-fine { text-align: center; margin-top: 32px; font-size: 0.9rem; color: var(--ink-soft); }
-
-  @media (max-width: 860px) {
-    .tier-grid { grid-template-columns: 1fr; }
-  }
+  .pricing-teaser { padding: 0 0 40px; }
+  .pricing-teaser .excerpt-panel { max-width: 720px; margin: 0 auto; text-align: center; }
+  .pricing-teaser p { color: var(--ink); font-size: 1.05rem; margin: 18px 0 30px; }
+  .pricing-teaser p strong { color: var(--deep-blue); }
 </style>
 </head>
 <body>
@@ -121,7 +94,7 @@
   <div class="wrap content">
     <span class="eyebrow">1:1 COACHING</span>
     <h1 style="margin-top: 18px;">Let's build a practice<br><span class="hl">that works for you</span>.</h1>
-    <p class="lede">The <a href="/#signup-form">free Quick-Start Guide</a> and the <a href="/book.html">full book</a> give you the fundamentals to succeed.<br>Personal coaching gives you direct feedback on your own practice, plus the accountability to keep you on track.</p>
+    <p class="lede">The <a href="/#signup-form">free Quick-Start Guide</a> and the <a href="/book.html">Full Book</a> give you the fundamentals to succeed.<br>Personal coaching gives you direct feedback on your own practice, plus the accountability to keep you on track.</p>
   </div>
 </section>
 
@@ -163,41 +136,12 @@
 
 <div class="divider-wrap"><div class="divider"></div></div>
 
-<section class="tier-section wrap" id="pricing">
-  <div class="tier-head">
-    <h2>Pricing, <span class="hl">Two Ways</span></h2>
-    <p>Both start the same way: a free 15-minute call so I can hear where you're at and you can ask me anything, no commitment either way.</p>
+<section class="pricing-teaser wrap" id="pricing">
+  <div class="excerpt-panel">
+    <span class="eyebrow-alt">PRICING</span>
+    <p>Coaching starts at <strong>$179</strong> for a 3-session Starter package, or <strong>$297</strong> for the Full Program: a consulting session, six bi-weekly sessions, and the book included. Both begin with a free 15-minute call, no commitment either way.</p>
+    <a class="btn btn-primary" href="/pricing.html#coaching-tiers">See Full Pricing</a>
   </div>
-  <div class="tier-grid">
-
-    <div class="tier-card">
-      <span class="eyebrow">STARTER</span>
-      <div class="price">$179</div>
-      <p class="tier-fit">Best if you want a focused tune-up on where you're stuck right now.</p>
-      <ul>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Free 15-minute intro call</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>3 one-on-one sessions with me</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Direct feedback on your current practice and where it's breaking down</li>
-      </ul>
-      <a class="btn btn-outline-dark" href="/contact.html">Apply for Coaching</a>
-    </div>
-
-    <div class="tier-card is-featured">
-      <span class="tier-badge">Full Program</span>
-      <span class="eyebrow">FULL PROGRAM</span>
-      <div class="price">$297</div>
-      <p class="tier-fit">Best if you want sustained support through a full 12 weeks of practice.</p>
-      <ul>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Free 15-minute intro call</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A full consulting session to build your custom practice</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Six bi-weekly sessions, 12 weeks of ongoing support</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The full book included, a $15 value</li>
-      </ul>
-      <a class="btn btn-primary" href="/contact.html">Apply for Coaching</a>
-    </div>
-
-  </div>
-  <p class="tier-fine">Spots are limited. Send a message with a bit about your practice and current experience, and I'll follow up to see if it's a good fit.</p>
 </section>
 
 <footer class="wrap site-footer">
