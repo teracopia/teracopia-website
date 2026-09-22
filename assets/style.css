@@ -439,7 +439,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 
 @media (max-width: 860px) {
   .offer-card { grid-template-columns: 1fr; }
-  .offer-card .book-cover-wrap { max-width: 260px; margin: 0 auto; }
+  .offer-card .book-cover-wrap { max-width: 260px; margin: 0 auto; transform: translateX(6px); }
   .testi-grid { grid-template-columns: 1fr; }
 }
 
