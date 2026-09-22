@@ -239,7 +239,7 @@ nav.site-nav {
 }
 
 /* CTA BAND (reused across about / faq / blog index / 404) */
-.cta-band { padding: 20px 0 100px; text-align: center; }
+.cta-band { padding-top: 20px; padding-bottom: 100px; text-align: center; }
 .cta-band h2 { font-size: 1.9rem; max-width: 18em; margin: 0 auto 18px; }
 .cta-band p { color: var(--ink-soft); max-width: 34em; margin: 0 auto 32px; }
 .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
@@ -299,7 +299,7 @@ nav.site-nav {
 }
 
 /* ABOUT-STYLE TWO COLUMN BLOCK (eyebrow + body) — reused across pages */
-.about { padding: 88px 0; }
+.about { padding-top: 88px; padding-bottom: 88px; }
 .about:not(.firsthand) { padding-top: 48px; }
 .about-grid { display: grid; grid-template-columns: 220px 1fr; gap: 48px; }
 .about-grid.centered { grid-template-columns: 1fr; text-align: center; gap: 20px; }
@@ -312,7 +312,7 @@ nav.site-nav {
 .about-body p.pull { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-style: italic; color: var(--deep-blue); line-height: 1.5; }
 
 /* PILLARS / 3-UP FEATURE GRID */
-.pillars { padding: 96px 0 56px; }
+.pillars { padding-top: 96px; padding-bottom: 56px; }
 .about.firsthand { padding-top: 40px; }
 .pillars-head { text-align: center; margin-bottom: 64px; }
 .pillars-head h2 { font-size: 2rem; }
@@ -326,7 +326,7 @@ nav.site-nav {
 .pillar p { font-family: 'Manrope', sans-serif; color: var(--ink-soft); font-size: 1rem; font-weight: 400; margin: 0; }
 
 /* EXCERPT / QUOTE PANEL */
-.excerpt-section { padding: 40px 0 40px; }
+.excerpt-section { padding-top: 40px; padding-bottom: 40px; }
 .excerpt-panel { background: var(--surface); padding: 64px 56px; text-align: center; border: 2px solid var(--deep-blue); border-radius: 8px; box-shadow: 0 0 40px rgba(108,140,238,0.35); }
 .excerpt-panel .eyebrow-alt {
   font-family: 'Jost', sans-serif; font-weight: 700; font-size: 1.55rem; letter-spacing: 0.16em;
@@ -338,7 +338,7 @@ nav.site-nav {
 .excerpt-quote p:last-child { margin-bottom: 0; }
 
 /* TIMELINE (about page journey) */
-.timeline { padding: 20px 0 96px; }
+.timeline { padding-top: 20px; padding-bottom: 96px; }
 .timeline-row { display: grid; grid-template-columns: 90px 1fr; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); }
 .timeline-row:last-child { border-bottom: 1px solid var(--line); }
 .timeline-year { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--deep-blue); padding-top: 2px; }
@@ -346,7 +346,7 @@ nav.site-nav {
 .timeline-body p { margin: 0; color: var(--ink-soft); max-width: 42em; }
 
 /* PRICING / OFFER CARD (book page) */
-.offer { padding: 20px 0 100px; }
+.offer { padding-top: 20px; padding-bottom: 100px; }
 .offer-card {
   display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: center;
   background: var(--bg-panel); padding: 56px; border: 2px solid var(--deep-blue);
@@ -405,14 +405,14 @@ nav.site-nav {
 }
 
 /* TESTIMONIAL GRID */
-.testimonials { padding: 20px 0 100px; }
+.testimonials { padding-top: 20px; padding-bottom: 100px; }
 .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 .testi-card { background: var(--bg); border: 1px solid var(--line); padding: 32px 28px; }
 .testi-card p.quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: var(--ink); margin: 0 0 18px; }
 .testi-card .who { font-family: 'Jost', sans-serif; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
 
 /* FAQ */
-.faq { padding: 20px 0 100px; }
+.faq { padding-top: 20px; padding-bottom: 100px; }
 .faq-item { border-top: 1px solid var(--line); padding: 26px 0; }
 .faq-item:last-child { border-bottom: 1px solid var(--line); }
 .faq-item h3 { font-size: 1.1rem; margin-bottom: 10px; }
@@ -421,7 +421,7 @@ nav.site-nav {
 /* FOOTER */
 footer.site-footer {
   position: relative;
-  padding: 40px 0 56px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  padding-top: 40px; padding-bottom: 56px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
   color: var(--ink-soft); font-family: 'Manrope', sans-serif; font-size: 0.9rem; font-weight: 400;
 }
 footer.site-footer::before {
@@ -475,7 +475,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 }
 
 /* BLOG INDEX */
-.blog-list { padding: 20px 0 100px; }
+.blog-list { padding-top: 20px; padding-bottom: 100px; }
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 .blog-card {
   display: flex; flex-direction: column; background: var(--bg); border: 1px solid var(--line);
@@ -495,7 +495,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 }
 
 /* ARTICLE PAGE */
-.article-hero { padding: 88px 0 40px; }
+.article-hero { padding-top: 88px; padding-bottom: 40px; }
 .article-hero .article-meta {
   font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--deep-blue);
@@ -503,7 +503,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .article-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin-top: 14px; max-width: 16em; }
 .article-hero .article-dek { margin-top: 20px; font-size: 1.15rem; color: var(--ink-soft); max-width: 38em; }
 
-.article-body { padding: 0 0 80px; }
+.article-body { padding-top: 0; padding-bottom: 80px; }
 .article-content { max-width: 700px; margin: 0 auto; }
 .article-content p { margin: 0 0 22px; font-size: 1.08rem; color: var(--ink); }
 .article-content h2 { font-size: 1.5rem; margin: 48px 0 18px; }
@@ -522,7 +522,7 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 .article-cta p { color: var(--ink-soft); margin: 0 0 22px; }
 
 /* STATS / CREDIBILITY STRIP */
-.stats-strip { padding: 8px 0 100px; }
+.stats-strip { padding-top: 8px; padding-bottom: 100px; }
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--night); color: var(--white); }
 .stat { padding: 44px 32px; text-align: center; }
 .stat:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.12); }
