@@ -35,8 +35,12 @@
   .contact-email {
     display: inline-block; margin-top: 8px; font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 1.5rem;
     color: var(--deep-blue); text-decoration: none; border-bottom: 2px solid var(--deep-blue);
+    max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
   }
   .contact-email:hover { color: var(--mid-blue); }
+  @media (max-width: 420px) {
+    .contact-email { font-size: 1.15rem; }
+  }
   .contact-note {
     margin-top: 28px; font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 1.2rem;
     line-height: 1.65; color: var(--ink-soft); max-width: 34em; margin-left: auto; margin-right: auto;
