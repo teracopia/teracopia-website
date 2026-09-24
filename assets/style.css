@@ -451,6 +451,10 @@ footer .foot-links a:hover { color: var(--deep-blue); }
   .testi-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 480px) {
+  .offer-card { padding: 32px 22px; }
+}
+
 @media (max-width: 720px) {
   nav.site-nav { flex-wrap: nowrap; justify-content: space-between; align-items: center; }
   .nav-toggle { display: flex; }
@@ -528,6 +532,10 @@ footer .foot-links a:hover { color: var(--deep-blue); }
 }
 .article-cta h3 { font-size: 1.3rem; margin-bottom: 12px; }
 .article-cta p { color: var(--ink-soft); margin: 0 0 22px; }
+
+@media (max-width: 480px) {
+  .article-cta { padding: 28px 20px; }
+}
 
 /* STATS / CREDIBILITY STRIP */
 .stats-strip { padding-top: 8px; padding-bottom: 100px; }
