@@ -20,10 +20,11 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background: linear-gradient(180deg, #0B0E16 0%, #0F193A 50%, #13245E 100%);
   background-attachment: scroll;
   color: var(--ink);
@@ -206,6 +207,13 @@ nav.site-nav {
 
 .btn-outline-dark { background: transparent; color: var(--ink); border: 2px solid rgba(255,255,255,0.35); }
 .btn-outline-dark:hover { border-color: var(--deep-blue); color: var(--deep-blue); box-shadow: 0 0 20px rgba(108,140,238,0.45); }
+
+/* On narrow screens, a nowrap button inside a shrinking grid/flex column can force
+   the whole column (and page) wider than the viewport, clipping text off the right
+   edge. Letting button text wrap here fixes that at the source. */
+@media (max-width: 540px) {
+  .btn { white-space: normal; text-align: center; }
+}
 
 /* DIVIDER + ORNAMENT */
 .divider-wrap { display: flex; justify-content: center; position: relative; }

@@ -36,6 +36,7 @@
     display: flex; flex-direction: column;
     background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
     padding: 40px 32px; text-align: center;
+    min-width: 0;
   }
   .pricing-card { transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease; }
   .pricing-card:hover { border-color: var(--deep-blue); transform: translateY(-3px); box-shadow: 0 0 40px rgba(108,140,238,0.3); }
@@ -64,6 +65,7 @@
   .tier-card {
     background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
     padding: 40px 36px; display: flex; flex-direction: column;
+    min-width: 0;
   }
   .tier-card.is-featured { border-color: var(--deep-blue); box-shadow: 0 0 40px rgba(108,140,238,0.3); position: relative; }
   .tier-badge {
