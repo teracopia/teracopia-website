@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- navy is the site's single theme; no runtime theme switching needed -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're In - Teracopia Coaching</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#102EA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=Jost:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .start-hero { padding-top: 96px; padding-bottom: 20px; text-align: center; }
+  .start-hero .eyebrow { font-size: 1rem; }
+  .start-hero h1 { font-size: clamp(2.2rem, 5vw, 3rem); }
+  .start-hero p { margin: 20px auto 0; max-width: 40em; color: var(--ink-soft); font-size: 1.1rem; }
+
+  .start-steps { max-width: 720px; margin: 56px auto 0; display: flex; flex-direction: column; gap: 24px; }
+  .start-step {
+    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 32px; display: flex; gap: 22px; align-items: flex-start;
+  }
+  .start-step-num {
+    flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--logo-blue); color: var(--white); font-family: 'Jost', sans-serif;
+    font-weight: 600; display: flex; align-items: center; justify-content: center;
+  }
+  .start-step h2 { font-size: 1.25rem; margin-bottom: 8px; }
+  .start-step p { color: var(--ink-soft); margin: 0 0 18px; }
+  .start-note {
+    text-align: center; margin-top: 40px; font-size: 0.95rem; color: var(--ink-soft);
+    max-width: 34em; margin-left: auto; margin-right: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="site-nav-bar">
+<nav class="wrap site-nav">
+  <a class="brand" href="/">
+    <svg viewBox="-20 -35 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="navGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3654C4" stop-opacity="0.95"/>
+          <stop offset="45%" stop-color="#102EA0" stop-opacity="0.45"/>
+          <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="80" cy="80" r="115" fill="url(#navGlow)"/>
+      <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
+        stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
+      <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
+    </svg>
+    <span class="brand-word">TERACOPIA</span>
+  </a>
+  <div class="nav-controls">
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right" id="nav-menu">
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/coaching.html">Coaching</a></li>
+        <li><a href="/pricing.html">Pricing</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/faq.html">FAQ</a></li>
+        <li><a href="/book.html" class="nav-cta">Buy the Book</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</div>
+
+<section class="start-hero wrap">
+  <span class="eyebrow">YOU'RE IN</span>
+  <h1 style="margin-top: 14px;">Welcome to Coaching</h1>
+  <p>Your payment went through, thank you. Here's what to do next to get your sessions on the calendar.</p>
+</section>
+
+<section class="wrap">
+  <div class="start-steps">
+
+    <div class="start-step">
+      <div class="start-step-num">1</div>
+      <div>
+        <h2>Fill out your intake form</h2>
+        <p>A few questions about your lucid dreaming experience, your sleep routine, and your goals, so I can prepare for our first session together. Takes about 10 minutes.</p>
+        <a class="btn btn-outline-dark" href="https://docs.google.com/forms/d/e/1FAIpQLSce7qztfeq_FEbt9ztcw7agcxnjamT5ySJhGHyhJG1LOSOlpw/viewform" target="_blank" rel="noopener">Fill Out Intake Form</a>
+      </div>
+    </div>
+
+    <div class="start-step">
+      <div class="start-step-num">2</div>
+      <div>
+        <h2>Book your first session</h2>
+        <p>Use the link below to schedule each of your sessions as we go. No need to book them all at once, one at a time works fine.</p>
+        <a class="btn btn-primary" href="https://cal.com/teracopia/30min" target="_blank" rel="noopener">Book a Session</a>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="start-note">Questions before we get started? Just reply to your receipt email or reach out at <a href="mailto:hello@teracopia.com" style="color: var(--deep-blue);">hello@teracopia.com</a>.</p>
+</section>
+
+<footer class="wrap site-footer">
+  <span class="brand-word">TERACOPIA</span>
+  <ul class="foot-links">
+    <li><a href="/about.html">About</a></li>
+    <li><a href="/pricing.html">Pricing</a></li>
+    <li><a href="/blog/">Blog</a></li>
+    <li><a href="/faq.html">FAQ</a></li>
+    <li><a href="/book.html">Buy the Book</a></li>
+    <li><a href="/contact.html">Contact</a></li>
+    <li><a href="/legal.html">Privacy &amp; Terms</a></li>
+  </ul>
+  <span>&copy; 2026 Teracopia. Unlocking your higher self.</span>
+</footer>
+
+<script src="/assets/nav.js" defer></script>
+</body>
+</html>
