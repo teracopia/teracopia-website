@@ -212,7 +212,7 @@ nav.site-nav {
    the whole column (and page) wider than the viewport, clipping text off the right
    edge. Letting button text wrap here fixes that at the source. */
 @media (max-width: 540px) {
-  .btn { white-space: normal; text-align: center; }
+  .btn { white-space: normal; text-align: center; padding-left: 22px; padding-right: 22px; }
 }
 
 /* DIVIDER + ORNAMENT */
