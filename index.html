@@ -221,7 +221,7 @@
     <h1>Lucid Dreaming <span class="hl">Is a Skill</span>.<br>You Can Learn It.</h1>
     <p class="hero-sub">I built a simple practice from thousands of my own lucid dreams.<br>This free guide is the first step, with proven methods you can start using tonight.</p>
 
-    <form id="signup-form" action="https://assets.mailerlite.com/jsonp/2642253/forms/198878160596502020/subscribe" class="capture" method="post" target="_blank">
+    <form id="signup-form" action="https://assets.mailerlite.com/jsonp/2642253/forms/198878160596502020/subscribe" class="capture" method="post">
       <ul class="capture-errors" data-element="errors" data-group="alert"></ul>
       <input name="fields[name]" aria-label="First Name" placeholder="First name" required type="text">
       <input name="fields[email]" aria-label="Email Address" placeholder="you@email.com" required type="email">
@@ -342,5 +342,50 @@
 </footer>
 
 <script src="/assets/nav.js" defer></script>
+<script>
+(function () {
+  var form = document.getElementById('signup-form');
+  if (!form) return;
+  var errorsEl = form.querySelector('[data-element="errors"]');
+  var submitBtn = form.querySelector('[data-element="submit"]');
+  var submitLabel = submitBtn.textContent;
+  var genericError = "Something went wrong. Please try again, or email hello@teracopia.com and I'll send it to you directly.";
+
+  function showErrors(messages) {
+    errorsEl.innerHTML = '';
+    messages.forEach(function (msg) {
+      var li = document.createElement('li');
+      li.textContent = msg;
+      errorsEl.appendChild(li);
+    });
+    submitBtn.disabled = false;
+    submitBtn.textContent = submitLabel;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorsEl.innerHTML = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    fetch(form.action, { method: 'POST', body: new FormData(form) })
+      .then(function (res) { return res.json().catch(function () { return {}; }); })
+      .then(function (data) {
+        if (data && data.success) {
+          form.outerHTML = '<div data-element="success">You\'re in! Check your email in the next few minutes for the guide.</div>';
+        } else {
+          var messages = [];
+          if (data && data.errors && data.errors.fields) {
+            Object.keys(data.errors.fields).forEach(function (key) {
+              data.errors.fields[key].forEach(function (msg) { messages.push(msg); });
+            });
+          }
+          showErrors(messages.length ? messages : [genericError]);
+        }
+      })
+      .catch(function () { showErrors([genericError]); });
+  });
+})();
+</script>
 </body>
 </html>
