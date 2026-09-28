@@ -61,41 +61,43 @@
   .tier-head { text-align: center; margin-bottom: 48px; }
   .tier-head h2 { font-size: 1.9rem; }
   .tier-head p { color: var(--ink-soft); max-width: 40em; margin: 14px auto 0; }
-  .tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-  .tier-grid-single { grid-template-columns: minmax(0, 420px); justify-content: center; }
-  .tier-card {
-    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
-    padding: 40px 36px; display: flex; flex-direction: column;
-    min-width: 0;
+
+  .tier-combined {
+    background: var(--bg-panel); border: 1px solid var(--deep-blue); border-radius: 8px;
+    box-shadow: 0 0 40px rgba(108,140,238,0.3);
+    max-width: 1200px; margin: 0 auto; padding: 48px;
   }
-  .tier-card.is-featured { border-color: var(--deep-blue); box-shadow: 0 0 40px rgba(108,140,238,0.3); position: relative; }
-  .tier-badge {
-    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-    background: var(--logo-blue); color: var(--white); font-family: 'Jost', sans-serif;
+  .tier-combined-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; align-items: start; text-align: left; }
+  .tier-badge-inline {
+    display: inline-block; background: var(--logo-blue); color: var(--white); font-family: 'Jost', sans-serif;
     font-weight: 600; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 6px 16px; border-radius: 2px; white-space: nowrap;
+    padding: 6px 16px; border-radius: 2px; margin-bottom: 14px;
   }
-  .tier-card h3 { font-size: 1.35rem; margin-bottom: 4px; }
-  .tier-card .price { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--deep-blue); margin: 14px 0 6px; }
-  .tier-card .price span { font-family: 'Manrope', sans-serif; font-size: 1rem; color: var(--ink-soft); font-weight: 400; }
-  .tier-card .tier-fit { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 22px; }
-  .tier-card ul { list-style: none; margin: 0 0 28px; padding: 0; flex-grow: 1; }
-  .tier-card li { position: relative; padding-left: 32px; margin-bottom: 14px; color: var(--ink); }
-  .tier-card .check-icon {
+  .tier-info-col h3 { font-size: 1.6rem; margin-bottom: 10px; }
+  .tier-info-col .tier-fit { color: var(--ink-soft); font-size: 1.02rem; margin: 0 0 26px; max-width: 46em; }
+  .tier-info-col ul { list-style: none; margin: 0; padding: 0; }
+  .tier-info-col li { position: relative; padding-left: 32px; margin-bottom: 15px; color: var(--ink); }
+  .tier-info-col .check-icon {
     position: absolute; left: 0; top: 2px; width: 22px; height: 22px;
     filter: drop-shadow(0 0 10px rgba(108,140,238,0.55));
   }
-  .tier-fine { text-align: center; margin-top: 32px; font-size: 0.9rem; color: var(--ink-soft); }
-  .tier-cta { text-align: center; margin-top: 44px; }
+
+  .tier-cta-col { border-left: 1px solid var(--line); padding-left: 48px; text-align: left; }
+  .tier-cta-col .price { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--deep-blue); margin: 0 0 6px; }
+  .tier-cta-col .price span { font-family: 'Manrope', sans-serif; font-size: 1rem; color: var(--ink-soft); font-weight: 400; }
+  .tier-cta-col p { color: var(--ink); font-size: 1rem; margin: 0 0 24px; }
+  .tier-cta-col .btn { width: 100%; text-align: center; }
+  .tier-fine { margin-top: 18px; font-size: 0.88rem; color: var(--ink-soft); }
 
   @media (max-width: 860px) {
     .pricing-grid { grid-template-columns: 1fr; }
-    .tier-grid { grid-template-columns: 1fr; }
+    .tier-combined { padding: 36px 28px; }
+    .tier-combined-grid { grid-template-columns: 1fr; gap: 32px; }
+    .tier-cta-col { border-left: none; border-top: 1px solid var(--line); padding-left: 0; padding-top: 32px; }
   }
 
   @media (max-width: 480px) {
     .pricing-card { padding: 32px 22px; }
-    .tier-card { padding: 32px 22px; }
   }
 </style>
 </head>
@@ -195,25 +197,28 @@
     <h2>The Full <span class="hl">Coaching Program</span></h2>
     <p>Starts the same way for everyone: a free 15-minute call so I can hear where you're at and you can ask me anything, no commitment either way.</p>
   </div>
-  <div class="tier-grid tier-grid-single">
 
-    <div class="tier-card is-featured">
-      <span class="tier-badge">1:1 Coaching</span>
-      <h3>Full Program</h3>
-      <div class="price">$297</div>
-      <p class="tier-fit">Sustained, personalized support through a full 12 weeks of practice.</p>
-      <ul>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Free 15-minute intro call</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A full consulting session to build your custom practice</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Six bi-weekly sessions, 12 weeks of ongoing support</li>
-        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The full book included, a $19.99 value</li>
-      </ul>
+  <div class="tier-combined">
+    <div class="tier-combined-grid">
+      <div class="tier-info-col">
+        <span class="tier-badge-inline">1:1 COACHING</span>
+        <h3>Full Program</h3>
+        <p class="tier-fit">This is the highest-touch way to work with me: sustained, personalized support through a full 12 weeks of practice, built entirely around your schedule, your goals, and where you're actually starting from, not a generic template.</p>
+        <ul>
+          <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A free 15-minute intro call first, so we can both make sure it's the right fit before you commit to anything</li>
+          <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>A full consulting session where we build your custom practice from the ground up</li>
+          <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Six bi-weekly sessions over 12 weeks of direct, ongoing support and troubleshooting</li>
+          <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Direct access to me between sessions any time something comes up</li>
+          <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>The full book included, a $19.99 value, so you always have the fundamentals on hand</li>
+        </ul>
+      </div>
+      <div class="tier-cta-col">
+        <div class="price">$297</div>
+        <p>A one-time investment for the entire 12-week program. It starts with a free intro call and no pressure either way, but if you're ready to actually build a lasting practice instead of guessing your way through it alone, this is where that starts.</p>
+        <a class="btn btn-primary" href="https://cal.com/teracopia/15min" target="_blank" rel="noopener">Book Your Free Intro Call</a>
+        <p class="tier-fine">Spots are limited. Book your free intro call and I'll follow up with next steps if it's a good fit.</p>
+      </div>
     </div>
-
-  </div>
-  <div class="tier-cta">
-    <a class="btn btn-primary" href="https://cal.com/teracopia/15min" target="_blank" rel="noopener">Book Your Free Intro Call</a>
-    <p class="tier-fine">Spots are limited. Book your free intro call and I'll follow up with next steps if it's a good fit.</p>
   </div>
 </section>
 

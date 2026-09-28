@@ -30,6 +30,21 @@
   /* HERO (home page only) */
   .cta-row { display: flex; justify-content: center; margin-top: 32px; }
 
+  .help-section .pillar { text-align: left; }
+  .help-section .pillar-icon { justify-content: flex-start; }
+  .help-section .pillar h3 { text-align: left; }
+  .pillar-list { list-style: none; margin: 16px 0 0; padding: 0; }
+  .pillar-list li {
+    position: relative; padding-left: 28px; margin-bottom: 12px;
+    color: var(--ink-soft); font-family: 'Manrope', sans-serif; font-size: 0.98rem; font-weight: 400;
+    text-align: left;
+  }
+  .pillar-list li:last-child { margin-bottom: 0; }
+  .pillar-list .check-icon {
+    position: absolute; left: 0; top: 2px; width: 18px; height: 18px;
+    filter: drop-shadow(0 0 8px rgba(108,140,238,0.5));
+  }
+
   #signup-form { scroll-margin-top: 22vh; }
 
   .hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
@@ -206,25 +221,37 @@
   </div>
 </section>
 
-<section class="pillars wrap">
+<section class="pillars help-section wrap">
   <div class="pillars-head">
-    <h2>It's <span class="hl">Worth</span> Learning</h2>
+    <h2>How It Can <span class="hl">Help</span></h2>
   </div>
   <div class="pillar-grid">
     <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M15 25l6 6 13-15"/></svg></div>
-      <h3>Wake Up Ready</h3>
-      <p>Rehearse a speech, a big game, or a hard conversation, then walk in already having done it. Dream practice mimics real training, so you show up sharper and prepared.</p>
+      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M31 8a16 16 0 1 0 9 29 13 13 0 0 1-9-29z"/></svg></div>
+      <h3>Get Better Sleep</h3>
+      <ul class="pillar-list">
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Sleep through the night and wake up refreshed</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Take control of nightmares and recurring dreams</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Relax into sleep, easing anxiety and restlessness</li>
+      </ul>
     </div>
     <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M30 18l-4 10-10 4 4-10z"/></svg></div>
-      <h3>Total Freedom</h3>
-      <p>Imagine having the ability to fly, explore the universe, or relive a memory exactly the way you want. Once you're lucid, there are no limits to what's possible.</p>
+      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2" fill="#6C8CEE"/></svg></div>
+      <h3>Perform Better</h3>
+      <ul class="pillar-list">
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Practice skills like a high-performance athlete</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Rehearse speeches, presentations, and work meetings</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Build mind and body connections for your waking life</li>
+      </ul>
     </div>
     <div class="pillar">
-      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6l14 6v10c0 10-6 16-14 20-8-4-14-10-14-20V12z"/></svg></div>
-      <h3>Face Fears</h3>
-      <p>Take control of a recurring nightmare and solve the root of the problem. Confronting your fears in a lucid dream is one of the safest ways to practice facing them in real life.</p>
+      <div class="pillar-icon"><svg viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 34h28"/><circle cx="24" cy="26" r="10"/><path d="M24 8v4M11 15l3 3M37 15l-3 3"/></svg></div>
+      <h3>Live Better</h3>
+      <ul class="pillar-list">
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Solve internal frustrations weighing you down</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Consciously reprogram your subconscious mind</li>
+        <li><svg class="check-icon" viewBox="0 0 48 48" fill="none" stroke="#6C8CEE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 25l6 6 13-15"/></svg>Experience the feeling of mastering your dreams</li>
+      </ul>
     </div>
   </div>
 </section>
