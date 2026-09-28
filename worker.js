@@ -3,7 +3,8 @@
  *
  * Everything is served as a static asset (see [assets] in wrangler.toml)
  * EXCEPT the paths listed in `run_worker_first` below, which hit this
- * script first. That's currently just /download/* and /secure/*:
+ * script first. That's currently /download/*, /secure/*, /webhook/*, and
+ * /check-subscriber:
  *
  *   /download/ebook  - verifies a Stripe Checkout Session actually paid
  *                       for the book, then streams the real PDF back.
@@ -14,6 +15,11 @@
  *                       rejected below, since env.ASSETS.fetch() bypasses
  *                       this script entirely and would otherwise happily
  *                       serve it to anyone who found the path.
+ *   /check-subscriber - read-only lookup the homepage signup form calls
+ *                       before submitting, so it can tell someone who
+ *                       already joined "Free Guide Signups" that they're
+ *                       already on the list instead of implying a fresh
+ *                       email is on its way.
  *
  * Requires Worker secrets (Cloudflare dashboard -> Workers & Pages ->
  * teracopia -> Settings -> Variables and Secrets, or `wrangler secret put
@@ -46,6 +52,7 @@ const EBOOK_PRODUCT_ID = "prod_VGxRwAg1J1BU13"; // "Your Simple Guide to Lucid D
 const EBOOK_FILE_PATH = "/secure/your-simple-guide-to-lucid-dreaming.pdf";
 const EBOOK_DOWNLOAD_NAME = "Your-Simple-Guide-to-Lucid-Dreaming.pdf";
 const MAILERLITE_EBOOK_BUYERS_GROUP_ID = "199232136794867305"; // "Ebook Buyers" group
+const MAILERLITE_FREE_GUIDE_GROUP_ID = "198878190159004793"; // "Free Guide Signups" group
 
 export default {
   async fetch(request, env, ctx) {
@@ -57,6 +64,10 @@ export default {
 
     if (url.pathname === "/webhook/stripe" && request.method === "POST") {
       return handleStripeWebhook(request, env, ctx);
+    }
+
+    if (url.pathname === "/check-subscriber" && request.method === "GET") {
+      return handleCheckSubscriber(request, env);
     }
 
     if (url.pathname.startsWith("/secure/")) {
@@ -128,6 +139,52 @@ async function handleEbookDownload(request, env) {
   headers.set("Content-Disposition", `attachment; filename="${EBOOK_DOWNLOAD_NAME}"`);
   headers.set("Cache-Control", "no-store");
   return new Response(fileRes.body, { status: 200, headers });
+}
+
+// GET /check-subscriber?email=... — used by the homepage signup form to
+// show a different confirmation message to someone who has already joined
+// the "Free Guide Signups" group, since re-submitting the form won't
+// re-trigger that group's automation (MailerLite only fires "on joining a
+// group" the first time). Read-only, no side effects. Always resolves to
+// {"alreadySubscribed": false} on any lookup failure so a broken check
+// never blocks a real signup — this is a cosmetic message choice, not a
+// gate on the form.
+async function handleCheckSubscriber(request, env) {
+  const jsonResponse = (alreadySubscribed) =>
+    new Response(JSON.stringify({ alreadySubscribed }), {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    });
+
+  const url = new URL(request.url);
+  const email = url.searchParams.get("email");
+  if (!email || !env.MAILERLITE_API_KEY) {
+    return jsonResponse(false);
+  }
+
+  try {
+    const res = await fetch(
+      `https://connect.mailerlite.com/api/subscribers/${encodeURIComponent(email)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      // 404 = never subscribed before; any other error, fail open.
+      return jsonResponse(false);
+    }
+
+    const body = await res.json();
+    const groups = body?.data?.groups || [];
+    const alreadySubscribed = groups.some((g) => g.id === MAILERLITE_FREE_GUIDE_GROUP_ID);
+    return jsonResponse(alreadySubscribed);
+  } catch (err) {
+    return jsonResponse(false);
+  }
 }
 
 async function handleStripeWebhook(request, env, ctx) {

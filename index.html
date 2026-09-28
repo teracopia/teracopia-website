@@ -374,6 +374,8 @@
   var submitBtn = form.querySelector('[data-element="submit"]');
   var submitLabel = submitBtn.textContent;
   var genericError = "Something went wrong. Please try again, or email hello@teracopia.com and I'll send it to you directly.";
+  var newSignupMessage = "You're in! Check your email in the next few minutes for the guide.";
+  var alreadySignedUpMessage = "Looks like you're already on the list! Check your inbox (or spam folder) for the guide — can't find it? Email hello@teracopia.com and I'll resend it.";
 
   function showErrors(messages) {
     errorsEl.innerHTML = '';
@@ -386,28 +388,46 @@
     submitBtn.textContent = submitLabel;
   }
 
+  // Checked before submitting, so it reflects whether this email was
+  // already on the list BEFORE this submission (not after) — used only to
+  // pick which confirmation message to show. Never blocks the real signup:
+  // any failure here (network error, endpoint down, etc.) just falls back
+  // to treating them as a new signup.
+  function checkAlreadySubscribed(email) {
+    if (!email) return Promise.resolve(false);
+    return fetch('/check-subscriber?email=' + encodeURIComponent(email))
+      .then(function (res) { return res.ok ? res.json() : {}; })
+      .then(function (data) { return !!(data && data.alreadySubscribed); })
+      .catch(function () { return false; });
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     errorsEl.innerHTML = '';
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
-    fetch(form.action, { method: 'POST', body: new FormData(form) })
-      .then(function (res) { return res.json().catch(function () { return {}; }); })
-      .then(function (data) {
-        if (data && data.success) {
-          form.outerHTML = '<div data-element="success">You\'re in! Check your email in the next few minutes for the guide.</div>';
-        } else {
-          var messages = [];
-          if (data && data.errors && data.errors.fields) {
-            Object.keys(data.errors.fields).forEach(function (key) {
-              data.errors.fields[key].forEach(function (msg) { messages.push(msg); });
-            });
+    var emailInput = form.querySelector('input[name="fields[email]"]');
+    var email = emailInput ? emailInput.value : '';
+
+    checkAlreadySubscribed(email).then(function (alreadySubscribed) {
+      return fetch(form.action, { method: 'POST', body: new FormData(form) })
+        .then(function (res) { return res.json().catch(function () { return {}; }); })
+        .then(function (data) {
+          if (data && data.success) {
+            var message = alreadySubscribed ? alreadySignedUpMessage : newSignupMessage;
+            form.outerHTML = '<div data-element="success">' + message + '</div>';
+          } else {
+            var messages = [];
+            if (data && data.errors && data.errors.fields) {
+              Object.keys(data.errors.fields).forEach(function (key) {
+                data.errors.fields[key].forEach(function (msg) { messages.push(msg); });
+              });
+            }
+            showErrors(messages.length ? messages : [genericError]);
           }
-          showErrors(messages.length ? messages : [genericError]);
-        }
-      })
-      .catch(function () { showErrors([genericError]); });
+        });
+    }).catch(function () { showErrors([genericError]); });
   });
 })();
 </script>
