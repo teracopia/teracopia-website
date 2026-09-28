@@ -291,7 +291,7 @@ nav.site-nav {
   color: var(--ink);
 }
 .formkit-alert-success::before, [data-element="success"]::before {
-  content: "\2713";
+  content: "";
   position: absolute;
   top: -20px;
   left: 50%;
@@ -299,10 +299,7 @@ nav.site-nav {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--logo-blue);
-  color: var(--white);
-  font-size: 1.2rem;
-  line-height: 40px;
+  background: var(--logo-blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 25l6 6 13-15'/%3E%3C/svg%3E") no-repeat center/20px 20px;
   box-shadow: 0 0 18px rgba(54,84,196,0.6);
 }
 
