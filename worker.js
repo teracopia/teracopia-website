@@ -7,7 +7,8 @@
  * /check-subscriber:
  *
  *   /download/ebook  - verifies a Stripe Checkout Session actually paid
- *                       for the book, then streams the real PDF back.
+ *                       for the book (or for coaching, which includes the
+ *                       book free), then streams the real PDF back.
  *   /secure/*         - where the real, un-served-by-default ebook PDF
  *                       lives. Never linked publicly; only ever read
  *                       internally via env.ASSETS.fetch() from this
@@ -49,6 +50,7 @@
  */
 
 const EBOOK_PRODUCT_ID = "prod_VGxRwAg1J1BU13"; // "Your Simple Guide to Lucid Dreaming"
+const COACHING_PRODUCT_ID = "prod_VJxAFXxWfOLmGp"; // "Coaching Package: 6 Sessions" — coaching buyers get the book free, so /download/ebook also honors this product
 const EBOOK_FILE_PATH = "/secure/your-simple-guide-to-lucid-dreaming.pdf";
 const EBOOK_DOWNLOAD_NAME = "Your-Simple-Guide-to-Lucid-Dreaming.pdf";
 const MAILERLITE_EBOOK_BUYERS_GROUP_ID = "199232136794867305"; // "Ebook Buyers" group
@@ -123,7 +125,10 @@ async function handleEbookDownload(request, env) {
   const purchasedEbook = (session.line_items?.data || []).some(
     (item) => item.price?.product === EBOOK_PRODUCT_ID
   );
-  if (!purchasedEbook) {
+  const purchasedCoaching = (session.line_items?.data || []).some(
+    (item) => item.price?.product === COACHING_PRODUCT_ID
+  );
+  if (!purchasedEbook && !purchasedCoaching) {
     return new Response("This purchase doesn't include the ebook.", { status: 402 });
   }
 
