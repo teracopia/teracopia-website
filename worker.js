@@ -72,6 +72,10 @@ export default {
       return handleCheckSubscriber(request, env);
     }
 
+    if (url.pathname === "/api/dashboard" && request.method === "GET") {
+      return handleDashboard(request, env);
+    }
+
     if (url.pathname.startsWith("/secure/")) {
       // Only this script's own internal env.ASSETS.fetch() calls should
       // ever reach this file. Any request that gets here came in from
@@ -325,4 +329,346 @@ async function addEbookBuyerToMailerLite(env, toEmail, toName, downloadUrl) {
     // Best-effort: the download link is also shown on Stripe's own
     // success-page redirect, so a failed sync isn't a lost sale.
   }
+}
+
+// ============================================================================
+// Accountability Dashboard API
+// ============================================================================
+//
+// GET /api/dashboard — aggregates live metrics for Quinton's private
+// accountability dashboard (not linked anywhere public). Requires the
+// X-Dashboard-Token header to match env.DASHBOARD_TOKEN, so this never
+// leaks business numbers to the public internet.
+//
+// Additional Worker secrets required (on top of the ones above):
+//
+//   DASHBOARD_TOKEN       - shared secret the dashboard page sends as the
+//                           X-Dashboard-Token header. Generate any random
+//                           string.
+//   STRIPE_DASHBOARD_KEY  - read-only restricted Stripe key (separate from
+//                           STRIPE_SECRET_KEY, which only needs Checkout
+//                           Session read access for the download flow).
+//   CALCOM_API_KEY        - Cal.com API key (Settings -> Developer ->
+//                           API keys).
+//   CF_API_TOKEN          - Cloudflare API token with Account Analytics:Read
+//                           on this zone, used to pull Web Analytics via
+//                           GraphQL.
+//   CF_ZONE_TAG           - the teracopia.com zone ID (Cloudflare dashboard
+//                           -> Overview -> API section, bottom right).
+//
+// MAILERLITE_API_KEY (already configured above) is reused for subscriber
+// and campaign stats.
+
+const EBOOK_PRICE_LOOKUP = new Set([EBOOK_PRODUCT_ID]);
+const COACHING_PRICE_LOOKUP = new Set([COACHING_PRODUCT_ID]);
+
+async function handleDashboard(request, env) {
+  const token = request.headers.get("X-Dashboard-Token");
+  if (!env.DASHBOARD_TOKEN || token !== env.DASHBOARD_TOKEN) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  const [stripe, calcom, mailerlite, cloudflareAnalytics] = await Promise.all([
+    fetchStripeDashboardData(env).catch((err) => ({ error: String(err) })),
+    fetchCalcomData(env).catch((err) => ({ error: String(err) })),
+    fetchMailerLiteData(env).catch((err) => ({ error: String(err) })),
+    fetchCloudflareAnalytics(env).catch((err) => ({ error: String(err) })),
+  ]);
+
+  return new Response(
+    JSON.stringify({
+      generatedAt: new Date().toISOString(),
+      stripe,
+      calcom,
+      mailerlite,
+      cloudflareAnalytics,
+    }),
+    { status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } }
+  );
+}
+
+function dayKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function startOfWeek(date) {
+  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = d.getUTCDay(); // 0 = Sunday
+  d.setUTCDate(d.getUTCDate() - day);
+  return dayKey(d);
+}
+
+async function fetchStripeDashboardData(env) {
+  if (!env.STRIPE_DASHBOARD_KEY) return { error: "STRIPE_DASHBOARD_KEY not configured" };
+
+  const ninetyDaysAgo = Math.floor(Date.now() / 1000) - 90 * 24 * 60 * 60;
+  const sessions = [];
+  let startingAfter = null;
+  let pages = 0;
+
+  // Stripe Checkout Sessions list, paginated, last 90 days, with line
+  // items expanded so we can tell book vs. coaching apart.
+  while (pages < 10) {
+    const params = new URLSearchParams();
+    params.set("limit", "100");
+    params.set("created[gte]", String(ninetyDaysAgo));
+    params.append("expand[]", "data.line_items");
+    if (startingAfter) params.set("starting_after", startingAfter);
+
+    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${env.STRIPE_DASHBOARD_KEY}` },
+    });
+    if (!res.ok) throw new Error(`Stripe list sessions failed: ${res.status}`);
+    const page = await res.json();
+    sessions.push(...(page.data || []));
+    pages++;
+    if (!page.has_more || !page.data?.length) break;
+    startingAfter = page.data[page.data.length - 1].id;
+  }
+
+  const paid = sessions.filter((s) => s.payment_status === "paid");
+
+  const dailyMap = new Map(); // date -> {book, coaching}
+  const weeklyMap = new Map(); // weekStart -> {book, coaching}
+  let totalBook = 0;
+  let totalCoaching = 0;
+
+  for (const session of paid) {
+    const items = session.line_items?.data || [];
+    const hasBook = items.some((i) => EBOOK_PRICE_LOOKUP.has(i.price?.product));
+    const hasCoaching = items.some((i) => COACHING_PRICE_LOOKUP.has(i.price?.product));
+    const created = new Date(session.created * 1000);
+    const dKey = dayKey(created);
+    const wKey = startOfWeek(created);
+
+    if (!dailyMap.has(dKey)) dailyMap.set(dKey, { date: dKey, book: 0, coaching: 0 });
+    if (!weeklyMap.has(wKey)) weeklyMap.set(wKey, { weekStart: wKey, book: 0, coaching: 0 });
+
+    if (hasCoaching) {
+      // Coaching purchases include the book free — count the sale as
+      // coaching, not double-counted as a separate book sale.
+      dailyMap.get(dKey).coaching++;
+      weeklyMap.get(wKey).coaching++;
+      totalCoaching++;
+    } else if (hasBook) {
+      dailyMap.get(dKey).book++;
+      weeklyMap.get(wKey).book++;
+      totalBook++;
+    }
+  }
+
+  const daily = [...dailyMap.values()].sort((a, b) => a.date.localeCompare(b.date));
+  const weekly = [...weeklyMap.values()].sort((a, b) => a.weekStart.localeCompare(b.weekStart));
+
+  return {
+    windowDays: 90,
+    totals: { book: totalBook, coaching: totalCoaching, all: totalBook + totalCoaching },
+    daily,
+    weekly,
+  };
+}
+
+async function fetchCalcomData(env) {
+  if (!env.CALCOM_API_KEY) return { error: "CALCOM_API_KEY not configured" };
+
+  const res = await fetch(`https://api.cal.com/v1/bookings?apiKey=${encodeURIComponent(env.CALCOM_API_KEY)}`);
+  if (!res.ok) throw new Error(`Cal.com bookings failed: ${res.status}`);
+  const body = await res.json();
+  const bookings = body.bookings || [];
+
+  const now = Date.now();
+  const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+  const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+
+  let totalBooked = 0;
+  let completed = 0;
+  let upcoming = 0;
+  let cancelled = 0;
+  let bookedLast7Days = 0;
+  let bookedLast30Days = 0;
+  const dailyMap = new Map();
+
+  for (const b of bookings) {
+    const status = (b.status || "").toLowerCase();
+    const start = new Date(b.startTime).getTime();
+    const createdAt = new Date(b.createdAt || b.startTime).getTime();
+
+    if (status === "cancelled" || status === "rejected") {
+      cancelled++;
+      continue;
+    }
+    totalBooked++;
+    if (start < now) completed++;
+    else upcoming++;
+
+    if (createdAt >= sevenDaysAgo) bookedLast7Days++;
+    if (createdAt >= thirtyDaysAgo) bookedLast30Days++;
+
+    if (createdAt >= thirtyDaysAgo) {
+      const dKey = dayKey(new Date(createdAt));
+      dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
+    }
+  }
+
+  const daily = [...dailyMap.entries()]
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  return { totalBooked, completed, upcoming, cancelled, bookedLast7Days, bookedLast30Days, daily };
+}
+
+async function fetchMailerLiteData(env) {
+  if (!env.MAILERLITE_API_KEY) return { error: "MAILERLITE_API_KEY not configured" };
+
+  const headers = {
+    Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
+    Accept: "application/json",
+  };
+
+  const now = Date.now();
+  const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+  const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+
+  // Active subscriber count.
+  const subsRes = await fetch("https://connect.mailerlite.com/api/subscribers?filter[status]=active&limit=1", {
+    headers,
+  });
+  if (!subsRes.ok) throw new Error(`MailerLite subscribers failed: ${subsRes.status}`);
+  const subsBody = await subsRes.json();
+  const totalActiveSubscribers = subsBody.total ?? subsBody.meta?.total ?? null;
+
+  // Recent subscribers (sorted newest first) to count new signups in the
+  // last 7/30 days — capped at 500 most recent, which comfortably covers
+  // a 30-day window at this list's current volume.
+  let newLast7Days = 0;
+  let newLast30Days = 0;
+  const dailyMap = new Map();
+  let cursor = null;
+  let fetched = 0;
+
+  while (fetched < 500) {
+    const params = new URLSearchParams();
+    params.set("filter[status]", "active");
+    params.set("sort", "-created_at");
+    params.set("limit", "100");
+    if (cursor) params.set("cursor", cursor);
+
+    const res = await fetch(`https://connect.mailerlite.com/api/subscribers?${params.toString()}`, { headers });
+    if (!res.ok) break;
+    const body = await res.json();
+    const page = body.data || [];
+    if (!page.length) break;
+
+    let stop = false;
+    for (const sub of page) {
+      const createdAt = new Date(sub.created_at).getTime();
+      if (createdAt < thirtyDaysAgo) {
+        stop = true;
+        break;
+      }
+      if (createdAt >= sevenDaysAgo) newLast7Days++;
+      newLast30Days++;
+      const dKey = dayKey(new Date(createdAt));
+      dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
+    }
+
+    fetched += page.length;
+    cursor = body.meta?.next_cursor;
+    if (stop || !cursor) break;
+  }
+
+  // Recent campaigns, for "emails sent" over the last 30 days.
+  let campaignsSentLast30Days = 0;
+  let emailsSentLast30Days = 0;
+  try {
+    const campRes = await fetch("https://connect.mailerlite.com/api/campaigns?filter[status]=sent&limit=50", {
+      headers,
+    });
+    if (campRes.ok) {
+      const campBody = await campRes.json();
+      for (const c of campBody.data || []) {
+        const sentAt = c.finished_at || c.scheduled_for || c.updated_at;
+        if (sentAt && new Date(sentAt).getTime() >= thirtyDaysAgo) {
+          campaignsSentLast30Days++;
+          emailsSentLast30Days += c.stats?.sent || 0;
+        }
+      }
+    }
+  } catch (err) {
+    // Non-fatal — campaign stats are a bonus metric.
+  }
+
+  const newSubscribersDaily = [...dailyMap.entries()]
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  return {
+    totalActiveSubscribers,
+    newLast7Days,
+    newLast30Days,
+    newSubscribersDaily,
+    campaignsSentLast30Days,
+    emailsSentLast30Days,
+  };
+}
+
+async function fetchCloudflareAnalytics(env) {
+  if (!env.CF_API_TOKEN || !env.CF_ZONE_TAG) {
+    return { error: "CF_API_TOKEN / CF_ZONE_TAG not configured" };
+  }
+
+  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const until = new Date().toISOString().slice(0, 10);
+
+  const query = `
+    query {
+      viewer {
+        zones(filter: { zoneTag: "${env.CF_ZONE_TAG}" }) {
+          httpRequests1dGroups(limit: 14, filter: { date_geq: "${since}", date_leq: "${until}" }, orderBy: [date_ASC]) {
+            dimensions { date }
+            sum { requests pageViews }
+            uniq { uniques }
+          }
+        }
+      }
+    }
+  `;
+
+  const res = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.CF_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query }),
+  });
+  if (!res.ok) throw new Error(`Cloudflare GraphQL failed: ${res.status}`);
+  const body = await res.json();
+  if (body.errors?.length) throw new Error(`Cloudflare GraphQL errors: ${JSON.stringify(body.errors)}`);
+
+  const groups = body.data?.viewer?.zones?.[0]?.httpRequests1dGroups || [];
+  const daily = groups.map((g) => ({
+    date: g.dimensions.date,
+    requests: g.sum.requests,
+    pageViews: g.sum.pageViews,
+    uniqueVisitors: g.uniq.uniques,
+  }));
+
+  const last7Days = daily.reduce(
+    (acc, d) => ({
+      requests: acc.requests + d.requests,
+      pageViews: acc.pageViews + d.pageViews,
+      uniqueVisitors: acc.uniqueVisitors + d.uniqueVisitors,
+    }),
+    { requests: 0, pageViews: 0, uniqueVisitors: 0 }
+  );
+
+  return {
+    note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately.",
+    daily,
+    last7Days,
+  };
 }
