@@ -72,6 +72,10 @@ export default {
       return handleCheckSubscriber(request, env);
     }
 
+    if (url.pathname === "/api/dashboard" && request.method === "OPTIONS") {
+      return new Response(null, { status: 204, headers: dashboardCorsHeaders() });
+    }
+
     if (url.pathname === "/api/dashboard" && request.method === "GET") {
       return handleDashboard(request, env);
     }
@@ -362,12 +366,21 @@ async function addEbookBuyerToMailerLite(env, toEmail, toName, downloadUrl) {
 const EBOOK_PRICE_LOOKUP = new Set([EBOOK_PRODUCT_ID]);
 const COACHING_PRICE_LOOKUP = new Set([COACHING_PRODUCT_ID]);
 
+function dashboardCorsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, OPTIONS",
+    "Access-Control-Allow-Headers": "X-Dashboard-Token",
+    "Access-Control-Max-Age": "86400",
+  };
+}
+
 async function handleDashboard(request, env) {
   const token = request.headers.get("X-Dashboard-Token");
   if (!env.DASHBOARD_TOKEN || token !== env.DASHBOARD_TOKEN) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...dashboardCorsHeaders() },
     });
   }
 
@@ -386,7 +399,10 @@ async function handleDashboard(request, env) {
       mailerlite,
       cloudflareAnalytics,
     }),
-    { status: 200, headers: { "Content-Type": "application/json", "Cache-Control": "no-store" } }
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...dashboardCorsHeaders() },
+    }
   );
 }
 
