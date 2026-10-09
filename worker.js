@@ -811,7 +811,11 @@ async function fetchCloudflareAnalytics(env) {
   // Hourly data is a separate, much shorter window -- Cloudflare's hourly
   // analytics retention is far shorter than daily, and a year of hourly
   // points would be both useless and a huge payload.
-  const hourlySinceDt = new Date(Date.now() - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  // Cloudflare's httpRequests1hGroups caps the query span at 3 days, so
+  // this uses a dedicated (shorter) window even though other sources use
+  // the full HOURLY_WINDOW_DAYS.
+  const CF_HOURLY_WINDOW_DAYS = Math.min(HOURLY_WINDOW_DAYS, 3);
+  const hourlySinceDt = new Date(Date.now() - CF_HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
   const hourlyUntilDt = new Date().toISOString();
 
   const query = `
@@ -927,7 +931,10 @@ async function getYouTubeAccessToken(env) {
       grant_type: "refresh_token",
     }),
   });
-  if (!res.ok) throw new Error(`YouTube OAuth token refresh failed: ${res.status}`);
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`YouTube OAuth token refresh failed: ${res.status} ${errText.slice(0, 300)}`);
+  }
   const body = await res.json();
   return body.access_token || null;
 }
