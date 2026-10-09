@@ -388,11 +388,12 @@ async function handleDashboard(request, env) {
     });
   }
 
-  const [stripe, calcom, mailerlite, cloudflareAnalytics] = await Promise.all([
+  const [stripe, calcom, mailerlite, cloudflareAnalytics, youtube] = await Promise.all([
     fetchStripeDashboardData(env).catch((err) => ({ error: String(err) })),
     fetchCalcomData(env).catch((err) => ({ error: String(err) })),
     fetchMailerLiteData(env).catch((err) => ({ error: String(err) })),
     fetchCloudflareAnalytics(env).catch((err) => ({ error: String(err) })),
+    fetchYouTubeData(env).catch((err) => ({ error: String(err) })),
   ]);
 
   return new Response(
@@ -402,6 +403,7 @@ async function handleDashboard(request, env) {
       calcom,
       mailerlite,
       cloudflareAnalytics,
+      youtube,
     }),
     {
       status: 200,
@@ -766,6 +768,94 @@ async function fetchCloudflareAnalytics(env) {
     note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately. History depth depends on your Cloudflare plan's analytics retention.",
     daily,
     last7Days,
+  };
+}
+
+// ============================================================================
+// YouTube (subscriber count, lifetime totals, per-video view counts)
+// ============================================================================
+//
+// Subscriber count and lifetime totals come straight from the public
+// YouTube Data API v3 (channels.list) -- just an API key, no OAuth needed.
+// The trend chart buckets each video's CURRENT view count by its upload
+// date (not true day-by-day view history) since that needs the YouTube
+// Analytics API with OAuth as the channel owner -- a bigger lift saved for
+// later if real watch-time / daily-view history is wanted.
+//
+// Additional Worker secret required:
+//   YOUTUBE_API_KEY - a YouTube Data API v3 key (no OAuth, just enable the
+//                      API in Google Cloud Console and create an API key).
+
+const YOUTUBE_CHANNEL_ID = "UCTis_yWYeHD5OvchyBOHU-A"; // @teracopia
+const YOUTUBE_UPLOADS_PLAYLIST_ID = "UU" + YOUTUBE_CHANNEL_ID.slice(2);
+
+async function fetchYouTubeData(env) {
+  if (!env.YOUTUBE_API_KEY) {
+    return { error: "YOUTUBE_API_KEY not configured" };
+  }
+
+  const statsRes = await fetch(
+    `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${env.YOUTUBE_API_KEY}`
+  );
+  if (!statsRes.ok) throw new Error(`YouTube channels.list failed: ${statsRes.status}`);
+  const statsBody = await statsRes.json();
+  const stats = statsBody.items?.[0]?.statistics;
+  if (!stats) throw new Error("YouTube channel not found");
+
+  // Walk the uploads playlist to get every video's id, title, and publish date.
+  const videoRefs = [];
+  let pageToken = "";
+  let pages = 0;
+  do {
+    const url =
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50` +
+      `&playlistId=${YOUTUBE_UPLOADS_PLAYLIST_ID}&key=${env.YOUTUBE_API_KEY}` +
+      (pageToken ? `&pageToken=${pageToken}` : "");
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`YouTube playlistItems failed: ${res.status}`);
+    const body = await res.json();
+    for (const item of body.items || []) {
+      const publishedAt = (item.contentDetails?.videoPublishedAt || item.snippet?.publishedAt || "").slice(0, 10);
+      videoRefs.push({
+        videoId: item.contentDetails?.videoId,
+        publishedAt,
+        title: item.snippet?.title || "Untitled",
+      });
+    }
+    pageToken = body.nextPageToken || "";
+    pages++;
+  } while (pageToken && pages < 6);
+
+  // Batch-fetch each video's current view count, 50 ids per request.
+  const viewsByVideoId = new Map();
+  for (let i = 0; i < videoRefs.length; i += 50) {
+    const ids = videoRefs
+      .slice(i, i + 50)
+      .map((v) => v.videoId)
+      .filter(Boolean)
+      .join(",");
+    if (!ids) continue;
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${ids}&key=${env.YOUTUBE_API_KEY}`);
+    if (!res.ok) throw new Error(`YouTube videos.list failed: ${res.status}`);
+    const body = await res.json();
+    for (const v of body.items || []) {
+      viewsByVideoId.set(v.id, Number(v.statistics?.viewCount || 0));
+    }
+  }
+
+  const daily = videoRefs
+    .filter((v) => v.publishedAt && v.videoId)
+    .map((v) => ({ date: v.publishedAt, views: viewsByVideoId.get(v.videoId) || 0, videos: 1 }));
+
+  const latest = [...videoRefs].filter((v) => v.publishedAt).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))[0];
+
+  return {
+    note: "Subscriber count and lifetime totals are live from the YouTube Data API. The chart buckets each video's current view count by its upload date, not true daily view history -- that needs the YouTube Analytics API with OAuth.",
+    subscriberCount: Number(stats.subscriberCount || 0),
+    totalViews: Number(stats.viewCount || 0),
+    videoCount: Number(stats.videoCount || 0),
+    daily,
+    latestVideo: latest ? { title: latest.title, publishedAt: latest.publishedAt, views: viewsByVideoId.get(latest.videoId) || 0 } : null,
   };
 }
 
