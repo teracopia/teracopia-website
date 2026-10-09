@@ -712,7 +712,10 @@ async function fetchCloudflareAnalytics(env) {
     return { error: "CF_API_TOKEN / CF_ZONE_TAG not configured" };
   }
 
-  const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  // Cloudflare's GraphQL analytics API rejects any zone query spanning more
+  // than 52 weeks + 1 day + 1 hour, so this stays a few days under a full
+  // year to leave room for date-boundary rounding.
+  const since = new Date(Date.now() - 358 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const until = new Date().toISOString().slice(0, 10);
 
   const query = `
