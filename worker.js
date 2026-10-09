@@ -424,17 +424,17 @@ function startOfWeek(date) {
 async function fetchStripeDashboardData(env) {
   if (!env.STRIPE_DASHBOARD_KEY) return { error: "STRIPE_DASHBOARD_KEY not configured" };
 
-  const ninetyDaysAgo = Math.floor(Date.now() / 1000) - 90 * 24 * 60 * 60;
+  const yearAgo = Math.floor(Date.now() / 1000) - 365 * 24 * 60 * 60;
   const sessions = [];
   let startingAfter = null;
   let pages = 0;
 
-  // Stripe Checkout Sessions list, paginated, last 90 days, with line
+  // Stripe Checkout Sessions list, paginated, last 365 days, with line
   // items expanded so we can tell book vs. coaching apart.
-  while (pages < 10) {
+  while (pages < 30) {
     const params = new URLSearchParams();
     params.set("limit", "100");
-    params.set("created[gte]", String(ninetyDaysAgo));
+    params.set("created[gte]", String(yearAgo));
     params.append("expand[]", "data.line_items");
     if (startingAfter) params.set("starting_after", startingAfter);
 
@@ -493,7 +493,7 @@ async function fetchStripeDashboardData(env) {
   const weekly = [...weeklyMap.values()].sort((a, b) => a.weekStart.localeCompare(b.weekStart));
 
   return {
-    windowDays: 90,
+    windowDays: 365,
     totals: {
       book: totalBook,
       coaching: totalCoaching,
@@ -518,7 +518,7 @@ async function fetchCalcomData(env) {
   const bookings = [];
   let skip = 0;
   let pages = 0;
-  while (pages < 10) {
+  while (pages < 30) {
     const res = await fetch(`https://api.cal.com/v2/bookings?take=100&skip=${skip}`, {
       headers: {
         Authorization: `Bearer ${env.CALCOM_API_KEY}`,
@@ -537,6 +537,7 @@ async function fetchCalcomData(env) {
   const now = Date.now();
   const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
   const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+  const yearAgoMs = now - 365 * 24 * 60 * 60 * 1000;
 
   let totalBooked = 0;
   let completed = 0;
@@ -562,7 +563,7 @@ async function fetchCalcomData(env) {
     if (createdAt >= sevenDaysAgo) bookedLast7Days++;
     if (createdAt >= thirtyDaysAgo) bookedLast30Days++;
 
-    if (createdAt >= thirtyDaysAgo) {
+    if (createdAt >= yearAgoMs) {
       const dKey = dayKey(new Date(createdAt));
       dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
     }
@@ -586,11 +587,12 @@ async function fetchMailerLiteData(env) {
   const now = Date.now();
   const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
   const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+  const yearAgo = now - 365 * 24 * 60 * 60 * 1000;
 
-  // Recent subscribers (sorted newest first) to count new signups in the
-  // last 7/30 days — capped at 500 most recent, which comfortably covers
-  // a 30-day window at this list's current volume. The first page's
-  // response also carries the account-wide active subscriber total.
+  // Recent subscribers (sorted newest first) to build a year-long daily
+  // signup trend — capped at 3000 most recent, which comfortably covers a
+  // year at this list's current volume. The first page's response also
+  // carries the account-wide active subscriber total.
   let totalActiveSubscribers = null;
   let newLast7Days = 0;
   let newLast30Days = 0;
@@ -613,7 +615,7 @@ async function fetchMailerLiteData(env) {
     // Non-fatal — total is a bonus metric alongside the daily breakdown.
   }
 
-  while (fetched < 500) {
+  while (fetched < 3000) {
     const params = new URLSearchParams();
     params.set("filter[status]", "active");
     params.set("sort", "-created_at");
@@ -629,12 +631,12 @@ async function fetchMailerLiteData(env) {
     let stop = false;
     for (const sub of page) {
       const createdAt = new Date(sub.created_at).getTime();
-      if (createdAt < thirtyDaysAgo) {
+      if (createdAt < yearAgo) {
         stop = true;
         break;
       }
       if (createdAt >= sevenDaysAgo) newLast7Days++;
-      newLast30Days++;
+      if (createdAt >= thirtyDaysAgo) newLast30Days++;
       const dKey = dayKey(new Date(createdAt));
       dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
     }
@@ -644,28 +646,53 @@ async function fetchMailerLiteData(env) {
     if (stop || !cursor) break;
   }
 
-  // Recent campaigns, for "emails sent" over the last 30 days.
+  // Recent campaigns, for a year-long "emails sent" trend. Paginated up to
+  // 300 campaigns, which is generous for a solo creator's send volume.
   let campaignsSentLast30Days = 0;
   let emailsSentLast30Days = 0;
+  const emailsDailyMap = new Map();
   try {
-    const campRes = await fetch("https://connect.mailerlite.com/api/campaigns?filter[status]=sent&limit=50", {
-      headers,
-    });
-    if (campRes.ok) {
+    let campPage = 1;
+    let campFetched = 0;
+    while (campFetched < 300) {
+      const campRes = await fetch(
+        `https://connect.mailerlite.com/api/campaigns?filter[status]=sent&limit=50&page=${campPage}`,
+        { headers }
+      );
+      if (!campRes.ok) break;
       const campBody = await campRes.json();
-      for (const c of campBody.data || []) {
+      const campaigns = campBody.data || [];
+      if (!campaigns.length) break;
+
+      let stop = false;
+      for (const c of campaigns) {
         const sentAt = c.finished_at || c.scheduled_for || c.updated_at;
-        if (sentAt && new Date(sentAt).getTime() >= thirtyDaysAgo) {
+        const sentAtMs = sentAt ? new Date(sentAt).getTime() : null;
+        if (!sentAtMs || sentAtMs < yearAgo) {
+          stop = true;
+          continue;
+        }
+        if (sentAtMs >= thirtyDaysAgo) {
           campaignsSentLast30Days++;
           emailsSentLast30Days += c.stats?.sent || 0;
         }
+        const dKey = dayKey(new Date(sentAtMs));
+        emailsDailyMap.set(dKey, (emailsDailyMap.get(dKey) || 0) + (c.stats?.sent || 0));
       }
+
+      campFetched += campaigns.length;
+      campPage++;
+      if (stop || campaigns.length < 50) break;
     }
   } catch (err) {
     // Non-fatal — campaign stats are a bonus metric.
   }
 
   const newSubscribersDaily = [...dailyMap.entries()]
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const emailsSentDaily = [...emailsDailyMap.entries()]
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => a.date.localeCompare(b.date));
 
@@ -676,6 +703,7 @@ async function fetchMailerLiteData(env) {
     newSubscribersDaily,
     campaignsSentLast30Days,
     emailsSentLast30Days,
+    emailsSentDaily,
   };
 }
 
@@ -684,14 +712,14 @@ async function fetchCloudflareAnalytics(env) {
     return { error: "CF_API_TOKEN / CF_ZONE_TAG not configured" };
   }
 
-  const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  const since = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const until = new Date().toISOString().slice(0, 10);
 
   const query = `
     query {
       viewer {
         zones(filter: { zoneTag: "${env.CF_ZONE_TAG}" }) {
-          httpRequests1dGroups(limit: 14, filter: { date_geq: "${since}", date_leq: "${until}" }, orderBy: [date_ASC]) {
+          httpRequests1dGroups(limit: 400, filter: { date_geq: "${since}", date_leq: "${until}" }, orderBy: [date_ASC]) {
             dimensions { date }
             sum { requests pageViews }
             uniq { uniques }
@@ -721,7 +749,8 @@ async function fetchCloudflareAnalytics(env) {
     uniqueVisitors: g.uniq.uniques,
   }));
 
-  const last7Days = daily.reduce(
+  const last7 = daily.slice(-7);
+  const last7Days = last7.reduce(
     (acc, d) => ({
       requests: acc.requests + d.requests,
       pageViews: acc.pageViews + d.pageViews,
@@ -731,7 +760,7 @@ async function fetchCloudflareAnalytics(env) {
   );
 
   return {
-    note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately.",
+    note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately. History depth depends on your Cloudflare plan's analytics retention.",
     daily,
     last7Days,
   };

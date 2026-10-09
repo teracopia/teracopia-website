@@ -16,10 +16,14 @@
     --accent-soft: #e4ebff;
     --accent2: #16b3a3;
     --accent2-soft: #d9f5f1;
-    --warn: #f0a93e;
+    --warn: #e08a1e;
     --warn-soft: #fdf0dc;
     --good: #19b366;
+    --good-soft: #def6e9;
     --bad: #e5484d;
+    --bad-soft: #fde5e6;
+    --neutral: #8d93ac;
+    --neutral-soft: #eaecf3;
     --shadow: 0 1px 2px rgba(22,25,43,0.04), 0 8px 24px -12px rgba(22,25,43,0.10);
     color-scheme: light;
   }
@@ -34,10 +38,14 @@
       --accent-soft: #233064;
       --accent2: #3fd9c7;
       --accent2-soft: #123733;
-      --warn: #f3b562;
+      --warn: #e8a83f;
       --warn-soft: #3a2c15;
       --good: #4fd98b;
+      --good-soft: #143828;
       --bad: #ff6b72;
+      --bad-soft: #3a191b;
+      --neutral: #9aa0c2;
+      --neutral-soft: #202542;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
       color-scheme: dark;
     }
@@ -60,9 +68,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     flex-wrap: wrap;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
   }
   .brand { display: flex; align-items: center; gap: 10px; }
   .brand .mark { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), var(--accent2)); flex: none; }
@@ -83,11 +91,35 @@
   #refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
   #refresh-btn:disabled { opacity: 0.55; cursor: default; }
 
+  .period-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .period-group {
+    display: flex;
+    gap: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    box-shadow: var(--shadow);
+  }
+  .period-btn {
+    font-family: inherit; border: none; background: none; font-size: 13px; color: var(--muted);
+    padding: 7px 16px; border-radius: 7px; cursor: pointer; font-weight: 500;
+  }
+  .period-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
+  .period-caption { font-size: 12.5px; color: var(--muted); }
+
   .hero-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 22px;
   }
   .hero-card {
     background: var(--card);
@@ -98,25 +130,25 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
+    border-top: 3px solid var(--cat, var(--accent));
   }
-  .hero-card .label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .hero-card .label { font-size: 12px; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
   .hero-card .big-num { font-size: 25px; font-weight: 700; letter-spacing: -0.01em; }
-  .hero-ratios { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; font-size: 12px; color: var(--muted); }
-  .hero-ratios .row { display: flex; align-items: center; gap: 6px; }
-  .ratio-val { font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
-  .ratio-val.up { color: var(--good); }
-  .ratio-val.down { color: var(--bad); }
-  .hero-chart { flex: 1; min-height: 46px; margin: 8px 0 2px; }
-  .hero-foot { font-size: 12.5px; color: var(--fg); font-weight: 600; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border); text-align: center; }
-  .hero-foot .muted { color: var(--muted); font-weight: 400; }
+  .delta { font-weight: 600; display: inline-flex; align-items: center; gap: 3px; font-size: 12px; margin-top: 6px; }
+  .delta.up { color: var(--good); }
+  .delta.down { color: var(--bad); }
+  .delta.flat { color: var(--muted); }
+  .hero-chart { flex: 1; min-height: 40px; margin: 8px 0 2px; }
+  .hero-foot { font-size: 12px; color: var(--muted); margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border); }
 
-  .main-grid {
-    display: grid;
-    grid-template-columns: 2.1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-    align-items: start;
-  }
+  .section { margin-bottom: 18px; }
+  .section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cat-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cat, var(--accent)); flex: none; }
+  .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--cat, var(--accent)); }
+  .section-head h2 { font-size: 15px; font-weight: 700; margin: 0; color: var(--fg); }
+  .section-head .src { font-size: 12px; color: var(--muted); font-weight: 400; }
+
+  .main-grid { display: grid; grid-template-columns: 2.1fr 1fr; gap: 16px; align-items: start; }
   .panel {
     background: var(--card);
     border: 1px solid var(--border);
@@ -125,27 +157,11 @@
     padding: 18px 20px 20px;
     min-width: 0;
   }
-  .panel-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 6px;
-  }
-  .tabs { display: flex; gap: 18px; }
-  .tab {
-    background: none; border: none; font-family: inherit; font-size: 13.5px; color: var(--muted);
-    padding: 6px 0; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 500;
-  }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .range-group { display: flex; gap: 4px; background: var(--bg); border-radius: 8px; padding: 3px; }
-  .range-btn { font-family: inherit; border: none; background: none; font-size: 12px; color: var(--muted); padding: 5px 10px; border-radius: 6px; cursor: pointer; }
-  .range-btn.active { background: var(--card); color: var(--fg); box-shadow: var(--shadow); font-weight: 600; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .panel-title { font-size: 13px; font-weight: 600; margin: 0 0 10px; color: var(--muted); }
 
-  .panel-title { font-size: 14px; font-weight: 600; margin: 14px 0 10px; }
   .chart-wrap { min-width: 0; overflow-x: auto; }
-  svg.chart { width: 100%; height: auto; display: block; min-width: 440px; }
+  svg.chart { width: 100%; height: auto; display: block; min-width: 420px; }
   .chart-legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
   .chart-legend span { display: inline-flex; align-items: center; gap: 5px; }
   .chart-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
@@ -156,19 +172,21 @@
   .rank-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex: none; }
   .rank-badge.top { background: var(--accent); color: #fff; }
   .rank-day { flex: 1; min-width: 0; color: var(--fg); }
-  .rank-day .d { font-size: 11px; color: var(--muted); display: block; }
   .rank-amt { font-weight: 700; font-size: 13px; }
 
-  .secondary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 14px; margin-bottom: 14px; }
+  .stat { }
+  .stat .s-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+  .stat .s-num { font-size: 19px; font-weight: 700; }
+  .stat .s-sub { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
 
-  .metric-row { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
-  .metric-row .m-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
-  .metric-row .m-num { font-size: 19px; font-weight: 700; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sub-chart-title { font-size: 11.5px; color: var(--muted); margin: 10px 0 4px; }
 
-  .error-note { font-size: 12.5px; color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); border: 1px solid color-mix(in srgb, var(--bad) 30%, transparent); border-radius: 8px; padding: 8px 12px; }
+  .error-note { font-size: 12.5px; color: var(--bad); background: var(--bad-soft); border: 1px solid var(--bad); border-radius: 8px; padding: 8px 12px; }
   .skeleton { color: var(--muted); font-size: 13px; padding: 6px 0; }
 
-  .pending-card { border-style: dashed; opacity: 0.8; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .pending-card .panel-body { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .pending-card p { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; max-width: 56ch; }
   .pending-tag { font-size: 11px; color: var(--muted); background: var(--bg); border-radius: 6px; padding: 4px 9px; white-space: nowrap; }
 
@@ -177,11 +195,12 @@
   @media (max-width: 920px) {
     .hero-grid { grid-template-columns: repeat(2, 1fr); }
     .main-grid { grid-template-columns: 1fr; }
-    .secondary-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
   }
   @media (max-width: 480px) {
     .hero-grid { grid-template-columns: 1fr 1fr; }
     .header-right { width: 100%; justify-content: space-between; }
+    .period-bar { flex-direction: column; align-items: flex-start; }
   }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -203,59 +222,114 @@
     </div>
   </header>
 
+  <div class="period-bar">
+    <div class="period-group" id="period-group">
+      <button class="period-btn" data-period="day" type="button">Day</button>
+      <button class="period-btn" data-period="week" type="button">Week</button>
+      <button class="period-btn active" data-period="month" type="button">Month</button>
+      <button class="period-btn" data-period="year" type="button">Year</button>
+    </div>
+    <div class="period-caption" id="period-caption"></div>
+  </div>
+
   <div class="hero-grid" id="hero-grid">
-    <div class="hero-card"><div class="label">Total Sales</div><div class="skeleton">Loading…</div></div>
-    <div class="hero-card"><div class="label">Visitors</div><div class="skeleton">Loading…</div></div>
-    <div class="hero-card"><div class="label">Sessions</div><div class="skeleton">Loading…</div></div>
-    <div class="hero-card"><div class="label">Subscribers</div><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="skeleton">Loading…</div></div>
   </div>
 
-  <div class="main-grid">
-    <div class="panel">
-      <div class="panel-head">
-        <div class="tabs">
-          <button class="tab active" data-tab="sales" type="button">Revenue</button>
-          <button class="tab" data-tab="sessions" type="button">Sessions</button>
-        </div>
-        <div class="range-group" id="range-group">
-          <button class="range-btn" data-range="8" type="button">8w</button>
-          <button class="range-btn active" data-range="12" type="button">12w</button>
-          <button class="range-btn" data-range="26" type="button">26w</button>
+  <!-- Sales — Stripe -->
+  <div class="section" id="section-sales" style="--cat:var(--accent)">
+    <div class="section-head">
+      <span class="cat-dot"></span>
+      <span class="eyebrow">Sales</span>
+      <h2>Revenue</h2>
+      <span class="src">· Stripe</span>
+    </div>
+    <div class="main-grid">
+      <div class="panel">
+        <div class="panel-title" id="sales-chart-title">Revenue — book vs. coaching</div>
+        <div class="chart-wrap"><svg class="chart" id="sales-chart" viewBox="0 0 700 220"></svg></div>
+        <div class="chart-legend">
+          <span><i style="background:var(--accent)"></i>Book</span>
+          <span><i style="background:var(--accent2)"></i>Coaching</span>
         </div>
       </div>
-      <div class="panel-title" id="chart-title">Revenue trend — book vs. coaching</div>
-      <div class="chart-wrap"><svg class="chart" id="main-chart" viewBox="0 0 700 230"></svg></div>
-      <div class="chart-legend" id="main-legend">
-        <span><i style="background:var(--accent)"></i>Book</span>
-        <span><i style="background:var(--accent2)"></i>Coaching</span>
+      <div class="panel">
+        <div class="panel-title" id="sales-rank-title">Best days</div>
+        <ul class="rank-list" id="rank-list"><li class="skeleton">Loading…</li></ul>
       </div>
     </div>
+  </div>
 
+  <!-- Sessions — Cal.com -->
+  <div class="section" id="section-sessions" style="--cat:var(--accent2)">
+    <div class="section-head">
+      <span class="cat-dot"></span>
+      <span class="eyebrow">Sessions</span>
+      <h2>Bookings</h2>
+      <span class="src">· Cal.com</span>
+    </div>
     <div class="panel">
-      <div class="panel-title" style="margin-top:0;">Best days (90d)</div>
-      <ul class="rank-list" id="rank-list"><li class="skeleton">Loading…</li></ul>
+      <div class="stat-grid" id="calcom-stats"><div class="skeleton">Loading…</div></div>
+      <div class="panel-title" id="calcom-chart-title">Sessions booked</div>
+      <div class="chart-wrap"><svg class="chart" id="calcom-chart" viewBox="0 0 700 150"></svg></div>
     </div>
   </div>
 
-  <div class="secondary-grid">
-    <div class="panel" id="panel-mail">
-      <div class="panel-title" style="margin-top:0;">Email — MailerLite</div>
-      <div class="metric-row" id="mail-metrics"><div class="skeleton">Loading…</div></div>
-      <div class="chart-wrap"><svg class="chart" id="mail-chart" viewBox="0 0 560 120"></svg></div>
+  <!-- Email — MailerLite -->
+  <div class="section" id="section-email" style="--cat:var(--warn)">
+    <div class="section-head">
+      <span class="cat-dot"></span>
+      <span class="eyebrow">Email</span>
+      <h2>Subscribers &amp; campaigns</h2>
+      <span class="src">· MailerLite</span>
     </div>
-    <div class="panel" id="panel-web">
-      <div class="panel-title" style="margin-top:0;">Website traffic — Cloudflare</div>
-      <div class="metric-row" id="web-metrics"><div class="skeleton">Loading…</div></div>
-      <div class="chart-wrap"><svg class="chart" id="web-chart" viewBox="0 0 560 120"></svg></div>
+    <div class="panel">
+      <div class="stat-grid" id="mail-stats"><div class="skeleton">Loading…</div></div>
+      <div class="two-col">
+        <div>
+          <div class="sub-chart-title" id="mail-sub-chart-title">New subscribers</div>
+          <div class="chart-wrap"><svg class="chart" id="mail-sub-chart" viewBox="0 0 340 120"></svg></div>
+        </div>
+        <div>
+          <div class="sub-chart-title" id="mail-sent-chart-title">Emails sent</div>
+          <div class="chart-wrap"><svg class="chart" id="mail-sent-chart" viewBox="0 0 340 120"></svg></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="panel pending-card">
-    <div>
-      <div class="panel-title" style="margin:0 0 2px;">YouTube</div>
-      <p>Subscriber count and watch time need a Google Cloud API key (and OAuth for watch time). Ask Claude to set this up when you're ready.</p>
+  <!-- Website traffic — Cloudflare -->
+  <div class="section" id="section-web" style="--cat:var(--good)">
+    <div class="section-head">
+      <span class="cat-dot"></span>
+      <span class="eyebrow">Website</span>
+      <h2>Traffic</h2>
+      <span class="src">· Cloudflare</span>
     </div>
-    <span class="pending-tag">Not connected</span>
+    <div class="panel">
+      <div class="stat-grid" id="web-stats"><div class="skeleton">Loading…</div></div>
+      <div class="panel-title" id="web-chart-title">Unique visitors</div>
+      <div class="chart-wrap"><svg class="chart" id="web-chart" viewBox="0 0 700 150"></svg></div>
+    </div>
+  </div>
+
+  <!-- YouTube -->
+  <div class="section" id="section-youtube" style="--cat:var(--neutral)">
+    <div class="section-head">
+      <span class="cat-dot"></span>
+      <span class="eyebrow">Video</span>
+      <h2>YouTube</h2>
+      <span class="src">· Not connected</span>
+    </div>
+    <div class="panel pending-card">
+      <div class="panel-body">
+        <p style="margin:0;">Subscriber count and watch time need a Google Cloud API key (and OAuth for watch time). Ask Claude to set this up when you're ready.</p>
+        <span class="pending-tag">Not connected</span>
+      </div>
+    </div>
   </div>
 
   <footer class="page">Private — unlisted page, blocked from search indexing</footer>
@@ -268,25 +342,98 @@
 
   const $ = (id) => document.getElementById(id);
   const fmt = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : new Intl.NumberFormat("en-US").format(n);
-  const fmtMoney = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : "$" + new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(n);
-  const fmtDate = (iso) => {
-    const d = new Date(iso + (iso.length <= 10 ? "T00:00:00Z" : ""));
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-  };
+  const fmtMoney = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : "$" + new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 
+  function fmtLabel(key, granularity) {
+    if (granularity === "month") {
+      const [y, m] = key.split("-");
+      return new Date(Date.UTC(Number(y), Number(m) - 1, 1)).toLocaleDateString("en-US", { month: "short", year: "2-digit", timeZone: "UTC" });
+    }
+    const d = new Date(key + "T00:00:00Z");
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  }
+
+  // ---- Period config -------------------------------------------------
+  // Each option defines the KPI window (days) and how the trend charts
+  // beneath it are bucketed: "day" = daily bars, "week" = weekly bars,
+  // "month" = monthly bars, plus how many buckets of history to show.
+  const PERIODS = {
+    day:   { days: 1,   granularity: "day",   buckets: 14, caption: "Today vs. yesterday — chart shows last 14 days" },
+    week:  { days: 7,   granularity: "day",   buckets: 56, caption: "Last 7 days vs. the 7 before — chart shows last 8 weeks, daily" },
+    month: { days: 30,  granularity: "week",  buckets: 26, caption: "Last 30 days vs. the 30 before — chart shows last 6 months, weekly" },
+    year:  { days: 365, granularity: "month", buckets: 12, caption: "Last 365 days vs. the year before — chart shows last 12 months" },
+  };
+  let activePeriod = "month";
+
+  // ---- Generic daily-array aggregation -------------------------------
+  function dayKey(d) { return d; }
+  function weekKeyOf(dateStr) {
+    const d = new Date(dateStr + "T00:00:00Z");
+    const day = d.getUTCDay();
+    d.setUTCDate(d.getUTCDate() - day);
+    return d.toISOString().slice(0, 10);
+  }
+  function monthKeyOf(dateStr) { return dateStr.slice(0, 7); }
+
+  function bucketKey(dateStr, granularity) {
+    if (granularity === "week") return weekKeyOf(dateStr);
+    if (granularity === "month") return monthKeyOf(dateStr);
+    return dateStr;
+  }
+
+  // valueFn(d) -> number; daily is an array of {date, ...}
+  function aggregate(daily, granularity, valueFn) {
+    const map = new Map();
+    for (const d of daily || []) {
+      const k = bucketKey(d.date, granularity);
+      map.set(k, (map.get(k) || 0) + valueFn(d));
+    }
+    return [...map.entries()].map(([key, value]) => ({ key, value })).sort((a, b) => a.key.localeCompare(b.key));
+  }
+
+  function cutoffKey(daysAgo) {
+    const d = new Date();
+    d.setUTCDate(d.getUTCDate() - daysAgo);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function sumWindow(daily, days, valueFn) {
+    const c = cutoffKey(days);
+    return (daily || []).filter((d) => d.date >= c).reduce((s, d) => s + valueFn(d), 0);
+  }
+
+  function sumPrevWindow(daily, days, valueFn) {
+    const end = cutoffKey(days);
+    const start = cutoffKey(days * 2);
+    return (daily || []).filter((d) => d.date >= start && d.date < end).reduce((s, d) => s + valueFn(d), 0);
+  }
+
+  function pctChange(curr, prev) {
+    if (!prev) return null;
+    return ((curr - prev) / prev) * 100;
+  }
+
+  function deltaHTML(curr, prev) {
+    const pct = pctChange(curr, prev);
+    if (pct === null) return `<span class="delta flat">—</span>`;
+    const up = pct >= 0;
+    return `<span class="delta ${up ? "up" : "down"}">${up ? "▲" : "▼"} ${Math.abs(pct).toFixed(0)}% vs prior</span>`;
+  }
+
+  // ---- SVG chart helpers ----------------------------------------------
   function svgEl(tag, attrs) {
     const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
     for (const k in attrs) el.setAttribute(k, attrs[k]);
     return el;
   }
 
-  function drawBarChart(svg, series, opts) {
+  function drawBarChart(svg, series, labels, opts) {
+    opts = opts || {};
     const vb = svg.getAttribute("viewBox").split(" ").map(Number);
     const W = vb[2], H = vb[3];
     const padL = opts.compact ? 4 : 34, padB = opts.compact ? 4 : 22, padT = 8, padR = 6;
     const plotW = W - padL - padR, plotH = H - padT - padB;
     svg.innerHTML = "";
-    const labels = opts.labels;
     const n = labels.length;
     if (!n) {
       const t = svgEl("text", { x: W / 2, y: H / 2, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12 });
@@ -300,7 +447,7 @@
       : series.flatMap((s) => s.values);
     const max = Math.max(1, ...totals);
     const gap = plotW / n;
-    const barW = Math.max(2, gap * (opts.barWidthRatio || 0.55));
+    const barW = Math.max(2, gap * (opts.barWidthRatio || 0.6));
 
     if (!opts.compact) {
       const gridN = 3;
@@ -332,7 +479,7 @@
           svg.appendChild(svgEl("rect", { x: x + si * sub, y: padT + plotH - h, width: Math.max(2, sub - 1), height: h, fill: ser.color, rx: 2 }));
         });
       }
-      if (!opts.compact && (n <= 16 || i % Math.ceil(n / 12) === 0)) {
+      if (!opts.compact && (n <= 14 || i % Math.ceil(n / 12) === 0)) {
         const t = svgEl("text", { x: x + barW / 2, y: H - 6, "text-anchor": "middle", fill: "var(--muted)", "font-size": 9 });
         t.textContent = label;
         svg.appendChild(t);
@@ -363,131 +510,179 @@
     svg.appendChild(svgEl("circle", { cx: last[0], cy: last[1], r: 3, fill: color }));
   }
 
-  function heroRatio(cls, label, value) {
-    if (value === null || value === undefined) return "";
-    const up = value >= 0;
-    const arrow = up ? "▲" : "▼";
-    return `<div class="row">${label} <span class="ratio-val ${up ? "up" : "down"}">${arrow} ${Math.abs(value).toFixed(0)}%</span></div>`;
-  }
-
-  function pctChange(curr, prev) {
-    if (!prev) return null;
-    return ((curr - prev) / prev) * 100;
-  }
-
+  // ---- Render ----------------------------------------------------------
   let FULL_DATA = null;
-  let activeTab = "sales";
-  let activeRange = 12;
 
-  function renderHero(data) {
+  function bucketed(daily, valueFn) {
+    const cfg = PERIODS[activePeriod];
+    const rows = aggregate(daily, cfg.granularity, valueFn).slice(-cfg.buckets);
+    return { labels: rows.map((r) => fmtLabel(r.key, cfg.granularity)), values: rows.map((r) => r.value) };
+  }
+
+  function render(data) {
+    FULL_DATA = data;
+    const cfg = PERIODS[activePeriod];
+    $("period-caption").textContent = cfg.caption;
+
     const stripe = data.stripe || {};
     const calcom = data.calcom || {};
     const mail = data.mailerlite || {};
     const web = data.cloudflareAnalytics || {};
 
-    // Sales tile
-    const weekly = stripe.weekly || [];
-    const wLast = weekly[weekly.length - 1], wPrev = weekly[weekly.length - 2];
-    const wLastRev = wLast ? wLast.revenueBook + wLast.revenueCoaching : null;
-    const wPrevRev = wPrev ? wPrev.revenueBook + wPrev.revenueCoaching : null;
-    const daily = stripe.daily || [];
-    const dLast = daily[daily.length - 1], dPrev = daily[daily.length - 2];
-    const dLastRev = dLast ? dLast.revenueBook + dLast.revenueCoaching : null;
-    const dPrevRev = dPrev ? dPrev.revenueBook + dPrev.revenueCoaching : null;
-    $("hero-grid").children[0].innerHTML = stripe.error ? `<div class="label">Total Sales</div><div class="error-note">${stripe.error}</div>` : `
-      <div class="label">Total Sales <span style="color:var(--muted);font-weight:400;">· 90d</span></div>
-      <div class="big-num">${fmtMoney(stripe.totals.revenueAll)}</div>
-      <div class="hero-ratios">
-        ${heroRatio("w", "Week ratio", pctChange(wLastRev, wPrevRev))}
-        ${heroRatio("d", "Day ratio", pctChange(dLastRev, dPrevRev))}
-      </div>
-      <div class="hero-foot">Day Sales <span class="muted">${fmtMoney(dLastRev)}</span></div>`;
-
-    // Visitors tile
-    const webDaily = web.daily || [];
-    $("hero-grid").children[1].innerHTML = web.error ? `<div class="label">Visitors</div><div class="error-note">${web.error}</div>` : `
-      <div class="label">Visitors <span style="color:var(--muted);font-weight:400;">· 7d</span></div>
-      <div class="big-num">${fmt(web.last7Days.uniqueVisitors)}</div>
-      <div class="hero-chart"><svg viewBox="0 0 220 46" id="hero-web-chart"></svg></div>
-      <div class="hero-foot">Day visits <span class="muted">${fmt(webDaily.length ? webDaily[webDaily.length - 1].uniqueVisitors : null)}</span></div>`;
-    if (!web.error) drawAreaChart($("hero-web-chart"), webDaily.map((d) => d.uniqueVisitors), "var(--accent2)");
-
-    // Sessions tile
-    const calcomDaily = (calcom.daily || []).slice(-10);
-    const completionRate = calcom.totalBooked ? Math.round((calcom.completed / calcom.totalBooked) * 100) : null;
-    $("hero-grid").children[2].innerHTML = calcom.error ? `<div class="label">Sessions</div><div class="error-note">${calcom.error}</div>` : `
-      <div class="label">Sessions <span style="color:var(--muted);font-weight:400;">· 30d</span></div>
-      <div class="big-num">${fmt(calcom.bookedLast30Days)}</div>
-      <div class="hero-chart"><svg viewBox="0 0 220 46" id="hero-calcom-chart"></svg></div>
-      <div class="hero-foot">Completion rate <span class="muted">${completionRate === null ? "—" : completionRate + "%"}</span></div>`;
-    if (!calcom.error) drawBarChart($("hero-calcom-chart"), [{ values: calcomDaily.map((d) => d.count), color: "var(--accent)" }], { labels: calcomDaily.map((d) => d.date), compact: true });
-
-    // Subscribers tile
-    $("hero-grid").children[3].innerHTML = mail.error ? `<div class="label">Subscribers</div><div class="error-note">${mail.error}</div>` : `
-      <div class="label">Subscribers <span style="color:var(--muted);font-weight:400;">· total</span></div>
-      <div class="big-num">${fmt(mail.totalActiveSubscribers)}</div>
-      <div class="hero-ratios"><div class="row">New this week <span class="ratio-val up">▲ ${fmt(mail.newLast7Days)}</span></div></div>
-      <div class="hero-foot">Emails sent (30d) <span class="muted">${fmt(mail.emailsSentLast30Days)}</span></div>`;
+    renderHero(stripe, calcom, mail, web, cfg);
+    renderSales(stripe, cfg);
+    renderSessions(calcom, cfg);
+    renderEmail(mail, cfg);
+    renderWeb(web, cfg);
   }
 
-  function renderMainChart() {
-    if (!FULL_DATA) return;
-    const stripe = FULL_DATA.stripe || {};
-    const calcom = FULL_DATA.calcom || {};
-    if (activeTab === "sales") {
-      $("chart-title").textContent = "Revenue trend — book vs. coaching";
-      $("main-legend").style.display = "flex";
-      if (stripe.error) { $("main-chart").innerHTML = ""; return; }
-      const weekly = (stripe.weekly || []).slice(-activeRange);
-      drawBarChart($("main-chart"), [
-        { values: weekly.map((w) => w.revenueBook), color: "var(--accent)" },
-        { values: weekly.map((w) => w.revenueCoaching), color: "var(--accent2)" },
-      ], { labels: weekly.map((w) => fmtDate(w.weekStart)), stacked: true });
+  function heroCard(idx, error, html) {
+    $("hero-grid").children[idx].innerHTML = error ? `<div class="error-note">${error}</div>` : html;
+  }
+
+  function renderHero(stripe, calcom, mail, web, cfg) {
+    // Revenue
+    if (stripe.error) {
+      heroCard(0, stripe.error);
     } else {
-      $("chart-title").textContent = "Sessions booked, daily";
-      $("main-legend").style.display = "none";
-      if (calcom.error) { $("main-chart").innerHTML = ""; return; }
-      const daily = calcom.daily || [];
-      drawBarChart($("main-chart"), [{ values: daily.map((d) => d.count), color: "var(--accent)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+      const rev = (d) => (d.revenueBook || 0) + (d.revenueCoaching || 0);
+      const curr = sumWindow(stripe.daily, cfg.days, rev);
+      const prev = sumPrevWindow(stripe.daily, cfg.days, rev);
+      heroCard(0, null, `
+        <div class="label">Revenue</div>
+        <div class="big-num">${fmtMoney(curr)}</div>
+        ${deltaHTML(curr, prev)}
+        <div class="hero-foot">${cfg.days === 1 ? "Today" : "Last " + cfg.days + " days"}</div>`);
     }
+    $("hero-grid").children[0].style.setProperty("--cat", "var(--accent)");
+
+    // Visitors
+    if (web.error) {
+      heroCard(1, web.error);
+    } else {
+      const curr = sumWindow(web.daily, cfg.days, (d) => d.uniqueVisitors || 0);
+      const prev = sumPrevWindow(web.daily, cfg.days, (d) => d.uniqueVisitors || 0);
+      heroCard(1, null, `
+        <div class="label">Visitors</div>
+        <div class="big-num">${fmt(curr)}</div>
+        ${deltaHTML(curr, prev)}
+        <div class="hero-chart"><svg viewBox="0 0 220 40" id="hero-web-chart"></svg></div>`);
+      const b = bucketed(web.daily, (d) => d.uniqueVisitors || 0);
+      drawAreaChart($("hero-web-chart"), b.values, "var(--good)");
+    }
+    $("hero-grid").children[1].style.setProperty("--cat", "var(--good)");
+
+    // Sessions
+    if (calcom.error) {
+      heroCard(2, calcom.error);
+    } else {
+      const curr = sumWindow(calcom.daily, cfg.days, (d) => d.count || 0);
+      const prev = sumPrevWindow(calcom.daily, cfg.days, (d) => d.count || 0);
+      heroCard(2, null, `
+        <div class="label">Sessions booked</div>
+        <div class="big-num">${fmt(curr)}</div>
+        ${deltaHTML(curr, prev)}
+        <div class="hero-chart"><svg viewBox="0 0 220 40" id="hero-calcom-chart"></svg></div>`);
+      const b = bucketed(calcom.daily, (d) => d.count || 0);
+      drawBarChart($("hero-calcom-chart"), [{ values: b.values, color: "var(--accent2)" }], b.labels, { compact: true });
+    }
+    $("hero-grid").children[2].style.setProperty("--cat", "var(--accent2)");
+
+    // Subscribers
+    if (mail.error) {
+      heroCard(3, mail.error);
+    } else {
+      const curr = sumWindow(mail.newSubscribersDaily, cfg.days, (d) => d.count || 0);
+      const prev = sumPrevWindow(mail.newSubscribersDaily, cfg.days, (d) => d.count || 0);
+      heroCard(3, null, `
+        <div class="label">New subscribers</div>
+        <div class="big-num">${fmt(curr)}</div>
+        ${deltaHTML(curr, prev)}
+        <div class="hero-foot">${fmt(mail.totalActiveSubscribers)} active total</div>`);
+    }
+    $("hero-grid").children[3].style.setProperty("--cat", "var(--warn)");
   }
 
-  function renderRankList(stripe) {
-    const el = $("rank-list");
-    if (stripe.error) { el.innerHTML = `<li class="error-note">${stripe.error}</li>`; return; }
+  function renderSales(stripe, cfg) {
+    if (stripe.error) {
+      $("sales-chart").innerHTML = "";
+      $("rank-list").innerHTML = `<li class="error-note">${stripe.error}</li>`;
+      return;
+    }
+    const book = bucketed(stripe.daily, (d) => d.revenueBook || 0);
+    const coaching = bucketed(stripe.daily, (d) => d.revenueCoaching || 0);
+    $("sales-chart-title").textContent = `Revenue — book vs. coaching (${cfg.granularity === "day" ? "daily" : cfg.granularity === "week" ? "weekly" : "monthly"})`;
+    drawBarChart($("sales-chart"), [
+      { values: book.values, color: "var(--accent)" },
+      { values: coaching.values, color: "var(--accent2)" },
+    ], book.labels, { stacked: true });
+
+    const c = cutoffKey(cfg.days);
     const days = (stripe.daily || [])
+      .filter((d) => d.date >= c)
       .map((d) => ({ date: d.date, revenue: (d.revenueBook || 0) + (d.revenueCoaching || 0) }))
       .filter((d) => d.revenue > 0)
       .sort((a, b) => b.revenue - a.revenue)
       .slice(0, 7);
-    if (!days.length) { el.innerHTML = `<li class="skeleton">No sales yet in this window</li>`; return; }
-    el.innerHTML = days.map((d, i) => `
-      <li>
-        <span class="rank-badge${i < 3 ? " top" : ""}">${i + 1}</span>
-        <span class="rank-day">${fmtDate(d.date)}</span>
-        <span class="rank-amt">${fmtMoney(d.revenue)}</span>
-      </li>`).join("");
+    $("sales-rank-title").textContent = cfg.days === 1 ? "Today" : `Best days — ${cfg.days === 7 ? "this week" : cfg.days === 30 ? "this month" : "this year"}`;
+    $("rank-list").innerHTML = days.length
+      ? days.map((d, i) => `<li><span class="rank-badge${i < 3 ? " top" : ""}">${i + 1}</span><span class="rank-day">${fmtLabel(d.date, "day")}</span><span class="rank-amt">${fmtMoney(d.revenue)}</span></li>`).join("")
+      : `<li class="skeleton">No sales yet in this window</li>`;
   }
 
-  function renderMail(mail) {
-    const el = $("mail-metrics");
-    if (mail.error) { el.innerHTML = `<div class="error-note">${mail.error}</div>`; return; }
-    el.innerHTML = `
-      <div><div class="m-label">New (7d)</div><div class="m-num">${fmt(mail.newLast7Days)}</div></div>
-      <div><div class="m-label">New (30d)</div><div class="m-num">${fmt(mail.newLast30Days)}</div></div>
-      <div><div class="m-label">Campaigns (30d)</div><div class="m-num">${fmt(mail.campaignsSentLast30Days)}</div></div>`;
-    const daily = mail.newSubscribersDaily || [];
-    drawBarChart($("mail-chart"), [{ values: daily.map((d) => d.count), color: "var(--warn)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+  function renderSessions(calcom, cfg) {
+    if (calcom.error) {
+      $("calcom-stats").innerHTML = `<div class="error-note">${calcom.error}</div>`;
+      $("calcom-chart").innerHTML = "";
+      return;
+    }
+    const booked = sumWindow(calcom.daily, cfg.days, (d) => d.count || 0);
+    const completionRate = calcom.totalBooked ? Math.round((calcom.completed / calcom.totalBooked) * 100) : null;
+    $("calcom-stats").innerHTML = `
+      <div class="stat"><div class="s-label">Booked</div><div class="s-num">${fmt(booked)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>
+      <div class="stat"><div class="s-label">Completed</div><div class="s-num">${fmt(calcom.completed)}</div><div class="s-sub">all time</div></div>
+      <div class="stat"><div class="s-label">Upcoming</div><div class="s-num">${fmt(calcom.upcoming)}</div><div class="s-sub">all time</div></div>
+      <div class="stat"><div class="s-label">Cancelled</div><div class="s-num">${fmt(calcom.cancelled)}</div><div class="s-sub">all time</div></div>
+      <div class="stat"><div class="s-label">Completion rate</div><div class="s-num">${completionRate === null ? "—" : completionRate + "%"}</div><div class="s-sub">all time</div></div>`;
+    const b = bucketed(calcom.daily, (d) => d.count || 0);
+    $("calcom-chart-title").textContent = `Sessions booked (${cfg.granularity === "day" ? "daily" : cfg.granularity === "week" ? "weekly" : "monthly"})`;
+    drawBarChart($("calcom-chart"), [{ values: b.values, color: "var(--accent2)" }], b.labels);
   }
 
-  function renderWeb(web) {
-    const el = $("web-metrics");
-    if (web.error) { el.innerHTML = `<div class="error-note">${web.error}</div>`; return; }
-    el.innerHTML = `
-      <div><div class="m-label">Requests (7d)</div><div class="m-num">${fmt(web.last7Days.requests)}</div></div>
-      <div><div class="m-label">Page views (7d)</div><div class="m-num">${fmt(web.last7Days.pageViews)}</div></div>`;
-    const daily = web.daily || [];
-    drawBarChart($("web-chart"), [{ values: daily.map((d) => d.uniqueVisitors), color: "var(--accent2)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+  function renderEmail(mail, cfg) {
+    if (mail.error) {
+      $("mail-stats").innerHTML = `<div class="error-note">${mail.error}</div>`;
+      $("mail-sub-chart").innerHTML = "";
+      $("mail-sent-chart").innerHTML = "";
+      return;
+    }
+    const newSubs = sumWindow(mail.newSubscribersDaily, cfg.days, (d) => d.count || 0);
+    const emailsSent = sumWindow(mail.emailsSentDaily, cfg.days, (d) => d.count || 0);
+    $("mail-stats").innerHTML = `
+      <div class="stat"><div class="s-label">Active subscribers</div><div class="s-num">${fmt(mail.totalActiveSubscribers)}</div><div class="s-sub">total</div></div>
+      <div class="stat"><div class="s-label">New subscribers</div><div class="s-num">${fmt(newSubs)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>
+      <div class="stat"><div class="s-label">Emails sent</div><div class="s-num">${fmt(emailsSent)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>`;
+    const subB = bucketed(mail.newSubscribersDaily, (d) => d.count || 0);
+    const sentB = bucketed(mail.emailsSentDaily, (d) => d.count || 0);
+    drawBarChart($("mail-sub-chart"), [{ values: subB.values, color: "var(--warn)" }], subB.labels);
+    drawBarChart($("mail-sent-chart"), [{ values: sentB.values, color: "var(--warn)" }], sentB.labels);
+  }
+
+  function renderWeb(web, cfg) {
+    if (web.error) {
+      $("web-stats").innerHTML = `<div class="error-note">${web.error}</div>`;
+      $("web-chart").innerHTML = "";
+      return;
+    }
+    const requests = sumWindow(web.daily, cfg.days, (d) => d.requests || 0);
+    const pageViews = sumWindow(web.daily, cfg.days, (d) => d.pageViews || 0);
+    const visitors = sumWindow(web.daily, cfg.days, (d) => d.uniqueVisitors || 0);
+    $("web-stats").innerHTML = `
+      <div class="stat"><div class="s-label">Unique visitors</div><div class="s-num">${fmt(visitors)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>
+      <div class="stat"><div class="s-label">Page views</div><div class="s-num">${fmt(pageViews)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>
+      <div class="stat"><div class="s-label">Requests</div><div class="s-num">${fmt(requests)}</div><div class="s-sub">${cfg.days === 1 ? "today" : "last " + cfg.days + "d"}</div></div>`;
+    const b = bucketed(web.daily, (d) => d.uniqueVisitors || 0);
+    drawBarChart($("web-chart"), [{ values: b.values, color: "var(--good)" }], b.labels);
   }
 
   async function load() {
@@ -499,19 +694,15 @@
       const res = await fetch(ENDPOINT, { headers: { "X-Dashboard-Token": TOKEN } });
       if (!res.ok) throw new Error(`Dashboard API returned ${res.status}`);
       const data = await res.json();
-      FULL_DATA = data;
-      renderHero(data);
-      renderMainChart();
-      renderRankList(data.stripe || { error: "no data" });
-      renderMail(data.mailerlite || { error: "no data" });
-      renderWeb(data.cloudflareAnalytics || { error: "no data" });
+      render(data);
       $("updated-at").textContent = "Updated " + new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
     } catch (err) {
       $("updated-at").textContent = "Failed to load";
       const msg = `<div class="error-note">Couldn't reach the dashboard API: ${String(err.message || err)}</div>`;
       $("hero-grid").innerHTML = `<div class="hero-card">${msg}</div>`.repeat(4);
-      $("mail-metrics").innerHTML = msg;
-      $("web-metrics").innerHTML = msg;
+      $("mail-stats").innerHTML = msg;
+      $("web-stats").innerHTML = msg;
+      $("calcom-stats").innerHTML = msg;
       $("rank-list").innerHTML = `<li>${msg}</li>`;
     } finally {
       btn.disabled = false;
@@ -519,20 +710,12 @@
     }
   }
 
-  document.querySelectorAll(".tab").forEach((btn) => {
+  document.querySelectorAll(".period-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
+      document.querySelectorAll(".period-btn").forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
-      activeTab = btn.dataset.tab;
-      renderMainChart();
-    });
-  });
-  document.querySelectorAll(".range-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".range-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      activeRange = Number(btn.dataset.range);
-      renderMainChart();
+      activePeriod = btn.dataset.period;
+      if (FULL_DATA) render(FULL_DATA);
     });
   });
   $("refresh-btn").addEventListener("click", load);
