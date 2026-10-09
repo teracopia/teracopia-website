@@ -510,10 +510,29 @@ async function fetchStripeDashboardData(env) {
 async function fetchCalcomData(env) {
   if (!env.CALCOM_API_KEY) return { error: "CALCOM_API_KEY not configured" };
 
-  const res = await fetch(`https://api.cal.com/v1/bookings?apiKey=${encodeURIComponent(env.CALCOM_API_KEY)}`);
-  if (!res.ok) throw new Error(`Cal.com bookings failed: ${res.status}`);
-  const body = await res.json();
-  const bookings = body.bookings || [];
+  // Cal.com's v1 API (apiKey as a query param) was retired — v2 uses a
+  // Bearer token plus a required version header, and paginates with
+  // take/skip. We page through everything in the last ~120 days worth of
+  // bookings (take=100 per page, capped at 10 pages) so counts are
+  // complete without pulling the account's entire booking history.
+  const bookings = [];
+  let skip = 0;
+  let pages = 0;
+  while (pages < 10) {
+    const res = await fetch(`https://api.cal.com/v2/bookings?take=100&skip=${skip}`, {
+      headers: {
+        Authorization: `Bearer ${env.CALCOM_API_KEY}`,
+        "cal-api-version": "2024-08-13",
+      },
+    });
+    if (!res.ok) throw new Error(`Cal.com bookings failed: ${res.status}`);
+    const body = await res.json();
+    const page = body.data || body.bookings || [];
+    bookings.push(...page);
+    pages++;
+    if (page.length < 100) break;
+    skip += 100;
+  }
 
   const now = Date.now();
   const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
@@ -529,8 +548,8 @@ async function fetchCalcomData(env) {
 
   for (const b of bookings) {
     const status = (b.status || "").toLowerCase();
-    const start = new Date(b.startTime).getTime();
-    const createdAt = new Date(b.createdAt || b.startTime).getTime();
+    const start = new Date(b.start || b.startTime).getTime();
+    const createdAt = new Date(b.createdAt || b.start || b.startTime).getTime();
 
     if (status === "cancelled" || status === "rejected") {
       cancelled++;
@@ -568,22 +587,17 @@ async function fetchMailerLiteData(env) {
   const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
   const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
 
-  // Active subscriber count.
-  const subsRes = await fetch("https://connect.mailerlite.com/api/subscribers?filter[status]=active&limit=1", {
-    headers,
-  });
-  if (!subsRes.ok) throw new Error(`MailerLite subscribers failed: ${subsRes.status}`);
-  const subsBody = await subsRes.json();
-  const totalActiveSubscribers = subsBody.total ?? subsBody.meta?.total ?? null;
-
   // Recent subscribers (sorted newest first) to count new signups in the
   // last 7/30 days — capped at 500 most recent, which comfortably covers
-  // a 30-day window at this list's current volume.
+  // a 30-day window at this list's current volume. The first page's
+  // response also carries the account-wide active subscriber total.
+  let totalActiveSubscribers = null;
   let newLast7Days = 0;
   let newLast30Days = 0;
   const dailyMap = new Map();
   let cursor = null;
   let fetched = 0;
+  let firstPage = true;
 
   while (fetched < 500) {
     const params = new URLSearchParams();
@@ -593,8 +607,12 @@ async function fetchMailerLiteData(env) {
     if (cursor) params.set("cursor", cursor);
 
     const res = await fetch(`https://connect.mailerlite.com/api/subscribers?${params.toString()}`, { headers });
-    if (!res.ok) break;
+    if (!res.ok) throw new Error(`MailerLite subscribers failed: ${res.status}`);
     const body = await res.json();
+    if (firstPage) {
+      totalActiveSubscribers = body.total ?? body.meta?.total ?? body.meta?.page?.total ?? null;
+      firstPage = false;
+    }
     const page = body.data || [];
     if (!page.length) break;
 
