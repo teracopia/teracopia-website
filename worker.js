@@ -789,6 +789,59 @@ async function fetchCloudflareAnalytics(env) {
 const YOUTUBE_CHANNEL_ID = "UCTis_yWYeHD5OvchyBOHU-A"; // @teracopia
 const YOUTUBE_UPLOADS_PLAYLIST_ID = "UU" + YOUTUBE_CHANNEL_ID.slice(2);
 
+// Watch-time hours require the YouTube Analytics API with OAuth as the
+// channel owner (the public API key above only covers subscriber/view
+// counts). Uses a long-lived refresh token to mint short-lived access
+// tokens on each request -- no user interaction needed after the one-time
+// authorization that produced the refresh token.
+//
+// Additional Worker secrets required for watch-time:
+//   YOUTUBE_OAUTH_CLIENT_ID     - OAuth 2.0 Client ID (Web application)
+//   YOUTUBE_OAUTH_CLIENT_SECRET - OAuth 2.0 Client secret
+//   YOUTUBE_OAUTH_REFRESH_TOKEN - refresh token from the one-time consent
+//                                 flow (see setup notes)
+//
+// If these aren't configured, fetchYouTubeData() still returns
+// subscriber/view data as before -- watch time is simply omitted.
+
+async function getYouTubeAccessToken(env) {
+  if (!env.YOUTUBE_OAUTH_CLIENT_ID || !env.YOUTUBE_OAUTH_CLIENT_SECRET || !env.YOUTUBE_OAUTH_REFRESH_TOKEN) {
+    return null;
+  }
+  const res = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      client_id: env.YOUTUBE_OAUTH_CLIENT_ID,
+      client_secret: env.YOUTUBE_OAUTH_CLIENT_SECRET,
+      refresh_token: env.YOUTUBE_OAUTH_REFRESH_TOKEN,
+      grant_type: "refresh_token",
+    }),
+  });
+  if (!res.ok) throw new Error(`YouTube OAuth token refresh failed: ${res.status}`);
+  const body = await res.json();
+  return body.access_token || null;
+}
+
+async function fetchYouTubeWatchTimeDaily(env) {
+  const accessToken = await getYouTubeAccessToken(env);
+  if (!accessToken) return [];
+
+  const today = new Date();
+  const end = today.toISOString().slice(0, 10);
+  const startDate = new Date(today);
+  startDate.setUTCDate(startDate.getUTCDate() - 365);
+  const start = startDate.toISOString().slice(0, 10);
+
+  const url =
+    `https://youtubeanalytics.googleapis.com/v2/reports?ids=channel%3D%3DMINE` +
+    `&startDate=${start}&endDate=${end}&metrics=estimatedMinutesWatched&dimensions=day`;
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!res.ok) throw new Error(`YouTube Analytics reports failed: ${res.status}`);
+  const body = await res.json();
+  return (body.rows || []).map(([date, minutes]) => ({ date, minutes: Number(minutes || 0) }));
+}
+
 async function fetchYouTubeData(env) {
   if (!env.YOUTUBE_API_KEY) {
     return { error: "YOUTUBE_API_KEY not configured" };
@@ -849,12 +902,21 @@ async function fetchYouTubeData(env) {
 
   const latest = [...videoRefs].filter((v) => v.publishedAt).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))[0];
 
+  let watchTimeDaily = [];
+  try {
+    watchTimeDaily = await fetchYouTubeWatchTimeDaily(env);
+  } catch (err) {
+    // Non-fatal: watch time is a bonus metric layered on top of the
+    // subscriber/view data above, which still returns fine without it.
+  }
+
   return {
-    note: "Subscriber count and lifetime totals are live from the YouTube Data API. The chart buckets each video's current view count by its upload date, not true daily view history -- that needs the YouTube Analytics API with OAuth.",
+    note: "Subscriber count and lifetime totals are live from the YouTube Data API. The chart buckets each video's current view count by its upload date, not true daily view history. Watch-time hours (when configured) come from the YouTube Analytics API via OAuth.",
     subscriberCount: Number(stats.subscriberCount || 0),
     totalViews: Number(stats.viewCount || 0),
     videoCount: Number(stats.videoCount || 0),
     daily,
+    watchTimeDaily,
     latestVideo: latest ? { title: latest.title, publishedAt: latest.publishedAt, views: viewsByVideoId.get(latest.videoId) || 0 } : null,
   };
 }

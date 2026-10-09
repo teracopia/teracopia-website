@@ -589,12 +589,17 @@
     if (yt.error) return statError("youtube", yt.error);
     const viewsThis = sumWindow(yt.daily, cfg.days, (d) => d.views || 0);
     const viewsPrev = sumPrevWindow(yt.daily, cfg.days, (d) => d.views || 0);
+    const watchMinutesThis = sumWindow(yt.watchTimeDaily || [], cfg.days, (d) => d.minutes || 0);
+    const watchHoursThis = watchMinutesThis / 60;
+    const watchHoursLine = (yt.watchTimeDaily && yt.watchTimeDaily.length)
+      ? ` · ${watchHoursThis.toFixed(watchHoursThis < 10 ? 1 : 0)} hrs watched ${periodWord(cfg)}`
+      : "";
 
     $("youtube-num").textContent = fmt(yt.subscriberCount);
     $("youtube-delta").innerHTML = deltaHTML(viewsThis, viewsPrev, "views vs prior");
     $("youtube-caption").innerHTML = yt.latestVideo
-      ? `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos<br>Latest: <b>${yt.latestVideo.title}</b>`
-      : `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos`;
+      ? `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos${watchHoursLine}<br>Latest: <b>${yt.latestVideo.title}</b>`
+      : `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos${watchHoursLine}`;
   }
 
   async function load() {
