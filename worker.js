@@ -1035,7 +1035,6 @@ async function fetchYouTubeData(env) {
 
   const subscriberCount = Number(stats.subscriberCount || 0);
   let analyticsDaily = [];
-  let analyticsDebug = null;
   try {
     const rows = await fetchYouTubeAnalyticsDaily(env);
     // Walk backward from the live subscriber total, undoing each day's
@@ -1049,12 +1048,10 @@ async function fetchYouTubeData(env) {
       running -= rows[i].gained - rows[i].lost;
     }
     analyticsDaily = rows;
-    analyticsDebug = `ok, ${rows.length} rows`;
   } catch (err) {
     // Non-fatal: these three line charts are bonus metrics layered on top
     // of the subscriber/view totals above, which still return fine
     // without them.
-    analyticsDebug = `error: ${String(err.message || err)}, hasClientId=${!!env.YOUTUBE_OAUTH_CLIENT_ID}, hasClientSecret=${!!env.YOUTUBE_OAUTH_CLIENT_SECRET}, hasRefreshToken=${!!env.YOUTUBE_OAUTH_REFRESH_TOKEN}`;
   }
 
   return {
@@ -1064,7 +1061,6 @@ async function fetchYouTubeData(env) {
     videoCount: Number(stats.videoCount || 0),
     daily,
     analyticsDaily,
-    analyticsDebug,
     latestVideo: latest ? { title: latest.title, publishedAt: latest.publishedAt, views: viewsByVideoId.get(latest.videoId) || 0 } : null,
   };
 }
