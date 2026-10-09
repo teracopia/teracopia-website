@@ -80,6 +80,10 @@ export default {
       return handleDashboard(request, env);
     }
 
+    if ((url.pathname === "/dashboard" || url.pathname === "/dashboard/") && (request.method === "GET" || request.method === "POST")) {
+      return handleDashboardPage(request, env);
+    }
+
     if (url.pathname.startsWith("/secure/")) {
       // Only this script's own internal env.ASSETS.fetch() calls should
       // ever reach this file. Any request that gets here came in from
@@ -703,4 +707,132 @@ async function fetchCloudflareAnalytics(env) {
     daily,
     last7Days,
   };
+}
+
+
+// ============================================================================
+// Dashboard page password gate
+// ============================================================================
+//
+// /dashboard itself (the static HTML) is only ever served after a password
+// check here in the Worker, so the DASHBOARD_TOKEN embedded in that page's
+// JS never reaches anyone who hasn't entered DASHBOARD_PASSWORD. A signed,
+// HttpOnly cookie (DASHBOARD_SESSION_SECRET) keeps the owner logged in for
+// 30 days without storing sessions anywhere.
+//
+// Additional Worker secrets required:
+//   DASHBOARD_PASSWORD        - the password visitors must enter.
+//   DASHBOARD_SESSION_SECRET  - random string used to sign the session
+//                               cookie. Not the same as DASHBOARD_TOKEN.
+
+const DASH_COOKIE = "dash_auth";
+const DASH_SESSION_MS = 30 * 24 * 60 * 60 * 1000;
+
+async function signDashboardSession(env, expiresAt) {
+  const payload = String(expiresAt);
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(env.DASHBOARD_SESSION_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sigBuffer = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
+  const sig = [...new Uint8Array(sigBuffer)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  return `${payload}.${sig}`;
+}
+
+async function verifyDashboardSession(env, token) {
+  if (!token || !env.DASHBOARD_SESSION_SECRET) return false;
+  const dot = token.lastIndexOf(".");
+  if (dot < 0) return false;
+  const payload = token.slice(0, dot);
+  const expiresAt = Number(payload);
+  if (!Number.isFinite(expiresAt) || Date.now() > expiresAt) return false;
+  const expected = await signDashboardSession(env, expiresAt);
+  if (expected.length !== token.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expected.length; i++) diff |= expected.charCodeAt(i) ^ token.charCodeAt(i);
+  return diff === 0;
+}
+
+function readCookie(request, name) {
+  const header = request.headers.get("Cookie") || "";
+  for (const part of header.split(";")) {
+    const eq = part.indexOf("=");
+    if (eq < 0) continue;
+    if (part.slice(0, eq).trim() === name) return decodeURIComponent(part.slice(eq + 1).trim());
+  }
+  return null;
+}
+
+function dashboardLoginPage({ error } = {}) {
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Teracopia Pulse</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family: system-ui, -apple-system, sans-serif; background:#eef1f7; color:#16192b; }
+  @media (prefers-color-scheme: dark) { body { background:#0e1120; color:#eef0fb; } }
+  form { background:#fff; border:1px solid #e6e8f1; border-radius:14px; padding:28px 26px;
+    box-shadow:0 8px 24px -12px rgba(22,25,43,0.15); width:min(90vw, 320px); }
+  @media (prefers-color-scheme: dark) { form { background:#171b30; border-color:#272c4d; } }
+  h1 { font-size:17px; margin:0 0 4px; }
+  p.sub { font-size:12.5px; color:#7a7f99; margin:0 0 18px; }
+  input { width:100%; box-sizing:border-box; padding:10px 12px; border-radius:8px; border:1px solid #e6e8f1;
+    font-size:14px; margin-bottom:12px; background:transparent; color:inherit; }
+  @media (prefers-color-scheme: dark) { input { border-color:#272c4d; } }
+  button { width:100%; padding:10px; border-radius:8px; border:none; background:#3b6ef6; color:#fff;
+    font-size:14px; font-weight:600; cursor:pointer; }
+  .error { color:#e5484d; font-size:12.5px; margin:-4px 0 12px; }
+</style></head>
+<body>
+  <form method="POST" action="/dashboard">
+    <h1>Teracopia Pulse</h1>
+    <p class="sub">Private dashboard — enter password to continue</p>
+    ${error ? '<div class="error">Incorrect password.</div>' : ""}
+    <input type="password" name="password" placeholder="Password" autofocus>
+    <button type="submit">Unlock</button>
+  </form>
+</body></html>`;
+}
+
+async function handleDashboardPage(request, env) {
+  if (!env.DASHBOARD_PASSWORD || !env.DASHBOARD_SESSION_SECRET) {
+    return new Response("Dashboard not configured yet.", { status: 500 });
+  }
+
+  if (request.method === "POST") {
+    const form = await request.formData();
+    const password = String(form.get("password") || "");
+    if (password === env.DASHBOARD_PASSWORD) {
+      const expiresAt = Date.now() + DASH_SESSION_MS;
+      const token = await signDashboardSession(env, expiresAt);
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: "/dashboard",
+          "Set-Cookie": `${DASH_COOKIE}=${encodeURIComponent(token)}; Max-Age=${DASH_SESSION_MS / 1000}; Path=/dashboard; HttpOnly; Secure; SameSite=Lax`,
+        },
+      });
+    }
+    return new Response(dashboardLoginPage({ error: true }), {
+      status: 401,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
+  }
+
+  const authed = await verifyDashboardSession(env, readCookie(request, DASH_COOKIE));
+  if (!authed) {
+    return new Response(dashboardLoginPage(), { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } });
+  }
+
+  const assetUrl = new URL("/dashboard/index.html", request.url);
+  const fileRes = await env.ASSETS.fetch(new Request(assetUrl, { headers: request.headers }));
+  const headers = new Headers(fileRes.headers);
+  headers.set("Cache-Control", "no-store");
+  return new Response(fileRes.body, { status: fileRes.status, headers });
 }
