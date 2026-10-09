@@ -416,6 +416,15 @@ function dayKey(date) {
   return date.toISOString().slice(0, 10);
 }
 
+// How far back "Hour" view's hourly buckets go. Keeping this short (a few
+// days) keeps the payload small -- hourly resolution a year back isn't
+// useful anyway.
+const HOURLY_WINDOW_DAYS = 4;
+
+function hourKey(date) {
+  return date.toISOString().slice(0, 13); // "2026-10-09T14"
+}
+
 function startOfWeek(date) {
   const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
   const day = d.getUTCDay(); // 0 = Sunday
@@ -455,6 +464,8 @@ async function fetchStripeDashboardData(env) {
 
   const dailyMap = new Map(); // date -> {book, coaching, revenueBook, revenueCoaching}
   const weeklyMap = new Map(); // weekStart -> {book, coaching, revenueBook, revenueCoaching}
+  const hourlyMap = new Map(); // hour -> {book, coaching, revenueBook, revenueCoaching}
+  const hourlyCutoff = Date.now() - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000;
   let totalBook = 0;
   let totalCoaching = 0;
   let revenueBook = 0;
@@ -472,6 +483,12 @@ async function fetchStripeDashboardData(env) {
     if (!dailyMap.has(dKey)) dailyMap.set(dKey, { date: dKey, book: 0, coaching: 0, revenueBook: 0, revenueCoaching: 0 });
     if (!weeklyMap.has(wKey)) weeklyMap.set(wKey, { weekStart: wKey, book: 0, coaching: 0, revenueBook: 0, revenueCoaching: 0 });
 
+    let hKey = null;
+    if (created.getTime() >= hourlyCutoff) {
+      hKey = hourKey(created);
+      if (!hourlyMap.has(hKey)) hourlyMap.set(hKey, { hour: hKey, book: 0, coaching: 0, revenueBook: 0, revenueCoaching: 0 });
+    }
+
     if (hasCoaching) {
       // Coaching purchases include the book free — count the sale as
       // coaching, not double-counted as a separate book sale.
@@ -479,6 +496,10 @@ async function fetchStripeDashboardData(env) {
       dailyMap.get(dKey).revenueCoaching += amount;
       weeklyMap.get(wKey).coaching++;
       weeklyMap.get(wKey).revenueCoaching += amount;
+      if (hKey) {
+        hourlyMap.get(hKey).coaching++;
+        hourlyMap.get(hKey).revenueCoaching += amount;
+      }
       totalCoaching++;
       revenueCoaching += amount;
     } else if (hasBook) {
@@ -486,6 +507,10 @@ async function fetchStripeDashboardData(env) {
       dailyMap.get(dKey).revenueBook += amount;
       weeklyMap.get(wKey).book++;
       weeklyMap.get(wKey).revenueBook += amount;
+      if (hKey) {
+        hourlyMap.get(hKey).book++;
+        hourlyMap.get(hKey).revenueBook += amount;
+      }
       totalBook++;
       revenueBook += amount;
     }
@@ -493,6 +518,7 @@ async function fetchStripeDashboardData(env) {
 
   const daily = [...dailyMap.values()].sort((a, b) => a.date.localeCompare(b.date));
   const weekly = [...weeklyMap.values()].sort((a, b) => a.weekStart.localeCompare(b.weekStart));
+  const hourly = [...hourlyMap.values()].sort((a, b) => a.hour.localeCompare(b.hour));
 
   return {
     windowDays: 365,
@@ -506,6 +532,7 @@ async function fetchStripeDashboardData(env) {
     },
     daily,
     weekly,
+    hourly,
   };
 }
 
@@ -548,6 +575,25 @@ async function fetchCalcomData(env) {
   let bookedLast7Days = 0;
   let bookedLast30Days = 0;
   const dailyMap = new Map();
+  const hourlyMap = new Map();
+  const hourlyCutoff = now - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+
+  // Cal.com's v2 booking objects don't reliably expose a plain "duration"
+  // field across every event type/version, so we compute it straight from
+  // start/end timestamps -- always correct regardless of field naming.
+  // Durations are rounded to the nearest 15 minutes and only classified as
+  // "15" or "30" when they land within 3 minutes of those marks; anything
+  // else (45min, custom lengths, etc.) is counted in totals but not split
+  // into the 15/30 breakdown.
+  function classifyDuration(b) {
+    const start = new Date(b.start || b.startTime).getTime();
+    const end = new Date(b.end || b.endTime).getTime();
+    if (!start || !end || end <= start) return null;
+    const minutes = (end - start) / 60000;
+    if (Math.abs(minutes - 15) <= 3) return 15;
+    if (Math.abs(minutes - 30) <= 3) return 30;
+    return null;
+  }
 
   for (const b of bookings) {
     const status = (b.status || "").toLowerCase();
@@ -565,17 +611,31 @@ async function fetchCalcomData(env) {
     if (createdAt >= sevenDaysAgo) bookedLast7Days++;
     if (createdAt >= thirtyDaysAgo) bookedLast30Days++;
 
+    const duration = classifyDuration(b);
+
     if (createdAt >= yearAgoMs) {
       const dKey = dayKey(new Date(createdAt));
-      dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
+      if (!dailyMap.has(dKey)) dailyMap.set(dKey, { date: dKey, count: 0, count15: 0, count30: 0 });
+      const row = dailyMap.get(dKey);
+      row.count++;
+      if (duration === 15) row.count15++;
+      else if (duration === 30) row.count30++;
+    }
+
+    if (createdAt >= hourlyCutoff) {
+      const hKey = hourKey(new Date(createdAt));
+      if (!hourlyMap.has(hKey)) hourlyMap.set(hKey, { hour: hKey, count: 0, count15: 0, count30: 0 });
+      const row = hourlyMap.get(hKey);
+      row.count++;
+      if (duration === 15) row.count15++;
+      else if (duration === 30) row.count30++;
     }
   }
 
-  const daily = [...dailyMap.entries()]
-    .map(([date, count]) => ({ date, count }))
-    .sort((a, b) => a.date.localeCompare(b.date));
+  const daily = [...dailyMap.values()].sort((a, b) => a.date.localeCompare(b.date));
+  const hourly = [...hourlyMap.values()].sort((a, b) => a.hour.localeCompare(b.hour));
 
-  return { totalBooked, completed, upcoming, cancelled, bookedLast7Days, bookedLast30Days, daily };
+  return { totalBooked, completed, upcoming, cancelled, bookedLast7Days, bookedLast30Days, daily, hourly };
 }
 
 async function fetchMailerLiteData(env) {
@@ -599,6 +659,8 @@ async function fetchMailerLiteData(env) {
   let newLast7Days = 0;
   let newLast30Days = 0;
   const dailyMap = new Map();
+  const hourlyMap = new Map();
+  const hourlyCutoff = now - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000;
   let cursor = null;
   let fetched = 0;
 
@@ -641,6 +703,10 @@ async function fetchMailerLiteData(env) {
       if (createdAt >= thirtyDaysAgo) newLast30Days++;
       const dKey = dayKey(new Date(createdAt));
       dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
+      if (createdAt >= hourlyCutoff) {
+        const hKey = hourKey(new Date(createdAt));
+        hourlyMap.set(hKey, (hourlyMap.get(hKey) || 0) + 1);
+      }
     }
 
     fetched += page.length;
@@ -653,6 +719,7 @@ async function fetchMailerLiteData(env) {
   let campaignsSentLast30Days = 0;
   let emailsSentLast30Days = 0;
   const emailsDailyMap = new Map();
+  const clicksDailyMap = new Map(); // date -> { sent, clicks }
   try {
     let campPage = 1;
     let campFetched = 0;
@@ -680,6 +747,19 @@ async function fetchMailerLiteData(env) {
         }
         const dKey = dayKey(new Date(sentAtMs));
         emailsDailyMap.set(dKey, (emailsDailyMap.get(dKey) || 0) + (c.stats?.sent || 0));
+
+        // Click-through rate: tracked as raw sent/clicks per day so the
+        // frontend can compute a correctly-weighted rate over any period
+        // (sum of clicks / sum of sent), rather than averaging daily
+        // percentages, which skews toward low-volume days.
+        const sentCount = c.stats?.sent || 0;
+        const clicksCount = c.stats?.clicks_count ?? c.stats?.clicked ?? 0;
+        if (sentCount > 0) {
+          if (!clicksDailyMap.has(dKey)) clicksDailyMap.set(dKey, { date: dKey, sent: 0, clicks: 0 });
+          const row = clicksDailyMap.get(dKey);
+          row.sent += sentCount;
+          row.clicks += clicksCount;
+        }
       }
 
       campFetched += campaigns.length;
@@ -694,18 +774,26 @@ async function fetchMailerLiteData(env) {
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => a.date.localeCompare(b.date));
 
+  const newSubscribersHourly = [...hourlyMap.entries()]
+    .map(([hour, count]) => ({ hour, count }))
+    .sort((a, b) => a.hour.localeCompare(b.hour));
+
   const emailsSentDaily = [...emailsDailyMap.entries()]
     .map(([date, count]) => ({ date, count }))
     .sort((a, b) => a.date.localeCompare(b.date));
+
+  const clickThroughDaily = [...clicksDailyMap.values()].sort((a, b) => a.date.localeCompare(b.date));
 
   return {
     totalActiveSubscribers,
     newLast7Days,
     newLast30Days,
     newSubscribersDaily,
+    newSubscribersHourly,
     campaignsSentLast30Days,
     emailsSentLast30Days,
     emailsSentDaily,
+    clickThroughDaily,
   };
 }
 
@@ -720,12 +808,23 @@ async function fetchCloudflareAnalytics(env) {
   const since = new Date(Date.now() - 358 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
   const until = new Date().toISOString().slice(0, 10);
 
+  // Hourly data is a separate, much shorter window -- Cloudflare's hourly
+  // analytics retention is far shorter than daily, and a year of hourly
+  // points would be both useless and a huge payload.
+  const hourlySinceDt = new Date(Date.now() - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const hourlyUntilDt = new Date().toISOString();
+
   const query = `
     query {
       viewer {
         zones(filter: { zoneTag: "${env.CF_ZONE_TAG}" }) {
           httpRequests1dGroups(limit: 400, filter: { date_geq: "${since}", date_leq: "${until}" }, orderBy: [date_ASC]) {
             dimensions { date }
+            sum { requests pageViews }
+            uniq { uniques }
+          }
+          httpRequests1hGroups(limit: 400, filter: { datetime_geq: "${hourlySinceDt}", datetime_leq: "${hourlyUntilDt}" }, orderBy: [datetime_ASC]) {
+            dimensions { datetime }
             sum { requests pageViews }
             uniq { uniques }
           }
@@ -746,9 +845,18 @@ async function fetchCloudflareAnalytics(env) {
   const body = await res.json();
   if (body.errors?.length) throw new Error(`Cloudflare GraphQL errors: ${JSON.stringify(body.errors)}`);
 
-  const groups = body.data?.viewer?.zones?.[0]?.httpRequests1dGroups || [];
+  const zone = body.data?.viewer?.zones?.[0] || {};
+  const groups = zone.httpRequests1dGroups || [];
   const daily = groups.map((g) => ({
     date: g.dimensions.date,
+    requests: g.sum.requests,
+    pageViews: g.sum.pageViews,
+    uniqueVisitors: g.uniq.uniques,
+  }));
+
+  const hourlyGroups = zone.httpRequests1hGroups || [];
+  const hourly = hourlyGroups.map((g) => ({
+    hour: String(g.dimensions.datetime).slice(0, 13),
     requests: g.sum.requests,
     pageViews: g.sum.pageViews,
     uniqueVisitors: g.uniq.uniques,
@@ -765,8 +873,9 @@ async function fetchCloudflareAnalytics(env) {
   );
 
   return {
-    note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately. History depth depends on your Cloudflare plan's analytics retention.",
+    note: "Zone-level traffic from Cloudflare's edge logs (works without any JS beacon). Time-on-site isn't available here — that needs Cloudflare Web Analytics' RUM beacon enabled separately. History depth depends on your Cloudflare plan's analytics retention; hourly data only covers the last few days.",
     daily,
+    hourly,
     last7Days,
   };
 }
@@ -823,7 +932,12 @@ async function getYouTubeAccessToken(env) {
   return body.access_token || null;
 }
 
-async function fetchYouTubeWatchTimeDaily(env) {
+// One Analytics reports call gets views, watch-time minutes, and net
+// subscriber change per day in a single round trip. Subscriber *count*
+// (a running total, not a delta) is reconstructed afterward by anchoring
+// the most recent day to the live total from the Data API and walking
+// backward subtracting each day's net change.
+async function fetchYouTubeAnalyticsDaily(env) {
   const accessToken = await getYouTubeAccessToken(env);
   if (!accessToken) return [];
 
@@ -835,11 +949,21 @@ async function fetchYouTubeWatchTimeDaily(env) {
 
   const url =
     `https://youtubeanalytics.googleapis.com/v2/reports?ids=channel%3D%3DMINE` +
-    `&startDate=${start}&endDate=${end}&metrics=estimatedMinutesWatched&dimensions=day`;
+    `&startDate=${start}&endDate=${end}` +
+    `&metrics=views,estimatedMinutesWatched,subscribersGained,subscribersLost&dimensions=day&sort=day`;
   const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-  if (!res.ok) throw new Error(`YouTube Analytics reports failed: ${res.status}`);
+  if (!res.ok) {
+    const errBody = await res.text().catch(() => "");
+    throw new Error(`YouTube Analytics reports failed: ${res.status} ${errBody.slice(0, 200)}`);
+  }
   const body = await res.json();
-  return (body.rows || []).map(([date, minutes]) => ({ date, minutes: Number(minutes || 0) }));
+  return (body.rows || []).map(([date, views, minutes, gained, lost]) => ({
+    date,
+    views: Number(views || 0),
+    minutes: Number(minutes || 0),
+    gained: Number(gained || 0),
+    lost: Number(lost || 0),
+  }));
 }
 
 async function fetchYouTubeData(env) {
@@ -902,21 +1026,38 @@ async function fetchYouTubeData(env) {
 
   const latest = [...videoRefs].filter((v) => v.publishedAt).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))[0];
 
-  let watchTimeDaily = [];
+  const subscriberCount = Number(stats.subscriberCount || 0);
+  let analyticsDaily = [];
+  let analyticsDebug = null;
   try {
-    watchTimeDaily = await fetchYouTubeWatchTimeDaily(env);
+    const rows = await fetchYouTubeAnalyticsDaily(env);
+    // Walk backward from the live subscriber total, undoing each day's
+    // net change, to get an approximate running count per day. The
+    // Analytics API typically lags 1-2 days behind real-time, so this is
+    // anchored at the most recent *available* Analytics day, not "today"
+    // exactly -- close enough for a progression chart.
+    let running = subscriberCount;
+    for (let i = rows.length - 1; i >= 0; i--) {
+      rows[i].subscriberCount = running;
+      running -= rows[i].gained - rows[i].lost;
+    }
+    analyticsDaily = rows;
+    analyticsDebug = `ok, ${rows.length} rows`;
   } catch (err) {
-    // Non-fatal: watch time is a bonus metric layered on top of the
-    // subscriber/view data above, which still returns fine without it.
+    // Non-fatal: these three line charts are bonus metrics layered on top
+    // of the subscriber/view totals above, which still return fine
+    // without them.
+    analyticsDebug = `error: ${String(err.message || err)}, hasClientId=${!!env.YOUTUBE_OAUTH_CLIENT_ID}, hasClientSecret=${!!env.YOUTUBE_OAUTH_CLIENT_SECRET}, hasRefreshToken=${!!env.YOUTUBE_OAUTH_REFRESH_TOKEN}`;
   }
 
   return {
-    note: "Subscriber count and lifetime totals are live from the YouTube Data API. The chart buckets each video's current view count by its upload date, not true daily view history. Watch-time hours (when configured) come from the YouTube Analytics API via OAuth.",
-    subscriberCount: Number(stats.subscriberCount || 0),
+    note: "Subscriber count and lifetime totals are live from the YouTube Data API. Per-day views, watch-time hours, and the subscriber-count progression (when configured) come from the YouTube Analytics API via OAuth -- that API has no hourly resolution, only daily.",
+    subscriberCount,
     totalViews: Number(stats.viewCount || 0),
     videoCount: Number(stats.videoCount || 0),
     daily,
-    watchTimeDaily,
+    analyticsDaily,
+    analyticsDebug,
     latestVideo: latest ? { title: latest.title, publishedAt: latest.publishedAt, views: viewsByVideoId.get(latest.videoId) || 0 } : null,
   };
 }

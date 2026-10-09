@@ -7,58 +7,32 @@
 <title>Teracopia Pulse</title>
 <style>
   :root {
-    --bg: #eef1f7;
-    --card: #ffffff;
-    --fg: #16192b;
-    --muted: #7a7f99;
-    --border: #e6e8f1;
-    --grid-line: #eceef6;
-    --accent: #3b6ef6;
-    --accent-soft: #eaf0ff;
-    --accent2: #16b3a3;
-    --accent2-soft: #e4f8f5;
-    --warn: #e08a1e;
-    --warn-soft: #fdf1df;
-    --good: #19b366;
-    --good-soft: #e2f7eb;
-    --bad: #e5484d;
-    --bad-soft: #fde5e6;
-    --neutral: #8d93ac;
-    --neutral-soft: #eef0f6;
-    --yt: #e23f3f;
-    --yt-soft: #fdeaea;
-    --shadow: 0 1px 2px rgba(22,25,43,0.04), 0 6px 18px -10px rgba(22,25,43,0.12);
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0e1120;
-      --card: #171b30;
-      --fg: #eef0fb;
-      --muted: #8d93bb;
-      --border: #272c4d;
-      --grid-line: #232749;
-      --accent: #6d8dff;
-      --accent-soft: #1d2748;
-      --accent2: #3fd9c7;
-      --accent2-soft: #10322e;
-      --warn: #e8a83f;
-      --warn-soft: #332814;
-      --good: #4fd98b;
-      --good-soft: #10301f;
-      --bad: #ff6b72;
-      --bad-soft: #3a191b;
-      --neutral: #9aa0c2;
-      --neutral-soft: #1c2038;
-      --yt: #ff6b6b;
-      --yt-soft: #391819;
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 18px -10px rgba(0,0,0,0.5);
-      color-scheme: dark;
-    }
+    --bg: #0e1120;
+    --card: #171b30;
+    --fg: #eef0fb;
+    --muted: #8d93bb;
+    --border: #272c4d;
+    --grid-line: #232749;
+    --accent: #6d8dff;
+    --accent-soft: #1d2748;
+    --accent2: #3fd9c7;
+    --accent2-soft: #10322e;
+    --warn: #e8a83f;
+    --warn-soft: #332814;
+    --good: #4fd98b;
+    --good-soft: #10301f;
+    --bad: #ff6b72;
+    --bad-soft: #3a191b;
+    --neutral: #9aa0c2;
+    --neutral-soft: #1c2038;
+    --yt: #ff6b6b;
+    --yt-soft: #391819;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 18px -10px rgba(0,0,0,0.5);
+    color-scheme: dark;
   }
 
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; height: 100%; }
+  html, body { margin: 0; padding: 0; min-height: 100%; }
   body {
     background: var(--bg);
     color: var(--fg);
@@ -87,7 +61,7 @@
   .header-right { display: flex; align-items: center; gap: 12px; }
 
   .period-group { display: flex; gap: 3px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 4px; box-shadow: var(--shadow); }
-  .period-btn { font-family: inherit; border: none; background: none; font-size: 13.5px; color: var(--muted); padding: 7px 15px; border-radius: 7px; cursor: pointer; font-weight: 500; }
+  .period-btn { font-family: inherit; border: none; background: none; font-size: 13.5px; color: var(--muted); padding: 7px 13px; border-radius: 7px; cursor: pointer; font-weight: 500; }
   .period-btn.active { background: var(--accent); color: #fff; font-weight: 600; }
 
   #refresh-btn {
@@ -100,103 +74,55 @@
 
   .period-caption { font-size: 13px; color: var(--muted); margin: -6px 0 16px; flex: none; }
 
-  /* ---- Dashboard grid: stat tiles + chart panels + full-width panel ---- */
   .dash-grid {
     display: grid;
-    grid-template-columns: 280px 1fr 1fr;
-    grid-template-rows: 1fr 1fr auto;
-    grid-template-areas:
-      "stat1 panelA panelB"
-      "stat2 panelA panelB"
-      "full  full   full";
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 16px;
     flex: 1;
     min-height: 0;
   }
-  #card-youtube  { grid-area: stat1; }
-  #card-bookings { grid-area: stat2; }
-  #card-web      { grid-area: panelA; }
-  #card-email    { grid-area: panelB; }
-  #card-revenue  { grid-area: full; min-height: 280px; }
 
   .card {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     box-shadow: var(--shadow);
-    padding: 22px 24px;
+    padding: 20px 22px;
     min-width: 0;
     display: flex;
     flex-direction: column;
   }
 
-  /* -- stat tiles (no chart; number + delta + caption) -- */
-  .stat-card { justify-content: center; }
-  .stat-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 4px; flex: none; flex-wrap: wrap; row-gap: 6px; }
+  .panel-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; }
   .cat-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--cat, var(--accent)); flex: none; }
-  .stat-head .t { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-  .stat-card .big-num { font-size: 44px; font-weight: 800; letter-spacing: -0.015em; line-height: 1.05; color: var(--cat, var(--fg)); }
-  .delta { font-weight: 700; display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; margin-top: 8px; }
-  .delta.up { color: var(--good); }
-  .delta.down { color: var(--bad); }
-  .delta.flat { color: var(--muted); }
-  .stat-caption { font-size: 12.5px; color: var(--muted); margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--border); }
-
-  /* -- chart panels -- */
-  .panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 4px; flex: none; }
-  .panel-title { display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 700; }
-  .panel-badge { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: nowrap; }
+  .panel-badge { font-size: 12.5px; color: var(--muted); font-weight: 600; white-space: normal; text-align: right; }
   .panel-badge b { color: var(--fg); font-weight: 700; }
   .panel-badge .up { color: var(--good); }
   .panel-badge .down { color: var(--bad); }
-  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .legend { display: flex; gap: 14px; font-size: 12px; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
   .legend span { display: inline-flex; align-items: center; gap: 5px; }
   .legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
 
-  .chart-wrap { flex: 1; min-height: 160px; margin-top: 10px; }
-  #card-revenue .chart-wrap { min-height: 190px; }
-  svg.chart { width: 100%; height: 100%; display: block; overflow: visible; }
+  .chart-wrap { flex: 1; min-height: 170px; margin-top: 10px; }
   .axis-label { font-size: 9.5px; fill: var(--muted); font-family: "Inter", system-ui, sans-serif; }
   .grid-line { stroke: var(--grid-line); stroke-width: 1; }
-
   .insight-line { font-size: 12.5px; color: var(--muted); margin-top: 10px; flex: none; }
   .insight-line b { color: var(--fg); }
 
-  .error-note { font-size: 13px; color: var(--bad); background: var(--bad-soft); border: 1px solid var(--bad); border-radius: 9px; padding: 9px 12px; }
+  footer { text-align: center; font-size: 11.5px; color: var(--muted); padding: 6px 0 2px; flex: none; }
 
-  footer.page { text-align: center; font-size: 11.5px; color: var(--muted); padding-top: 14px; flex: none; }
-
-  @media (max-width: 1000px) {
-    .dash-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto auto auto;
-      grid-template-areas:
-        "stat1 stat2"
-        "panelA panelB"
-        "full full";
-    }
-    .chart-wrap { min-height: 200px; }
+  @media (max-width: 1150px) {
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 640px) {
     main { min-height: 0; }
-    .dash-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "stat1"
-        "stat2"
-        "panelA"
-        "panelB"
-        "full";
-      flex: none;
-    }
-    .chart-wrap { min-height: 180px; }
+    .dash-grid { grid-template-columns: 1fr; }
+    .chart-wrap { min-height: 190px; }
     .header-right { width: 100%; justify-content: space-between; flex-wrap: wrap; row-gap: 8px; }
     .timestamp { flex-basis: 100%; order: 3; }
-    .panel-head { flex-wrap: wrap; row-gap: 6px; }
-    .panel-head > div[style] { width: 100%; justify-content: space-between; flex-wrap: wrap; row-gap: 6px; }
-    .legend { gap: 10px; }
-    .panel-badge { white-space: normal; }
+    .period-btn { padding: 7px 10px; font-size: 13px; }
   }
 </style>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -213,84 +139,124 @@
       </div>
     </div>
     <div class="header-right">
-      <div class="period-group" id="period-group">
+      <div class="period-group">
+        <button class="period-btn" data-period="hour" type="button">Hour</button>
         <button class="period-btn" data-period="day" type="button">Day</button>
         <button class="period-btn" data-period="week" type="button">Week</button>
         <button class="period-btn active" data-period="month" type="button">Month</button>
         <button class="period-btn" data-period="year" type="button">Year</button>
       </div>
-      <span class="timestamp" id="updated-at">loading…</span>
+      <span class="timestamp" id="updated-at">—</span>
       <button id="refresh-btn" type="button">Refresh</button>
     </div>
   </header>
 
-  <div class="period-caption" id="period-caption"></div>
+  <div class="period-caption" id="period-caption">—</div>
 
   <div class="dash-grid" id="dash-grid">
-    <!-- YouTube — stat tile -->
-    <div class="card stat-card" id="card-youtube" style="--cat:var(--yt)">
-      <div class="stat-head"><span class="cat-dot"></span><span class="t">YouTube Subscribers</span></div>
-      <div class="big-num" id="youtube-num">—</div>
-      <div id="youtube-delta"></div>
-      <div class="stat-caption" id="youtube-caption">—</div>
+    <div class="card" id="card-revenue" style="--cat:var(--accent)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Revenue — Book vs. Coaching</span></div>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span class="legend"><span><i style="background:var(--accent)"></i>Book</span><span><i style="background:var(--accent2)"></i>Coaching</span></span>
+          <span class="panel-badge" id="revenue-badge">—</span>
+        </div>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="revenue-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="revenue-insight"></div>
     </div>
 
-    <!-- Bookings — stat tile -->
-    <div class="card stat-card" id="card-bookings" style="--cat:var(--accent2)">
-      <div class="stat-head"><span class="cat-dot"></span><span class="t">Bookings (Cal.com)</span></div>
-      <div class="big-num" id="bookings-num">—</div>
-      <div id="bookings-delta"></div>
-      <div class="stat-caption" id="bookings-caption">—</div>
+    <div class="card" id="card-sessions" style="--cat:var(--accent2)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Sessions Booked — 15 vs. 30 min</span></div>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span class="legend"><span><i style="background:var(--accent)"></i>15 min</span><span><i style="background:var(--accent2)"></i>30 min</span></span>
+          <span class="panel-badge" id="sessions-badge">—</span>
+        </div>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="sessions-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="sessions-insight"></div>
     </div>
 
-    <!-- Web Traffic — line/area chart panel -->
     <div class="card" id="card-web" style="--cat:var(--good)">
       <div class="panel-head">
-        <div class="panel-title"><span class="cat-dot"></span><span>Website Visitors</span></div>
-        <span class="panel-badge" id="web-badge">—</span>
+        <div class="panel-title"><span class="cat-dot"></span><span>Website Traffic</span></div>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span class="legend"><span><i style="background:var(--accent)"></i>Visitors</span><span><i style="background:var(--good)"></i>Page views</span></span>
+          <span class="panel-badge" id="web-badge">—</span>
+        </div>
       </div>
       <div class="chart-wrap"><svg class="chart" id="web-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
       <div class="insight-line" id="web-insight"></div>
     </div>
 
-    <!-- Email List — bar chart panel -->
-    <div class="card" id="card-email" style="--cat:var(--warn)">
+    <div class="card" id="card-yt-subs" style="--cat:var(--yt)">
       <div class="panel-head">
-        <div class="panel-title"><span class="cat-dot"></span><span>New Email Subscribers</span></div>
-        <span class="panel-badge" id="email-badge">—</span>
+        <div class="panel-title"><span class="cat-dot"></span><span>YouTube Subscribers</span></div>
+        <span class="panel-badge" id="yt-subs-badge">—</span>
       </div>
-      <div class="chart-wrap"><svg class="chart" id="email-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
-      <div class="insight-line" id="email-insight"></div>
+      <div class="chart-wrap"><svg class="chart" id="yt-subs-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="yt-subs-insight"></div>
     </div>
 
-    <!-- Revenue — full-width dual-area chart panel -->
-    <div class="card" id="card-revenue" style="--cat:var(--accent)">
+    <div class="card" id="card-yt-views" style="--cat:var(--yt)">
       <div class="panel-head">
-        <div class="panel-title"><span class="cat-dot"></span><span>Revenue — Book vs. Coaching</span></div>
-        <div style="display:flex; align-items:center; gap:18px;">
-          <span class="legend">
-            <span><i style="background:var(--accent)"></i>Book</span>
-            <span><i style="background:var(--accent2)"></i>Coaching</span>
-          </span>
-          <span class="panel-badge" id="revenue-badge">—</span>
-        </div>
+        <div class="panel-title"><span class="cat-dot"></span><span>YouTube Views</span></div>
+        <span class="panel-badge" id="yt-views-badge">—</span>
       </div>
-      <div class="chart-wrap"><svg class="chart" id="revenue-chart" viewBox="0 0 1200 230" preserveAspectRatio="none"></svg></div>
-      <div class="insight-line" id="revenue-insight"></div>
+      <div class="chart-wrap"><svg class="chart" id="yt-views-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="yt-views-insight"></div>
+    </div>
+
+    <div class="card" id="card-yt-watch" style="--cat:var(--yt)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>YouTube Watch Time</span></div>
+        <span class="panel-badge" id="yt-watch-badge">—</span>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="yt-watch-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="yt-watch-insight"></div>
+    </div>
+
+    <div class="card" id="card-email-subs" style="--cat:var(--warn)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Email Subscribers</span></div>
+        <span class="panel-badge" id="email-subs-badge">—</span>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="email-subs-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="email-subs-insight"></div>
+    </div>
+
+    <div class="card" id="card-email-sent" style="--cat:var(--warn)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Emails Sent</span></div>
+        <span class="panel-badge" id="email-sent-badge">—</span>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="email-sent-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="email-sent-insight"></div>
+    </div>
+
+    <div class="card" id="card-ctr" style="--cat:var(--bad)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Click-Through Rate</span></div>
+        <span class="panel-badge" id="ctr-badge">—</span>
+      </div>
+      <div class="chart-wrap"><svg class="chart" id="ctr-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg></div>
+      <div class="insight-line" id="ctr-insight"></div>
     </div>
   </div>
 
-  <footer class="page">Private — unlisted page, blocked from search indexing</footer>
+  <footer>Private — unlisted page, blocked from search indexing</footer>
 </main>
 
 <script>
-(() => {
+(function () {
   const ENDPOINT = "/api/dashboard";
-  const TOKEN = "gp5c4QlFdT9EhmdzIZ9uZRrPiATqOv866oFbBZ3C6Jc";
+  const TOKEN = "__DASHBOARD_TOKEN__";
 
   const $ = (id) => document.getElementById(id);
   const fmt = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : new Intl.NumberFormat("en-US").format(n);
   const fmtMoney = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : "$" + new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+  const fmtPct1 = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : n.toFixed(1) + "%";
 
   function fmtLabel(key, granularity) {
     if (granularity === "month") {
@@ -300,15 +266,21 @@
     const d = new Date(key + "T00:00:00Z");
     return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
   }
+  function fmtHourLabel(hourKey) {
+    const d = new Date(hourKey + ":00:00Z");
+    return d.toLocaleTimeString("en-US", { hour: "numeric", timeZone: "UTC" });
+  }
 
   // ---- Period config -------------------------------------------------
   const PERIODS = {
+    hour:  { days: 1,   granularity: "hour",  buckets: 48, caption: "Last 24 hours vs. the 24 before — chart: last 48 hours, hourly (some metrics only report daily and fall back to that)" },
     day:   { days: 1,   granularity: "day",   buckets: 14, caption: "Today vs. yesterday — chart: last 14 days" },
     week:  { days: 7,   granularity: "day",   buckets: 14, caption: "Last 7 days vs. the 7 before — chart: last 14 days, daily" },
     month: { days: 30,  granularity: "week",  buckets: 12, caption: "Last 30 days vs. the 30 before — chart: last 12 weeks" },
     year:  { days: 365, granularity: "month", buckets: 12, caption: "Last 365 days vs. the year before — chart: last 12 months" },
   };
   let activePeriod = "month";
+  const periodWord = (cfg) => cfg.granularity === "hour" ? "today" : cfg.days === 1 ? "today" : cfg.days === 7 ? "this week" : cfg.days === 30 ? "this month" : "this year";
 
   // ---- Generic daily-array aggregation -------------------------------
   function weekKeyOf(dateStr) {
@@ -351,6 +323,26 @@
     return (daily || []).filter((d) => d.date >= start && d.date < end).reduce((s, d) => s + valueFn(d), 0);
   }
 
+  // ---- Hourly-array variants (for the Hour period) --------------------
+  function cutoffHourKey(hoursAgo) {
+    const d = new Date(Date.now() - hoursAgo * 60 * 60 * 1000);
+    return d.toISOString().slice(0, 13);
+  }
+  function sumWindowHourly(hourly, hours, valueFn) {
+    const c = cutoffHourKey(hours);
+    return (hourly || []).filter((d) => d.hour >= c).reduce((s, d) => s + valueFn(d), 0);
+  }
+  function sumPrevWindowHourly(hourly, hours, valueFn) {
+    const end = cutoffHourKey(hours);
+    const start = cutoffHourKey(hours * 2);
+    return (hourly || []).filter((d) => d.hour >= start && d.hour < end).reduce((s, d) => s + valueFn(d), 0);
+  }
+  function bucketedHourly(hourly, valueFn) {
+    const cfg = PERIODS[activePeriod];
+    const rows = (hourly || []).slice(-cfg.buckets);
+    return { labels: rows.map((r) => fmtHourLabel(r.hour)), values: rows.map((r) => valueFn(r)) };
+  }
+
   function pctChange(curr, prev) {
     if (!prev) return null;
     return ((curr - prev) / prev) * 100;
@@ -372,6 +364,18 @@
     return `${valueText} <span class="${up ? "up" : "down"}">${up ? "▲" : "▼"} ${Math.abs(pct).toFixed(0)}%</span>`;
   }
 
+  // Point-change badge, for rates (percentages) where a relative % change
+  // of a % is confusing -- shows the raw percentage-point difference.
+  function badgePointsHTML(curr, prev, label, fmtFn) {
+    const valueText = `<b>${fmtFn(curr)}</b> ${label}`;
+    if (prev === null || prev === undefined || Number.isNaN(prev) || curr === null || curr === undefined || Number.isNaN(curr)) {
+      return valueText;
+    }
+    const diff = curr - prev;
+    const up = diff >= 0;
+    return `${valueText} <span class="${up ? "up" : "down"}">${up ? "▲" : "▼"} ${Math.abs(diff).toFixed(1)}pts</span>`;
+  }
+
   // ---- SVG chart helpers ----------------------------------------------
   function svgEl(tag, attrs) {
     const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
@@ -379,8 +383,6 @@
     return el;
   }
 
-  // Shared axis layout: reserves space at left for y-axis labels and
-  // at bottom for x-axis labels, draws horizontal gridlines + y labels.
   function axisLayout(svg, maxValue) {
     const vb = svg.getAttribute("viewBox").split(" ").map(Number);
     const W = vb[2], H = vb[3];
@@ -394,9 +396,9 @@
     for (let i = 0; i <= rows; i++) {
       const y = padTop + (plotH * i) / rows;
       svg.appendChild(svgEl("line", { x1: padLeft, y1: y, x2: W - padRight, y2: y, class: "grid-line" }));
-      const val = Math.round(niceMax * (1 - i / rows));
+      const val = niceMax * (1 - i / rows);
       const t = svgEl("text", { x: padLeft - 8, y: y + 3, "text-anchor": "end", class: "axis-label" });
-      t.textContent = fmt(val);
+      t.textContent = niceMax < 10 ? val.toFixed(1) : fmt(Math.round(val));
       svg.appendChild(t);
     }
 
@@ -421,26 +423,8 @@
     svg.appendChild(t);
   }
 
-  function drawAxisBarChart(svg, values, labels, color) {
-    if (!labels.length) return noData(svg);
-    const max = Math.max(1, ...values);
-    const layout = axisLayout(svg, max);
-    const n = labels.length;
-    const gap = layout.plotW / n;
-    const barW = Math.max(3, gap * 0.55);
-    const xForIndex = (i) => layout.padLeft + gap * i + gap / 2;
-
-    values.forEach((v, i) => {
-      const h = (v / max) * layout.plotH;
-      const x = xForIndex(i) - barW / 2;
-      const y = layout.padTop + layout.plotH - h;
-      if (h > 0) svg.appendChild(svgEl("rect", { x, y, width: barW, height: h, fill: color, rx: 2 }));
-    });
-
-    drawXLabels(svg, labels, xForIndex, layout);
-  }
-
-  function drawAxisLineChart(svg, values, labels, color) {
+  // Single-series line chart with a soft gradient fill under the line.
+  function drawLineChart(svg, values, labels, color) {
     if (!labels.length) return noData(svg);
     const max = Math.max(1, ...values);
     const layout = axisLayout(svg, max);
@@ -456,34 +440,35 @@
     const gradId = "grad-" + Math.random().toString(36).slice(2, 8);
     const defs = svgEl("defs", {});
     const grad = svgEl("linearGradient", { id: gradId, x1: 0, y1: 0, x2: 0, y2: 1 });
-    grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": color, "stop-opacity": 0.3 }));
+    grad.appendChild(svgEl("stop", { offset: "0%", "stop-color": color, "stop-opacity": 0.28 }));
     grad.appendChild(svgEl("stop", { offset: "100%", "stop-color": color, "stop-opacity": 0.02 }));
     defs.appendChild(grad);
     svg.appendChild(defs);
 
     svg.appendChild(svgEl("path", { d: area, fill: `url(#${gradId})` }));
     svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: color, "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
-    pts.forEach(([cx, cy]) => svg.appendChild(svgEl("circle", { cx, cy, r: 2.5, fill: color })));
+    if (n <= 60) pts.forEach(([cx, cy]) => svg.appendChild(svgEl("circle", { cx, cy, r: 2.2, fill: color })));
 
     drawXLabels(svg, labels, xForIndex, layout);
   }
 
-  // Two overlapping (not stacked) translucent area series sharing one scale.
-  function drawDualAreaChart(svg, seriesA, seriesB, labels) {
+  // Multi-series line chart, plain strokes (no fill) so overlapping lines
+  // stay readable -- used for every "X vs. Y" comparison panel.
+  function drawMultiLineChart(svg, series, labels) {
     if (!labels.length) return noData(svg);
-    const max = Math.max(1, ...seriesA.values, ...seriesB.values);
+    const allValues = series.flatMap((s) => s.values);
+    const max = Math.max(1, ...allValues);
     const layout = axisLayout(svg, max);
     const n = labels.length;
     const step = n > 1 ? layout.plotW / (n - 1) : 0;
     const xForIndex = (i) => layout.padLeft + step * i;
     const yForValue = (v) => layout.padTop + layout.plotH - (v / max) * layout.plotH;
 
-    [seriesA, seriesB].forEach((series) => {
-      const pts = series.values.map((v, i) => [xForIndex(i), yForValue(v)]);
+    series.forEach((s) => {
+      const pts = s.values.map((v, i) => [xForIndex(i), yForValue(v)]);
       const line = pts.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
-      const area = line + ` L${pts[pts.length - 1][0].toFixed(1)},${layout.padTop + layout.plotH} L${pts[0][0].toFixed(1)},${layout.padTop + layout.plotH} Z`;
-      svg.appendChild(svgEl("path", { d: area, fill: series.color, "fill-opacity": 0.22 }));
-      svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: series.color, "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: s.color, "stroke-width": 2.5, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      if (n <= 60) pts.forEach(([cx, cy]) => svg.appendChild(svgEl("circle", { cx, cy, r: 2, fill: s.color })));
     });
 
     drawXLabels(svg, labels, xForIndex, layout);
@@ -491,12 +476,198 @@
 
   // ---- Render ----------------------------------------------------------
   let FULL_DATA = null;
-  const periodWord = (cfg) => cfg.days === 1 ? "today" : cfg.days === 7 ? "this week" : cfg.days === 30 ? "this month" : "this year";
 
   function bucketed(daily, valueFn) {
     const cfg = PERIODS[activePeriod];
     const rows = aggregate(daily, cfg.granularity, valueFn).slice(-cfg.buckets);
     return { labels: rows.map((r) => fmtLabel(r.key, cfg.granularity)), values: rows.map((r) => r.value) };
+  }
+
+  // For sources with no hourly feed: Hour period falls back to showing
+  // daily data (so the chart never goes empty), with the panel's badge
+  // window also behaving like Day period in that case.
+  function windowStats(daily, days) {
+    const cfg = PERIODS[activePeriod];
+    const effDays = cfg.granularity === "hour" ? 1 : cfg.days;
+    return effDays;
+  }
+
+  function statError(prefix, msg) {
+    const svg = $(`${prefix}-chart`);
+    if (svg) noData(svg);
+    $(`${prefix}-badge`).textContent = "Error";
+    $(`${prefix}-insight`).innerHTML = `<span style="color:var(--bad)">${msg}</span>`;
+  }
+
+  function renderRevenue(stripe, cfg) {
+    if (stripe.error) return statError("revenue", stripe.error);
+    const useHourly = cfg.granularity === "hour" && stripe.hourly && stripe.hourly.length;
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+
+    const curr = useHourly ? sumWindowHourly(stripe.hourly, 24, (d) => d.revenueBook + d.revenueCoaching) : sumWindow(stripe.daily, days, (d) => d.revenueBook + d.revenueCoaching);
+    const prev = useHourly ? sumPrevWindowHourly(stripe.hourly, 24, (d) => d.revenueBook + d.revenueCoaching) : sumPrevWindow(stripe.daily, days, (d) => d.revenueBook + d.revenueCoaching);
+
+    $("revenue-badge").innerHTML = badgeHTML(curr, prev, periodWord(cfg), fmtMoney);
+
+    const b = useHourly
+      ? { labels: bucketedHourly(stripe.hourly, (d) => d.revenueBook).labels, book: bucketedHourly(stripe.hourly, (d) => d.revenueBook).values, coaching: bucketedHourly(stripe.hourly, (d) => d.revenueCoaching).values }
+      : { labels: bucketed(stripe.daily, (d) => d.revenueBook).labels, book: bucketed(stripe.daily, (d) => d.revenueBook).values, coaching: bucketed(stripe.daily, (d) => d.revenueCoaching).values };
+
+    drawMultiLineChart($("revenue-chart"), [{ values: b.book, color: "var(--accent)" }, { values: b.coaching, color: "var(--accent2)" }], b.labels);
+
+    const bestDay = [...(stripe.daily || [])].sort((a, b2) => (b2.revenueBook + b2.revenueCoaching) - (a.revenueBook + a.revenueCoaching))[0];
+    $("revenue-insight").innerHTML = bestDay && (bestDay.revenueBook + bestDay.revenueCoaching) > 0
+      ? `Best day ${periodWord(cfg)}: <b>${fmtLabel(bestDay.date, "day")} · ${fmtMoney(bestDay.revenueBook + bestDay.revenueCoaching)}</b>`
+      : `No sales yet ${periodWord(cfg)}`;
+  }
+
+  function renderSessions(calcom, cfg) {
+    if (calcom.error) return statError("sessions", calcom.error);
+    const useHourly = cfg.granularity === "hour" && calcom.hourly && calcom.hourly.length;
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+
+    const curr15 = useHourly ? sumWindowHourly(calcom.hourly, 24, (d) => d.count15) : sumWindow(calcom.daily, days, (d) => d.count15);
+    const curr30 = useHourly ? sumWindowHourly(calcom.hourly, 24, (d) => d.count30) : sumWindow(calcom.daily, days, (d) => d.count30);
+    const prevTotal = useHourly ? sumPrevWindowHourly(calcom.hourly, 24, (d) => d.count15 + d.count30) : sumPrevWindow(calcom.daily, days, (d) => d.count15 + d.count30);
+
+    $("sessions-badge").innerHTML = badgeHTML(curr15 + curr30, prevTotal, periodWord(cfg), fmt);
+
+    const b15 = useHourly ? bucketedHourly(calcom.hourly, (d) => d.count15) : bucketed(calcom.daily, (d) => d.count15);
+    const b30 = useHourly ? bucketedHourly(calcom.hourly, (d) => d.count30) : bucketed(calcom.daily, (d) => d.count30);
+    drawMultiLineChart($("sessions-chart"), [{ values: b15.values, color: "var(--accent)" }, { values: b30.values, color: "var(--accent2)" }], b15.labels);
+
+    $("sessions-insight").innerHTML = `<b>${fmt(curr15)}</b> 15-min and <b>${fmt(curr30)}</b> 30-min sessions ${periodWord(cfg)}`;
+  }
+
+  function renderWeb(web, cfg) {
+    if (web.error) return statError("web", web.error);
+    const useHourly = cfg.granularity === "hour" && web.hourly && web.hourly.length;
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+
+    const visitors = useHourly ? sumWindowHourly(web.hourly, 24, (d) => d.uniqueVisitors || 0) : sumWindow(web.daily, days, (d) => d.uniqueVisitors || 0);
+    const prevVisitors = useHourly ? sumPrevWindowHourly(web.hourly, 24, (d) => d.uniqueVisitors || 0) : sumPrevWindow(web.daily, days, (d) => d.uniqueVisitors || 0);
+    const pageViews = useHourly ? sumWindowHourly(web.hourly, 24, (d) => d.pageViews || 0) : sumWindow(web.daily, days, (d) => d.pageViews || 0);
+
+    $("web-badge").innerHTML = badgeHTML(visitors, prevVisitors, periodWord(cfg), fmt);
+
+    const bv = useHourly ? bucketedHourly(web.hourly, (d) => d.uniqueVisitors || 0) : bucketed(web.daily, (d) => d.uniqueVisitors || 0);
+    const bp = useHourly ? bucketedHourly(web.hourly, (d) => d.pageViews || 0) : bucketed(web.daily, (d) => d.pageViews || 0);
+    drawMultiLineChart($("web-chart"), [{ values: bv.values, color: "var(--accent)" }, { values: bp.values, color: "var(--good)" }], bv.labels);
+
+    $("web-insight").innerHTML = `<b>${fmt(pageViews)}</b> page views · ${visitors ? (pageViews / visitors).toFixed(1) : "—"} per visit ${periodWord(cfg)}`;
+  }
+
+  function renderYoutube(yt, cfg) {
+    if (yt.error) {
+      statError("yt-subs", yt.error);
+      statError("yt-views", yt.error);
+      statError("yt-watch", yt.error);
+      return;
+    }
+    // YouTube's Analytics API has no hourly resolution -- always uses
+    // daily data, and the "today vs. yesterday" window Day period uses.
+    const days = 1;
+    const rows = yt.analyticsDaily || [];
+    const hasAnalytics = rows.length > 0;
+    const fallbackNote = cfg.granularity === "hour" ? " (daily data — YouTube has no hourly feed)" : "";
+
+    // Subscribers
+    const subsCurr = hasAnalytics ? sumWindow(rows, days, (d) => d.gained - d.lost) : null;
+    const subsPrev = hasAnalytics ? sumPrevWindow(rows, days, (d) => d.gained - d.lost) : null;
+    $("yt-subs-badge").innerHTML = `<b>${fmt(yt.subscriberCount)}</b> total`;
+    if (hasAnalytics) {
+      const b = bucketed(rows, (d) => d.subscriberCount ?? 0);
+      drawLineChart($("yt-subs-chart"), b.values, b.labels, "var(--yt)");
+      $("yt-subs-insight").innerHTML = `<b>${subsCurr >= 0 ? "+" : ""}${fmt(subsCurr)}</b> net new ${periodWord(cfg)}${fallbackNote}`;
+    } else {
+      noData($("yt-subs-chart"));
+      $("yt-subs-insight").innerHTML = `Connect YouTube Analytics (OAuth) to see progression over time`;
+    }
+
+    // Views
+    const viewsCurr = hasAnalytics ? sumWindow(rows, days, (d) => d.views || 0) : 0;
+    const viewsPrev = hasAnalytics ? sumPrevWindow(rows, days, (d) => d.views || 0) : 0;
+    $("yt-views-badge").innerHTML = badgeHTML(viewsCurr, viewsPrev, periodWord(cfg), fmt);
+    if (hasAnalytics) {
+      const b = bucketed(rows, (d) => d.views || 0);
+      drawLineChart($("yt-views-chart"), b.values, b.labels, "var(--yt)");
+      $("yt-views-insight").innerHTML = `<b>${fmt(yt.totalViews)}</b> lifetime views${fallbackNote}`;
+    } else {
+      noData($("yt-views-chart"));
+      $("yt-views-insight").innerHTML = `<b>${fmt(yt.totalViews)}</b> lifetime views (Analytics API not connected for daily history)`;
+    }
+
+    // Watch time (hours)
+    const watchCurrMin = hasAnalytics ? sumWindow(rows, days, (d) => d.minutes || 0) : 0;
+    const watchPrevMin = hasAnalytics ? sumPrevWindow(rows, days, (d) => d.minutes || 0) : 0;
+    $("yt-watch-badge").innerHTML = badgeHTML(watchCurrMin / 60, watchPrevMin / 60, periodWord(cfg), (n) => n.toFixed(1) + "h");
+    if (hasAnalytics) {
+      const b = bucketed(rows, (d) => (d.minutes || 0) / 60);
+      drawLineChart($("yt-watch-chart"), b.values, b.labels, "var(--yt)");
+      $("yt-watch-insight").innerHTML = `${yt.latestVideo ? `Latest: <b>${yt.latestVideo.title}</b>` : ""}${fallbackNote}`;
+    } else {
+      noData($("yt-watch-chart"));
+      $("yt-watch-insight").innerHTML = yt.latestVideo ? `Latest: <b>${yt.latestVideo.title}</b>` : "No videos yet";
+    }
+  }
+
+  function renderEmailSubs(mail, cfg) {
+    if (mail.error) return statError("email-subs", mail.error);
+    const useHourly = cfg.granularity === "hour" && mail.newSubscribersHourly && mail.newSubscribersHourly.length;
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+
+    const curr = useHourly ? sumWindowHourly(mail.newSubscribersHourly, 24, (d) => d.count) : sumWindow(mail.newSubscribersDaily, days, (d) => d.count);
+    const prev = useHourly ? sumPrevWindowHourly(mail.newSubscribersHourly, 24, (d) => d.count) : sumPrevWindow(mail.newSubscribersDaily, days, (d) => d.count);
+    $("email-subs-badge").innerHTML = badgeHTML(curr, prev, periodWord(cfg), fmt);
+
+    const b = useHourly ? bucketedHourly(mail.newSubscribersHourly, (d) => d.count) : bucketed(mail.newSubscribersDaily, (d) => d.count);
+    drawLineChart($("email-subs-chart"), b.values, b.labels, "var(--warn)");
+
+    $("email-subs-insight").innerHTML = `<b>${fmt(mail.totalActiveSubscribers)}</b> total active subscribers`;
+  }
+
+  function renderEmailSent(mail, cfg) {
+    if (mail.error) return statError("email-sent", mail.error);
+    // Campaign sends aren't a continuous hourly feed -- always daily data.
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+    const curr = sumWindow(mail.emailsSentDaily, days, (d) => d.count);
+    const prev = sumPrevWindow(mail.emailsSentDaily, days, (d) => d.count);
+    $("email-sent-badge").innerHTML = badgeHTML(curr, prev, periodWord(cfg), fmt);
+
+    const b = bucketed(mail.emailsSentDaily, (d) => d.count);
+    drawLineChart($("email-sent-chart"), b.values, b.labels, "var(--warn)");
+
+    const note = cfg.granularity === "hour" ? " (daily data — campaigns aren't an hourly feed)" : "";
+    $("email-sent-insight").innerHTML = `<b>${fmt(mail.campaignsSentLast30Days)}</b> campaigns sent in the last 30 days${note}`;
+  }
+
+  function renderCTR(mail, cfg) {
+    const rows = mail.clickThroughDaily || [];
+    if (mail.error) return statError("ctr", mail.error);
+    if (!rows.length) {
+      noData($("ctr-chart"));
+      $("ctr-badge").textContent = "—";
+      $("ctr-insight").textContent = "No campaign click data yet";
+      return;
+    }
+    const days = cfg.granularity === "hour" ? 1 : cfg.days;
+    const sentCurr = sumWindow(rows, days, (d) => d.sent);
+    const clicksCurr = sumWindow(rows, days, (d) => d.clicks);
+    const sentPrev = sumPrevWindow(rows, days, (d) => d.sent);
+    const clicksPrev = sumPrevWindow(rows, days, (d) => d.clicks);
+    const ctrCurr = sentCurr > 0 ? (clicksCurr / sentCurr) * 100 : null;
+    const ctrPrev = sentPrev > 0 ? (clicksPrev / sentPrev) * 100 : null;
+
+    $("ctr-badge").innerHTML = ctrCurr === null ? "No sends yet" : badgePointsHTML(ctrCurr, ctrPrev, periodWord(cfg), fmtPct1);
+
+    const cfgLocal = PERIODS[activePeriod];
+    const bucketedRows = aggregate(rows, cfgLocal.granularity === "hour" ? "day" : cfgLocal.granularity, (d) => d.sent > 0 ? (d.clicks / d.sent) * 100 : 0).slice(-cfgLocal.buckets);
+    const labels = bucketedRows.map((r) => fmtLabel(r.key, cfgLocal.granularity === "hour" ? "day" : cfgLocal.granularity));
+    const values = bucketedRows.map((r) => r.value);
+    drawLineChart($("ctr-chart"), values, labels, "var(--bad)");
+
+    const note = cfg.granularity === "hour" ? " (daily data — campaigns aren't an hourly feed)" : "";
+    $("ctr-insight").innerHTML = ctrCurr === null ? `No sends yet ${periodWord(cfg)}` : `<b>${fmt(clicksCurr)}</b> clicks on <b>${fmt(sentCurr)}</b> sent ${periodWord(cfg)}${note}`;
   }
 
   function render(data) {
@@ -505,101 +676,12 @@
     $("period-caption").textContent = cfg.caption;
 
     renderRevenue(data.stripe || {}, cfg);
-    renderBookings(data.calcom || {}, cfg);
-    renderEmail(data.mailerlite || {}, cfg);
+    renderSessions(data.calcom || {}, cfg);
     renderWeb(data.cloudflareAnalytics || {}, cfg);
     renderYoutube(data.youtube || {}, cfg);
-  }
-
-  function statError(prefix, msg) {
-    $(`${prefix}-num`).textContent = "";
-    $(`${prefix}-delta`).innerHTML = `<div class="error-note">${msg}</div>`;
-    $(`${prefix}-caption`).textContent = "";
-  }
-  function panelError(prefix, msg) {
-    $(`${prefix}-badge`).innerHTML = "";
-    $(`${prefix}-chart`).innerHTML = "";
-    $(`${prefix}-insight`).innerHTML = `<span class="error-note">${msg}</span>`;
-  }
-
-  function renderRevenue(stripe, cfg) {
-    if (stripe.error) return panelError("revenue", stripe.error);
-    const rev = (d) => (d.revenueBook || 0) + (d.revenueCoaching || 0);
-    const curr = sumWindow(stripe.daily, cfg.days, rev);
-    const prev = sumPrevWindow(stripe.daily, cfg.days, rev);
-
-    $("revenue-badge").innerHTML = badgeHTML(curr, prev, periodWord(cfg), fmtMoney);
-    const b = bucketed(stripe.daily, (d) => d.revenueBook || 0);
-    const c = bucketed(stripe.daily, (d) => d.revenueCoaching || 0);
-    drawDualAreaChart(
-      $("revenue-chart"),
-      { values: b.values, color: "var(--accent)" },
-      { values: c.values, color: "var(--accent2)" },
-      b.labels
-    );
-
-    const windowCut = cutoffKey(cfg.days);
-    const best = (stripe.daily || [])
-      .filter((d) => d.date >= windowCut)
-      .map((d) => ({ date: d.date, revenue: (d.revenueBook || 0) + (d.revenueCoaching || 0) }))
-      .filter((d) => d.revenue > 0)
-      .sort((a, b2) => b2.revenue - a.revenue)[0];
-    $("revenue-insight").innerHTML = best
-      ? `Best day ${periodWord(cfg)}: <b>${fmtLabel(best.date, "day")} · ${fmtMoney(best.revenue)}</b>`
-      : `No sales yet ${periodWord(cfg)}`;
-  }
-
-  function renderBookings(calcom, cfg) {
-    if (calcom.error) return statError("bookings", calcom.error);
-    const curr = sumWindow(calcom.daily, cfg.days, (d) => d.count || 0);
-    const prev = sumPrevWindow(calcom.daily, cfg.days, (d) => d.count || 0);
-    const completionRate = calcom.totalBooked ? Math.round((calcom.completed / calcom.totalBooked) * 100) : null;
-
-    $("bookings-num").textContent = fmt(curr);
-    $("bookings-delta").innerHTML = deltaHTML(curr, prev, "vs prior period");
-    $("bookings-caption").innerHTML =
-      `${fmt(calcom.completed)} completed · ${completionRate === null ? "—" : completionRate + "%"} rate · ${fmt(calcom.upcoming)} upcoming`;
-  }
-
-  function renderEmail(mail, cfg) {
-    if (mail.error) return panelError("email", mail.error);
-    const newSubs = sumWindow(mail.newSubscribersDaily, cfg.days, (d) => d.count || 0);
-    const prevSubs = sumPrevWindow(mail.newSubscribersDaily, cfg.days, (d) => d.count || 0);
-    const emailsSent = sumWindow(mail.emailsSentDaily, cfg.days, (d) => d.count || 0);
-
-    $("email-badge").innerHTML = badgeHTML(mail.totalActiveSubscribers, null, "total subscribers", fmt);
-    const b = bucketed(mail.newSubscribersDaily, (d) => d.count || 0);
-    drawAxisBarChart($("email-chart"), b.values, b.labels, "var(--warn)");
-    $("email-insight").innerHTML = `<b>${fmt(newSubs)}</b> new subscribers and <b>${fmt(emailsSent)}</b> emails sent ${periodWord(cfg)}`;
-  }
-
-  function renderWeb(web, cfg) {
-    if (web.error) return panelError("web", web.error);
-    const visitors = sumWindow(web.daily, cfg.days, (d) => d.uniqueVisitors || 0);
-    const prevVisitors = sumPrevWindow(web.daily, cfg.days, (d) => d.uniqueVisitors || 0);
-    const pageViews = sumWindow(web.daily, cfg.days, (d) => d.pageViews || 0);
-
-    $("web-badge").innerHTML = badgeHTML(visitors, prevVisitors, periodWord(cfg), fmt);
-    const b = bucketed(web.daily, (d) => d.uniqueVisitors || 0);
-    drawAxisLineChart($("web-chart"), b.values, b.labels, "var(--good)");
-    $("web-insight").innerHTML = `<b>${fmt(pageViews)}</b> page views · ${visitors ? (pageViews / visitors).toFixed(1) : "—"} per visit`;
-  }
-
-  function renderYoutube(yt, cfg) {
-    if (yt.error) return statError("youtube", yt.error);
-    const viewsThis = sumWindow(yt.daily, cfg.days, (d) => d.views || 0);
-    const viewsPrev = sumPrevWindow(yt.daily, cfg.days, (d) => d.views || 0);
-    const watchMinutesThis = sumWindow(yt.watchTimeDaily || [], cfg.days, (d) => d.minutes || 0);
-    const watchHoursThis = watchMinutesThis / 60;
-    const watchHoursLine = (yt.watchTimeDaily && yt.watchTimeDaily.length)
-      ? ` · ${watchHoursThis.toFixed(watchHoursThis < 10 ? 1 : 0)} hrs watched ${periodWord(cfg)}`
-      : "";
-
-    $("youtube-num").textContent = fmt(yt.subscriberCount);
-    $("youtube-delta").innerHTML = deltaHTML(viewsThis, viewsPrev, "views vs prior");
-    $("youtube-caption").innerHTML = yt.latestVideo
-      ? `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos${watchHoursLine}<br>Latest: <b>${yt.latestVideo.title}</b>`
-      : `${fmt(yt.totalViews)} lifetime views · ${fmt(yt.videoCount)} videos${watchHoursLine}`;
+    renderEmailSubs(data.mailerlite || {}, cfg);
+    renderEmailSent(data.mailerlite || {}, cfg);
+    renderCTR(data.mailerlite || {}, cfg);
   }
 
   async function load() {
@@ -616,11 +698,7 @@
     } catch (err) {
       $("updated-at").textContent = "Failed to load";
       const msg = String(err.message || err);
-      statError("youtube", msg);
-      statError("bookings", msg);
-      panelError("email", msg);
-      panelError("web", msg);
-      panelError("revenue", msg);
+      ["revenue", "sessions", "web", "yt-subs", "yt-views", "yt-watch", "email-subs", "email-sent", "ctr"].forEach((p) => statError(p, msg));
     } finally {
       btn.disabled = false;
       btn.textContent = "Refresh";
