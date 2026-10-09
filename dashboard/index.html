@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Teracopia Pulse</title>
+<style>
+  :root {
+    --bg: #eef1f7;
+    --card: #ffffff;
+    --fg: #16192b;
+    --muted: #7a7f99;
+    --border: #e6e8f1;
+    --accent: #3b6ef6;
+    --accent-soft: #e4ebff;
+    --accent2: #16b3a3;
+    --accent2-soft: #d9f5f1;
+    --warn: #f0a93e;
+    --warn-soft: #fdf0dc;
+    --good: #19b366;
+    --bad: #e5484d;
+    --shadow: 0 1px 2px rgba(22,25,43,0.04), 0 8px 24px -12px rgba(22,25,43,0.10);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1120;
+      --card: #171b30;
+      --fg: #eef0fb;
+      --muted: #8d93bb;
+      --border: #272c4d;
+      --accent: #6d8dff;
+      --accent-soft: #233064;
+      --accent2: #3fd9c7;
+      --accent2-soft: #123733;
+      --warn: #f3b562;
+      --warn-soft: #3a2c15;
+      --good: #4fd98b;
+      --bad: #ff6b72;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    padding-inline: 20px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
+  }
+  main { width: 100%; max-width: 1180px; margin: 0 auto; }
+  .num, .big-num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+  header.page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .mark { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, var(--accent), var(--accent2)); flex: none; }
+  .brand h1 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .brand .sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .header-right { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--muted); }
+  #refresh-btn {
+    font-family: inherit;
+    background: var(--card);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  #refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+  #refresh-btn:disabled { opacity: 0.55; cursor: default; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .hero-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-card .label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .hero-card .big-num { font-size: 25px; font-weight: 700; letter-spacing: -0.01em; }
+  .hero-ratios { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .hero-ratios .row { display: flex; align-items: center; gap: 6px; }
+  .ratio-val { font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+  .ratio-val.up { color: var(--good); }
+  .ratio-val.down { color: var(--bad); }
+  .hero-chart { flex: 1; min-height: 46px; margin: 8px 0 2px; }
+  .hero-foot { font-size: 12.5px; color: var(--fg); font-weight: 600; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border); text-align: center; }
+  .hero-foot .muted { color: var(--muted); font-weight: 400; }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 2.1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: start;
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 18px 20px 20px;
+    min-width: 0;
+  }
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .tabs { display: flex; gap: 18px; }
+  .tab {
+    background: none; border: none; font-family: inherit; font-size: 13.5px; color: var(--muted);
+    padding: 6px 0; cursor: pointer; border-bottom: 2px solid transparent; font-weight: 500;
+  }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .range-group { display: flex; gap: 4px; background: var(--bg); border-radius: 8px; padding: 3px; }
+  .range-btn { font-family: inherit; border: none; background: none; font-size: 12px; color: var(--muted); padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+  .range-btn.active { background: var(--card); color: var(--fg); box-shadow: var(--shadow); font-weight: 600; }
+
+  .panel-title { font-size: 14px; font-weight: 600; margin: 14px 0 10px; }
+  .chart-wrap { min-width: 0; overflow-x: auto; }
+  svg.chart { width: 100%; height: auto; display: block; min-width: 440px; }
+  .chart-legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  .chart-legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .chart-legend i { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
+
+  .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .rank-list li { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .rank-list li:last-child { border-bottom: none; }
+  .rank-badge { width: 22px; height: 22px; border-radius: 50%; background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex: none; }
+  .rank-badge.top { background: var(--accent); color: #fff; }
+  .rank-day { flex: 1; min-width: 0; color: var(--fg); }
+  .rank-day .d { font-size: 11px; color: var(--muted); display: block; }
+  .rank-amt { font-weight: 700; font-size: 13px; }
+
+  .secondary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  .metric-row { display: flex; gap: 18px; margin-bottom: 14px; flex-wrap: wrap; }
+  .metric-row .m-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
+  .metric-row .m-num { font-size: 19px; font-weight: 700; }
+
+  .error-note { font-size: 12.5px; color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); border: 1px solid color-mix(in srgb, var(--bad) 30%, transparent); border-radius: 8px; padding: 8px 12px; }
+  .skeleton { color: var(--muted); font-size: 13px; padding: 6px 0; }
+
+  .pending-card { border-style: dashed; opacity: 0.8; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .pending-card p { font-size: 12.5px; color: var(--muted); margin: 4px 0 0; max-width: 56ch; }
+  .pending-tag { font-size: 11px; color: var(--muted); background: var(--bg); border-radius: 6px; padding: 4px 9px; white-space: nowrap; }
+
+  footer.page { text-align: center; font-size: 11.5px; color: var(--muted); padding-block: 18px 6px; }
+
+  @media (max-width: 920px) {
+    .hero-grid { grid-template-columns: repeat(2, 1fr); }
+    .main-grid { grid-template-columns: 1fr; }
+    .secondary-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .hero-grid { grid-template-columns: 1fr 1fr; }
+    .header-right { width: 100%; justify-content: space-between; }
+  }
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<main>
+  <header class="page">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <h1>Teracopia Pulse</h1>
+        <div class="sub">Private accountability dashboard</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="timestamp" id="updated-at">loading…</span>
+      <button id="refresh-btn" type="button">Refresh</button>
+    </div>
+  </header>
+
+  <div class="hero-grid" id="hero-grid">
+    <div class="hero-card"><div class="label">Total Sales</div><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="label">Visitors</div><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="label">Sessions</div><div class="skeleton">Loading…</div></div>
+    <div class="hero-card"><div class="label">Subscribers</div><div class="skeleton">Loading…</div></div>
+  </div>
+
+  <div class="main-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="tabs">
+          <button class="tab active" data-tab="sales" type="button">Revenue</button>
+          <button class="tab" data-tab="sessions" type="button">Sessions</button>
+        </div>
+        <div class="range-group" id="range-group">
+          <button class="range-btn" data-range="8" type="button">8w</button>
+          <button class="range-btn active" data-range="12" type="button">12w</button>
+          <button class="range-btn" data-range="26" type="button">26w</button>
+        </div>
+      </div>
+      <div class="panel-title" id="chart-title">Revenue trend — book vs. coaching</div>
+      <div class="chart-wrap"><svg class="chart" id="main-chart" viewBox="0 0 700 230"></svg></div>
+      <div class="chart-legend" id="main-legend">
+        <span><i style="background:var(--accent)"></i>Book</span>
+        <span><i style="background:var(--accent2)"></i>Coaching</span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" style="margin-top:0;">Best days (90d)</div>
+      <ul class="rank-list" id="rank-list"><li class="skeleton">Loading…</li></ul>
+    </div>
+  </div>
+
+  <div class="secondary-grid">
+    <div class="panel" id="panel-mail">
+      <div class="panel-title" style="margin-top:0;">Email — MailerLite</div>
+      <div class="metric-row" id="mail-metrics"><div class="skeleton">Loading…</div></div>
+      <div class="chart-wrap"><svg class="chart" id="mail-chart" viewBox="0 0 560 120"></svg></div>
+    </div>
+    <div class="panel" id="panel-web">
+      <div class="panel-title" style="margin-top:0;">Website traffic — Cloudflare</div>
+      <div class="metric-row" id="web-metrics"><div class="skeleton">Loading…</div></div>
+      <div class="chart-wrap"><svg class="chart" id="web-chart" viewBox="0 0 560 120"></svg></div>
+    </div>
+  </div>
+
+  <div class="panel pending-card">
+    <div>
+      <div class="panel-title" style="margin:0 0 2px;">YouTube</div>
+      <p>Subscriber count and watch time need a Google Cloud API key (and OAuth for watch time). Ask Claude to set this up when you're ready.</p>
+    </div>
+    <span class="pending-tag">Not connected</span>
+  </div>
+
+  <footer class="page">Private — unlisted page, blocked from search indexing</footer>
+</main>
+
+<script>
+(() => {
+  const ENDPOINT = "/api/dashboard";
+  const TOKEN = "gp5c4QlFdT9EhmdzIZ9uZRrPiATqOv866oFbBZ3C6Jc";
+
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : new Intl.NumberFormat("en-US").format(n);
+  const fmtMoney = (n) => (n === null || n === undefined || Number.isNaN(n)) ? "—" : "$" + new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(n);
+  const fmtDate = (iso) => {
+    const d = new Date(iso + (iso.length <= 10 ? "T00:00:00Z" : ""));
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  };
+
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function drawBarChart(svg, series, opts) {
+    const vb = svg.getAttribute("viewBox").split(" ").map(Number);
+    const W = vb[2], H = vb[3];
+    const padL = opts.compact ? 4 : 34, padB = opts.compact ? 4 : 22, padT = 8, padR = 6;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    svg.innerHTML = "";
+    const labels = opts.labels;
+    const n = labels.length;
+    if (!n) {
+      const t = svgEl("text", { x: W / 2, y: H / 2, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12 });
+      t.textContent = "No data yet";
+      svg.appendChild(t);
+      return;
+    }
+    const stacked = opts.stacked;
+    const totals = stacked
+      ? series[0].values.map((_, i) => series.reduce((s, ser) => s + (ser.values[i] || 0), 0))
+      : series.flatMap((s) => s.values);
+    const max = Math.max(1, ...totals);
+    const gap = plotW / n;
+    const barW = Math.max(2, gap * (opts.barWidthRatio || 0.55));
+
+    if (!opts.compact) {
+      const gridN = 3;
+      for (let g = 0; g <= gridN; g++) {
+        const y = padT + plotH - (plotH * g) / gridN;
+        svg.appendChild(svgEl("line", { x1: padL, x2: W - padR, y1: y, y2: y, stroke: "var(--border)", "stroke-width": 1 }));
+        const val = Math.round((max * g) / gridN);
+        const t = svgEl("text", { x: padL - 8, y: y + 3, "text-anchor": "end", fill: "var(--muted)", "font-size": 9 });
+        t.textContent = val;
+        svg.appendChild(t);
+      }
+    }
+
+    labels.forEach((label, i) => {
+      const x = padL + gap * i + (gap - barW) / 2;
+      let yCursor = padT + plotH;
+      if (stacked) {
+        series.forEach((ser) => {
+          const v = ser.values[i] || 0;
+          const h = (v / max) * plotH;
+          yCursor -= h;
+          if (h > 0) svg.appendChild(svgEl("rect", { x, y: yCursor, width: barW, height: h, fill: ser.color, rx: 2 }));
+        });
+      } else {
+        const sub = barW / series.length;
+        series.forEach((ser, si) => {
+          const v = ser.values[i] || 0;
+          const h = (v / max) * plotH;
+          svg.appendChild(svgEl("rect", { x: x + si * sub, y: padT + plotH - h, width: Math.max(2, sub - 1), height: h, fill: ser.color, rx: 2 }));
+        });
+      }
+      if (!opts.compact && (n <= 16 || i % Math.ceil(n / 12) === 0)) {
+        const t = svgEl("text", { x: x + barW / 2, y: H - 6, "text-anchor": "middle", fill: "var(--muted)", "font-size": 9 });
+        t.textContent = label;
+        svg.appendChild(t);
+      }
+    });
+  }
+
+  function drawAreaChart(svg, values, color) {
+    const vb = svg.getAttribute("viewBox").split(" ").map(Number);
+    const W = vb[2], H = vb[3];
+    svg.innerHTML = "";
+    if (!values.length) return;
+    const max = Math.max(1, ...values);
+    const step = W / Math.max(1, values.length - 1);
+    const pts = values.map((v, i) => [i * step, H - (v / max) * (H - 6) - 2]);
+    const line = pts.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+    const area = line + ` L${(pts[pts.length - 1][0]).toFixed(1)},${H} L0,${H} Z`;
+    const gradId = "grad-" + Math.random().toString(36).slice(2, 8);
+    const defs = svgEl("defs", {});
+    const grad = svgEl("linearGradient", { id: gradId, x1: 0, y1: 0, x2: 0, y2: 1 });
+    const s1 = svgEl("stop", { offset: "0%", "stop-color": color, "stop-opacity": 0.35 });
+    const s2 = svgEl("stop", { offset: "100%", "stop-color": color, "stop-opacity": 0.02 });
+    grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(svgEl("path", { d: area, fill: `url(#${gradId})` }));
+    svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    const last = pts[pts.length - 1];
+    svg.appendChild(svgEl("circle", { cx: last[0], cy: last[1], r: 3, fill: color }));
+  }
+
+  function heroRatio(cls, label, value) {
+    if (value === null || value === undefined) return "";
+    const up = value >= 0;
+    const arrow = up ? "▲" : "▼";
+    return `<div class="row">${label} <span class="ratio-val ${up ? "up" : "down"}">${arrow} ${Math.abs(value).toFixed(0)}%</span></div>`;
+  }
+
+  function pctChange(curr, prev) {
+    if (!prev) return null;
+    return ((curr - prev) / prev) * 100;
+  }
+
+  let FULL_DATA = null;
+  let activeTab = "sales";
+  let activeRange = 12;
+
+  function renderHero(data) {
+    const stripe = data.stripe || {};
+    const calcom = data.calcom || {};
+    const mail = data.mailerlite || {};
+    const web = data.cloudflareAnalytics || {};
+
+    // Sales tile
+    const weekly = stripe.weekly || [];
+    const wLast = weekly[weekly.length - 1], wPrev = weekly[weekly.length - 2];
+    const wLastRev = wLast ? wLast.revenueBook + wLast.revenueCoaching : null;
+    const wPrevRev = wPrev ? wPrev.revenueBook + wPrev.revenueCoaching : null;
+    const daily = stripe.daily || [];
+    const dLast = daily[daily.length - 1], dPrev = daily[daily.length - 2];
+    const dLastRev = dLast ? dLast.revenueBook + dLast.revenueCoaching : null;
+    const dPrevRev = dPrev ? dPrev.revenueBook + dPrev.revenueCoaching : null;
+    $("hero-grid").children[0].innerHTML = stripe.error ? `<div class="label">Total Sales</div><div class="error-note">${stripe.error}</div>` : `
+      <div class="label">Total Sales <span style="color:var(--muted);font-weight:400;">· 90d</span></div>
+      <div class="big-num">${fmtMoney(stripe.totals.revenueAll)}</div>
+      <div class="hero-ratios">
+        ${heroRatio("w", "Week ratio", pctChange(wLastRev, wPrevRev))}
+        ${heroRatio("d", "Day ratio", pctChange(dLastRev, dPrevRev))}
+      </div>
+      <div class="hero-foot">Day Sales <span class="muted">${fmtMoney(dLastRev)}</span></div>`;
+
+    // Visitors tile
+    const webDaily = web.daily || [];
+    $("hero-grid").children[1].innerHTML = web.error ? `<div class="label">Visitors</div><div class="error-note">${web.error}</div>` : `
+      <div class="label">Visitors <span style="color:var(--muted);font-weight:400;">· 7d</span></div>
+      <div class="big-num">${fmt(web.last7Days.uniqueVisitors)}</div>
+      <div class="hero-chart"><svg viewBox="0 0 220 46" id="hero-web-chart"></svg></div>
+      <div class="hero-foot">Day visits <span class="muted">${fmt(webDaily.length ? webDaily[webDaily.length - 1].uniqueVisitors : null)}</span></div>`;
+    if (!web.error) drawAreaChart($("hero-web-chart"), webDaily.map((d) => d.uniqueVisitors), "var(--accent2)");
+
+    // Sessions tile
+    const calcomDaily = (calcom.daily || []).slice(-10);
+    const completionRate = calcom.totalBooked ? Math.round((calcom.completed / calcom.totalBooked) * 100) : null;
+    $("hero-grid").children[2].innerHTML = calcom.error ? `<div class="label">Sessions</div><div class="error-note">${calcom.error}</div>` : `
+      <div class="label">Sessions <span style="color:var(--muted);font-weight:400;">· 30d</span></div>
+      <div class="big-num">${fmt(calcom.bookedLast30Days)}</div>
+      <div class="hero-chart"><svg viewBox="0 0 220 46" id="hero-calcom-chart"></svg></div>
+      <div class="hero-foot">Completion rate <span class="muted">${completionRate === null ? "—" : completionRate + "%"}</span></div>`;
+    if (!calcom.error) drawBarChart($("hero-calcom-chart"), [{ values: calcomDaily.map((d) => d.count), color: "var(--accent)" }], { labels: calcomDaily.map((d) => d.date), compact: true });
+
+    // Subscribers tile
+    $("hero-grid").children[3].innerHTML = mail.error ? `<div class="label">Subscribers</div><div class="error-note">${mail.error}</div>` : `
+      <div class="label">Subscribers <span style="color:var(--muted);font-weight:400;">· total</span></div>
+      <div class="big-num">${fmt(mail.totalActiveSubscribers)}</div>
+      <div class="hero-ratios"><div class="row">New this week <span class="ratio-val up">▲ ${fmt(mail.newLast7Days)}</span></div></div>
+      <div class="hero-foot">Emails sent (30d) <span class="muted">${fmt(mail.emailsSentLast30Days)}</span></div>`;
+  }
+
+  function renderMainChart() {
+    if (!FULL_DATA) return;
+    const stripe = FULL_DATA.stripe || {};
+    const calcom = FULL_DATA.calcom || {};
+    if (activeTab === "sales") {
+      $("chart-title").textContent = "Revenue trend — book vs. coaching";
+      $("main-legend").style.display = "flex";
+      if (stripe.error) { $("main-chart").innerHTML = ""; return; }
+      const weekly = (stripe.weekly || []).slice(-activeRange);
+      drawBarChart($("main-chart"), [
+        { values: weekly.map((w) => w.revenueBook), color: "var(--accent)" },
+        { values: weekly.map((w) => w.revenueCoaching), color: "var(--accent2)" },
+      ], { labels: weekly.map((w) => fmtDate(w.weekStart)), stacked: true });
+    } else {
+      $("chart-title").textContent = "Sessions booked, daily";
+      $("main-legend").style.display = "none";
+      if (calcom.error) { $("main-chart").innerHTML = ""; return; }
+      const daily = calcom.daily || [];
+      drawBarChart($("main-chart"), [{ values: daily.map((d) => d.count), color: "var(--accent)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+    }
+  }
+
+  function renderRankList(stripe) {
+    const el = $("rank-list");
+    if (stripe.error) { el.innerHTML = `<li class="error-note">${stripe.error}</li>`; return; }
+    const days = (stripe.daily || [])
+      .map((d) => ({ date: d.date, revenue: (d.revenueBook || 0) + (d.revenueCoaching || 0) }))
+      .filter((d) => d.revenue > 0)
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 7);
+    if (!days.length) { el.innerHTML = `<li class="skeleton">No sales yet in this window</li>`; return; }
+    el.innerHTML = days.map((d, i) => `
+      <li>
+        <span class="rank-badge${i < 3 ? " top" : ""}">${i + 1}</span>
+        <span class="rank-day">${fmtDate(d.date)}</span>
+        <span class="rank-amt">${fmtMoney(d.revenue)}</span>
+      </li>`).join("");
+  }
+
+  function renderMail(mail) {
+    const el = $("mail-metrics");
+    if (mail.error) { el.innerHTML = `<div class="error-note">${mail.error}</div>`; return; }
+    el.innerHTML = `
+      <div><div class="m-label">New (7d)</div><div class="m-num">${fmt(mail.newLast7Days)}</div></div>
+      <div><div class="m-label">New (30d)</div><div class="m-num">${fmt(mail.newLast30Days)}</div></div>
+      <div><div class="m-label">Campaigns (30d)</div><div class="m-num">${fmt(mail.campaignsSentLast30Days)}</div></div>`;
+    const daily = mail.newSubscribersDaily || [];
+    drawBarChart($("mail-chart"), [{ values: daily.map((d) => d.count), color: "var(--warn)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+  }
+
+  function renderWeb(web) {
+    const el = $("web-metrics");
+    if (web.error) { el.innerHTML = `<div class="error-note">${web.error}</div>`; return; }
+    el.innerHTML = `
+      <div><div class="m-label">Requests (7d)</div><div class="m-num">${fmt(web.last7Days.requests)}</div></div>
+      <div><div class="m-label">Page views (7d)</div><div class="m-num">${fmt(web.last7Days.pageViews)}</div></div>`;
+    const daily = web.daily || [];
+    drawBarChart($("web-chart"), [{ values: daily.map((d) => d.uniqueVisitors), color: "var(--accent2)" }], { labels: daily.map((d) => fmtDate(d.date)) });
+  }
+
+  async function load() {
+    const btn = $("refresh-btn");
+    btn.disabled = true;
+    btn.textContent = "Refreshing…";
+    $("updated-at").textContent = "loading…";
+    try {
+      const res = await fetch(ENDPOINT, { headers: { "X-Dashboard-Token": TOKEN } });
+      if (!res.ok) throw new Error(`Dashboard API returned ${res.status}`);
+      const data = await res.json();
+      FULL_DATA = data;
+      renderHero(data);
+      renderMainChart();
+      renderRankList(data.stripe || { error: "no data" });
+      renderMail(data.mailerlite || { error: "no data" });
+      renderWeb(data.cloudflareAnalytics || { error: "no data" });
+      $("updated-at").textContent = "Updated " + new Date(data.generatedAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    } catch (err) {
+      $("updated-at").textContent = "Failed to load";
+      const msg = `<div class="error-note">Couldn't reach the dashboard API: ${String(err.message || err)}</div>`;
+      $("hero-grid").innerHTML = `<div class="hero-card">${msg}</div>`.repeat(4);
+      $("mail-metrics").innerHTML = msg;
+      $("web-metrics").innerHTML = msg;
+      $("rank-list").innerHTML = `<li>${msg}</li>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Refresh";
+    }
+  }
+
+  document.querySelectorAll(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeTab = btn.dataset.tab;
+      renderMainChart();
+    });
+  });
+  document.querySelectorAll(".range-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".range-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeRange = Number(btn.dataset.range);
+      renderMainChart();
+    });
+  });
+  $("refresh-btn").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

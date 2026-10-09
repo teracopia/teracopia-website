@@ -447,10 +447,12 @@ async function fetchStripeDashboardData(env) {
 
   const paid = sessions.filter((s) => s.payment_status === "paid");
 
-  const dailyMap = new Map(); // date -> {book, coaching}
-  const weeklyMap = new Map(); // weekStart -> {book, coaching}
+  const dailyMap = new Map(); // date -> {book, coaching, revenueBook, revenueCoaching}
+  const weeklyMap = new Map(); // weekStart -> {book, coaching, revenueBook, revenueCoaching}
   let totalBook = 0;
   let totalCoaching = 0;
+  let revenueBook = 0;
+  let revenueCoaching = 0;
 
   for (const session of paid) {
     const items = session.line_items?.data || [];
@@ -459,20 +461,27 @@ async function fetchStripeDashboardData(env) {
     const created = new Date(session.created * 1000);
     const dKey = dayKey(created);
     const wKey = startOfWeek(created);
+    const amount = (session.amount_total || 0) / 100;
 
-    if (!dailyMap.has(dKey)) dailyMap.set(dKey, { date: dKey, book: 0, coaching: 0 });
-    if (!weeklyMap.has(wKey)) weeklyMap.set(wKey, { weekStart: wKey, book: 0, coaching: 0 });
+    if (!dailyMap.has(dKey)) dailyMap.set(dKey, { date: dKey, book: 0, coaching: 0, revenueBook: 0, revenueCoaching: 0 });
+    if (!weeklyMap.has(wKey)) weeklyMap.set(wKey, { weekStart: wKey, book: 0, coaching: 0, revenueBook: 0, revenueCoaching: 0 });
 
     if (hasCoaching) {
       // Coaching purchases include the book free — count the sale as
       // coaching, not double-counted as a separate book sale.
       dailyMap.get(dKey).coaching++;
+      dailyMap.get(dKey).revenueCoaching += amount;
       weeklyMap.get(wKey).coaching++;
+      weeklyMap.get(wKey).revenueCoaching += amount;
       totalCoaching++;
+      revenueCoaching += amount;
     } else if (hasBook) {
       dailyMap.get(dKey).book++;
+      dailyMap.get(dKey).revenueBook += amount;
       weeklyMap.get(wKey).book++;
+      weeklyMap.get(wKey).revenueBook += amount;
       totalBook++;
+      revenueBook += amount;
     }
   }
 
@@ -481,7 +490,14 @@ async function fetchStripeDashboardData(env) {
 
   return {
     windowDays: 90,
-    totals: { book: totalBook, coaching: totalCoaching, all: totalBook + totalCoaching },
+    totals: {
+      book: totalBook,
+      coaching: totalCoaching,
+      all: totalBook + totalCoaching,
+      revenueBook: Math.round(revenueBook * 100) / 100,
+      revenueCoaching: Math.round(revenueCoaching * 100) / 100,
+      revenueAll: Math.round((revenueBook + revenueCoaching) * 100) / 100,
+    },
     daily,
     weekly,
   };
