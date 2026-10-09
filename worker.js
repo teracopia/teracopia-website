@@ -597,7 +597,21 @@ async function fetchMailerLiteData(env) {
   const dailyMap = new Map();
   let cursor = null;
   let fetched = 0;
-  let firstPage = true;
+
+  // The paginated list endpoint's meta has no total count — MailerLite
+  // requires a separate limit=0 request, which returns {"total": N}.
+  try {
+    const totalRes = await fetch(
+      `https://connect.mailerlite.com/api/subscribers?filter[status]=active&limit=0`,
+      { headers }
+    );
+    if (totalRes.ok) {
+      const totalBody = await totalRes.json();
+      totalActiveSubscribers = totalBody.total ?? null;
+    }
+  } catch (err) {
+    // Non-fatal — total is a bonus metric alongside the daily breakdown.
+  }
 
   while (fetched < 500) {
     const params = new URLSearchParams();
@@ -609,10 +623,6 @@ async function fetchMailerLiteData(env) {
     const res = await fetch(`https://connect.mailerlite.com/api/subscribers?${params.toString()}`, { headers });
     if (!res.ok) throw new Error(`MailerLite subscribers failed: ${res.status}`);
     const body = await res.json();
-    if (firstPage) {
-      totalActiveSubscribers = body.total ?? body.meta?.total ?? body.meta?.page?.total ?? null;
-      firstPage = false;
-    }
     const page = body.data || [];
     if (!page.length) break;
 
