@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 {{THEME_INIT}}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>You're In - Teracopia</title>
+<title>Purchase Complete - Teracopia</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -23,7 +23,8 @@
 
   .success-panel {
     max-width: 560px; margin: 48px auto 0; background: var(--bg-panel);
-    border: 1px solid var(--line); border-radius: 8px; padding: 36px; text-align: center;
+    border: 2px solid var(--deep-blue); border-radius: 8px; padding: 36px; text-align: center;
+    box-shadow: 0 0 40px rgba(108,140,238,0.35);
   }
   .success-panel p { color: var(--ink-soft); margin: 0 0 22px; }
   .success-panel .btn { width: 100%; max-width: 360px; }
@@ -39,14 +40,14 @@
 {{NAV:none}}
 
 <section class="start-hero wrap">
-  <span class="eyebrow">YOU'RE IN</span>
-  <h1 style="margin-top: 14px;">Thank You, Your Book Is on Its Way</h1>
-  <p>Your purchase went through, and your copy of "Your Simple Guide to Lucid Dreaming" is downloading now. We're also sending it straight to your inbox, so you'll have it either way.</p>
+  <span class="eyebrow">PURCHASE COMPLETE</span>
+  <h1 style="margin-top: 14px;">Order Successful</h1>
+  <p>Your purchase of "Your Simple Guide to Lucid Dreaming" was successful, and your copy is downloading now. We're also sending it straight to your inbox, so you'll have it either way.</p>
 </section>
 
 <section class="wrap">
   <div class="success-panel">
-    <p>If the download didn't start on its own, use the button below. We've also emailed your copy and a receipt to the address you checked out with: if you don't see it in a minute or two, take a look in your spam or promotions folder, since first emails from a new sender sometimes land there.</p>
+    <p>If the download didn't start on its own, use the button below. We've also emailed your copy and a receipt to the address you checked out with: if you don't see it in a minute or two, take a look in your spam folder, since first emails from a new sender sometimes land there.</p>
     <a class="btn btn-primary" id="manual-download" href="#">Download Your Book</a>
     <p id="download-status" aria-live="polite"></p>
   </div>

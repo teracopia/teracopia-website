@@ -78,33 +78,6 @@
     cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
 
-  .purchase-modal {
-    display: none; position: fixed; inset: 0; z-index: 220;
-    align-items: center; justify-content: center;
-    background: rgba(5,7,12,0.86);
-    padding: 24px;
-  }
-  .purchase-modal.open { display: flex; }
-  .purchase-modal-inner {
-    position: relative; max-width: 480px; width: 100%;
-    background: var(--bg-panel); border: 2px solid var(--deep-blue); border-radius: 8px;
-    padding: 40px 32px 32px; text-align: center;
-    box-shadow: 0 0 40px rgba(108,140,238,0.35), 0 30px 80px -20px rgba(0,0,0,0.6);
-  }
-  .purchase-modal-close {
-    position: absolute; top: 14px; left: 14px;
-    width: 34px; height: 34px; border-radius: 50%;
-    background: var(--panel-navy); border: 1px solid var(--line);
-    color: var(--ink); font-size: 1.2rem; line-height: 1;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-  }
-  .purchase-modal-close:hover { filter: brightness(1.3); }
-  .purchase-modal .eyebrow { font-size: 0.85rem; }
-  .purchase-modal h2 { font-size: 1.5rem; margin: 10px 0 14px; }
-  .purchase-modal p { color: var(--ink-soft); margin: 0 0 20px; font-size: 0.97rem; }
-  .purchase-modal .btn { width: 100%; }
-  .purchase-modal-status { font-size: 0.85rem; color: var(--ink-soft); margin-top: 12px; }
-
 </style>
 <script type="application/ld+json">
 {
@@ -213,60 +186,6 @@
   })();
 </script>
 
-
-<div class="purchase-modal" id="purchase-modal" role="dialog" aria-modal="true" aria-labelledby="purchase-modal-title">
-  <div class="purchase-modal-inner">
-    <button class="purchase-modal-close" id="purchase-modal-close" aria-label="Close">&times;</button>
-    <span class="eyebrow">PURCHASE COMPLETE</span>
-    <h2 id="purchase-modal-title">Order Successful</h2>
-    <p>Your purchase of "Your Simple Guide to Lucid Dreaming" was successful, and your copy is downloading now. We're also sending it straight to your inbox, so you'll have it either way.</p>
-    <p>If the download didn't start on its own, use the button below. We've also emailed your copy and a receipt to the address you checked out with: if you don't see it in a minute or two, take a look in your spam folder, since first emails from a new sender sometimes land there.</p>
-    <a class="btn btn-primary" id="purchase-modal-download" href="#">Download Your Book</a>
-    <p class="purchase-modal-status" id="purchase-modal-status" aria-live="polite"></p>
-  </div>
-</div>
-
-<script>
-  (function () {
-    var params = new URLSearchParams(window.location.search);
-    var sessionId = params.get('session_id');
-    if (!sessionId) return;
-
-    var modal = document.getElementById('purchase-modal');
-    var closeBtn = document.getElementById('purchase-modal-close');
-    var downloadBtn = document.getElementById('purchase-modal-download');
-    var statusEl = document.getElementById('purchase-modal-status');
-
-    var downloadUrl = '/download/ebook?session_id=' + encodeURIComponent(sessionId);
-    downloadBtn.href = downloadUrl;
-
-    function closeModal() {
-      modal.classList.remove('open');
-      // Back to the clean "buy the book" page, no purchase details left in the URL.
-      window.history.replaceState({}, '', '/book.html');
-    }
-
-    modal.classList.add('open');
-
-    // Trigger the download as a background action (not a page navigation) so
-    // this modal stays visible instead of appearing to freeze the page.
-    var a = document.createElement('a');
-    a.href = downloadUrl;
-    a.setAttribute('download', '');
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    if (statusEl) statusEl.textContent = 'Your download should appear in your browser shortly.';
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function (e) {
-      if (e.target === modal) closeModal();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
-    });
-  })();
-</script>
 
 {{FOOTER}}
 
