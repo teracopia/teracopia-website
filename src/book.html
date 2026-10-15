@@ -87,9 +87,9 @@
   .purchase-modal.open { display: flex; }
   .purchase-modal-inner {
     position: relative; max-width: 480px; width: 100%;
-    background: var(--bg-panel); border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg-panel); border: 2px solid var(--deep-blue); border-radius: 8px;
     padding: 40px 32px 32px; text-align: center;
-    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6);
+    box-shadow: 0 0 40px rgba(108,140,238,0.35), 0 30px 80px -20px rgba(0,0,0,0.6);
   }
   .purchase-modal-close {
     position: absolute; top: 14px; left: 14px;
@@ -218,8 +218,9 @@
   <div class="purchase-modal-inner">
     <button class="purchase-modal-close" id="purchase-modal-close" aria-label="Close">&times;</button>
     <span class="eyebrow">YOU'RE IN</span>
-    <h2 id="purchase-modal-title">Thank You, Your Book Is on Its Way</h2>
-    <p>Your purchase went through, and your copy of "Your Simple Guide to Lucid Dreaming" is downloading now. We're also sending it straight to your inbox, so you'll have it either way. If you don't see the email in a minute or two, check your spam or promotions folder, since first emails from a new sender sometimes land there.</p>
+    <h2 id="purchase-modal-title">Order Successful</h2>
+    <p>Your purchase of "Your Simple Guide to Lucid Dreaming" was successful, and your copy is downloading now. We're also sending it straight to your inbox, so you'll have it either way.</p>
+    <p>If the download didn't start on its own, use the button below. We've also emailed your copy and a receipt to the address you checked out with: if you don't see it in a minute or two, take a look in your spam folder, since first emails from a new sender sometimes land there.</p>
     <a class="btn btn-primary" id="purchase-modal-download" href="#">Download Your Book</a>
     <p class="purchase-modal-status" id="purchase-modal-status" aria-live="polite"></p>
   </div>
