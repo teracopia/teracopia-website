@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+{{THEME_INIT}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You're In - Teracopia</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="#102EA0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=Jost:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css">
+<style>
+  .start-hero { padding-top: 96px; padding-bottom: 20px; text-align: center; }
+  .start-hero .eyebrow { font-size: 1rem; }
+  .start-hero h1 { font-size: clamp(2.2rem, 5vw, 3rem); }
+  .start-hero p { margin: 20px auto 0; max-width: 40em; color: var(--ink-soft); font-size: 1.1rem; }
+
+  .success-panel {
+    max-width: 560px; margin: 48px auto 0; background: var(--bg-panel);
+    border: 1px solid var(--line); border-radius: 8px; padding: 36px; text-align: center;
+  }
+  .success-panel p { color: var(--ink-soft); margin: 0 0 22px; }
+  .success-panel .btn { width: 100%; max-width: 360px; }
+  .success-note {
+    text-align: center; margin-top: 28px; font-size: 0.95rem; color: var(--ink-soft);
+    max-width: 34em; margin-left: auto; margin-right: auto;
+  }
+  #download-status { font-size: 0.9rem; color: var(--ink-soft); margin-top: 14px; }
+</style>
+</head>
+<body>
+
+{{NAV:none}}
+
+<section class="start-hero wrap">
+  <span class="eyebrow">YOU'RE IN</span>
+  <h1 style="margin-top: 14px;">Thank You, Your Book Is on Its Way</h1>
+  <p>Your purchase went through, and your copy of "Your Simple Guide to Lucid Dreaming" is downloading now. We're also sending it straight to your inbox, so you'll have it either way.</p>
+</section>
+
+<section class="wrap">
+  <div class="success-panel">
+    <p>If the download didn't start on its own, use the button below. We've also emailed your copy and a receipt to the address you checked out with: if you don't see it in a minute or two, take a look in your spam or promotions folder, since first emails from a new sender sometimes land there.</p>
+    <a class="btn btn-primary" id="manual-download" href="#">Download Your Book</a>
+    <p id="download-status" aria-live="polite"></p>
+  </div>
+
+  <p class="success-note">Questions, or your copy never shows up anywhere? Just reply to your receipt email or reach out at <a href="mailto:hello@teracopia.com" style="color: var(--deep-blue);">hello@teracopia.com</a>.</p>
+</section>
+
+{{FOOTER}}
+
+<script src="/assets/nav.js" defer></script>
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+    var sessionId = params.get('session_id');
+    var statusEl = document.getElementById('download-status');
+    var manualBtn = document.getElementById('manual-download');
+
+    if (!sessionId) {
+      if (statusEl) statusEl.textContent = "We couldn't find your order details on this link. Use the button above, or email hello@teracopia.com and we'll send your copy directly.";
+      return;
+    }
+
+    var downloadUrl = '/download/ebook?session_id=' + encodeURIComponent(sessionId);
+    manualBtn.href = downloadUrl;
+
+    // Trigger the download as a background action (not a page navigation)
+    // so this confirmation page stays on screen instead of appearing to
+    // freeze while the file downloads.
+    var a = document.createElement('a');
+    a.href = downloadUrl;
+    a.setAttribute('download', '');
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    if (statusEl) statusEl.textContent = 'Your download should appear in your browser shortly.';
+  })();
+</script>
+</body>
+</html>
