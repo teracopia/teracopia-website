@@ -20,7 +20,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: clip; }
+html { scroll-behavior: smooth; overflow-x: clip; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 body {
   margin: 0;

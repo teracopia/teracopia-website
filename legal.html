@@ -34,7 +34,9 @@
   .legal-nav a {
     font-family: 'Jost', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em;
     text-transform: uppercase; text-decoration: none; color: var(--deep-blue); margin: 0 16px;
+    white-space: nowrap; display: inline-block;
   }
+  .legal-nav { display: flex; flex-wrap: wrap; justify-content: center; row-gap: 12px; }
   .legal-nav a:hover { color: var(--mid-blue); }
 
   .legal-body { padding-top: 0; padding-bottom: 100px; }
