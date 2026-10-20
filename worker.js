@@ -72,6 +72,10 @@ export default {
       return handleCheckSubscriber(request, env);
     }
 
+    if (url.pathname === "/signup" && request.method === "POST") {
+      return handleSignup(request, env);
+    }
+
     if (url.pathname === "/api/dashboard" && request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: dashboardCorsHeaders() });
     }
@@ -201,6 +205,93 @@ async function handleCheckSubscriber(request, env) {
     return jsonResponse(alreadySubscribed);
   } catch (err) {
     return jsonResponse(false);
+  }
+}
+
+// POST /signup — server-side replacement for the homepage form's old
+// direct browser -> MailerLite fetch(). That direct call worked fine from
+// a normal browser (verified 2026-10-20), but silently failed for at least
+// one real visitor opening the site from Telegram's in-app browser: a
+// fetch straight to a third-party marketing domain like
+// assets.mailerlite.com is exactly the kind of request iOS tracking
+// protection, in-app browsers, and ad/tracker blockers are prone to
+// quietly block, with no usable error to show. Routing through our own
+// domain removes that whole failure class, same pattern as the ebook
+// buyer sync below (MAILERLITE_API_KEY, server-side call to MailerLite's
+// real API instead of a client-side call to a marketing endpoint).
+//
+// Body (JSON): { name, email, website }. "website" is a honeypot field,
+// kept empty and hidden in the real form via CSS + tabindex="-1" +
+// aria-hidden + autocomplete="off" -- a human never fills it in, a bot
+// filling every field usually does. A non-empty honeypot gets a 200
+// "success" response (so a bot doesn't learn anything useful) but is
+// never actually sent to MailerLite.
+async function handleSignup(request, env) {
+  const jsonResponse = (status, body) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    });
+
+  if (!env.MAILERLITE_API_KEY) {
+    return jsonResponse(500, {
+      success: false,
+      message: "Signups are temporarily unavailable. Please email hello@teracopia.com and we'll get you the guide directly.",
+    });
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (err) {
+    return jsonResponse(400, { success: false, message: "Something went wrong. Please try again." });
+  }
+
+  const email = typeof body.email === "string" ? body.email.trim() : "";
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  const honeypot = typeof body.website === "string" ? body.website.trim() : "";
+
+  // Bot caught by the honeypot: pretend success, do nothing.
+  if (honeypot) {
+    return jsonResponse(200, { success: true });
+  }
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!emailOk) {
+    return jsonResponse(400, { success: false, message: "Please enter a valid email address." });
+  }
+
+  try {
+    const fields = {};
+    if (name) fields.name = name;
+
+    const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        fields,
+        groups: [MAILERLITE_FREE_GUIDE_GROUP_ID],
+      }),
+    });
+
+    if (!res.ok) {
+      return jsonResponse(502, {
+        success: false,
+        message: "Something went wrong. Please try again, or email hello@teracopia.com and I'll send it to you directly.",
+      });
+    }
+
+    return jsonResponse(200, { success: true });
+  } catch (err) {
+    return jsonResponse(502, {
+      success: false,
+      message: "Something went wrong. Please try again, or email hello@teracopia.com and I'll send it to you directly.",
+    });
   }
 }
 
