@@ -257,16 +257,16 @@ nav.site-nav {
 .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
 /* FORM (signup capture) */
-.capture { margin-top: 44px; display: flex; flex-direction: column; gap: 12px; max-width: 480px; width: 100%; }
+.capture { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; max-width: 480px; width: 100%; }
 .capture input[type="email"], .capture input[type="text"] {
-  width: 100%; flex: none; padding: 16px 20px; border-radius: 2px; border: 2px solid var(--line);
+  width: 100%; flex: none; padding: 13px 20px; border-radius: 2px; border: 2px solid var(--line);
   background: var(--surface); font-family: 'Manrope', sans-serif; font-weight: 400; font-size: 1.02rem;
   color: var(--ink); outline: none;
 }
 .capture input[type="email"]:focus, .capture input[type="text"]:focus { border-color: var(--deep-blue); }
 .capture button {
   display: flex; align-items: center; justify-content: center; line-height: 1;
-  width: 100%; padding: 16px 30px; border-radius: 2px; border: 2px solid var(--logo-blue); background: var(--logo-blue);
+  width: 100%; padding: 15px 30px; border-radius: 2px; border: 2px solid var(--logo-blue); background: var(--logo-blue);
   color: var(--white); font-family: 'Jost', sans-serif; font-size: 0.92rem; font-weight: 500; letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer; transition: background 0.2s ease, color 0.2s ease; white-space: nowrap;

@@ -45,10 +45,11 @@
   #signup-form { scroll-margin-top: 22vh; }
 
   .hero h1 .hl { color: var(--deep-blue); text-shadow: 0 0 18px rgba(108,140,238,0.4); }
+  .mobile-break { display: none; }
 
   .hero {
     position: relative;
-    padding-top: 28px;
+    padding-top: 12px;
     padding-bottom: 28px;
     text-align: center;
     display: flex;
@@ -61,8 +62,8 @@
   .hero-video-wrap {
     position: relative;
     width: 100%;
-    max-width: 380px;
-    margin-bottom: 16px;
+    max-width: 640px;
+    margin-bottom: 10px;
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid rgba(108,140,238,0.5);
@@ -87,17 +88,18 @@
 
   .hero .content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
-  .hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.7rem); max-width: 16em; line-height: 1.15; }
+  .hero h1 { font-size: clamp(2.3rem, 5.3vw, 3.8rem); max-width: 14em; }
 
   .hero-sub {
-    margin-top: 10px;
+    margin-top: 6px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 20px;
     padding-right: 20px;
     font-family: 'Manrope', sans-serif;
-    font-size: 1.02rem;
+    font-size: 1.08rem;
     font-weight: 400;
+    line-height: 1.35;
     color: var(--ink-soft);
     max-width: 46em;
     width: 100%;
@@ -126,11 +128,19 @@
     .book-teaser-grid .book-cover-wrap { max-width: 180px; margin: 0 auto; transform: translateX(6px); }
     .book-teaser-grid h2 { font-size: 1.45rem; }
 
-    .hero { padding-top: 20px; padding-bottom: 24px; }
-    .hero-video-wrap { max-width: 100%; margin-bottom: 14px; border-radius: 12px; }
-    .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem); }
+    .hero { padding-top: 24px; padding-bottom: 28px; }
+    .hero-video-wrap { max-width: 100%; margin-bottom: 16px; border-radius: 12px; }
+    .hero h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
     .hero h1 .hl { white-space: nowrap; }
-    .hero-sub { margin-top: 10px; font-size: 0.95rem; padding-left: 24px; padding-right: 24px; }
+    .hero-sub { margin-top: 10px; font-size: 1rem; padding-left: 24px; padding-right: 24px; }
+    .mobile-break { display: block; }
+  }
+
+  @media (min-width: 721px) {
+    .hero { padding-top: 22px; padding-bottom: 40px; }
+    .hero-video-wrap { margin-bottom: 16px; }
+    .hero-sub { margin-top: 14px; font-size: 1.1rem; line-height: 1.55; }
+    .capture { margin-top: 18px; }
   }
 
   /* BRAND DIVIDER (currently unused, kept for reuse)
@@ -242,7 +252,7 @@
     </script>
 
     <h1>Lucid Dreaming <span class="hl">Is a Skill</span>.<br>You Can Learn It.</h1>
-    <p class="hero-sub">I built a simple practice from thousands of my own lucid dreams.<br>This free Quick Start is the first step, with proven methods you can start using tonight.</p>
+    <p class="hero-sub">I built a simple practice from<br class="mobile-break"> thousands of my own lucid dreams.<br>This free Quick Start is the first step,<br class="mobile-break"> with proven methods you can start using.</p>
 
     <form id="signup-form" action="/signup" class="capture" method="post">
       <ul class="capture-errors" data-element="errors" data-group="alert"></ul>
