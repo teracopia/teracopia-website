@@ -48,8 +48,8 @@
 
   .hero {
     position: relative;
-    padding-top: 88px;
-    padding-bottom: 96px;
+    padding-top: 28px;
+    padding-bottom: 28px;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -58,42 +58,45 @@
   }
 
 
-  .hero-mark-wrap {
+  .hero-video-wrap {
     position: relative;
-    width: 245px;
-    height: 245px;
-    margin-bottom: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(108,140,238,0.5);
+    box-shadow: 0 0 30px rgba(108,140,238,0.25);
+    background: #000;
   }
 
-  .hero-mark-svg { width: 245px; height: 245px; overflow: visible; }
+  .hero-video { display: block; width: 100%; height: auto; aspect-ratio: 1928 / 1080; }
+  .hero-video::-webkit-media-controls-overlay-play-button,
+  .hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
 
-  .hero-glow-circle {
-    transform-origin: 80px 80px;
-    animation: mark-breathe 5.5s ease-in-out infinite;
+  .hero-video-play {
+    position: absolute; inset: 0; margin: auto; width: 36px; height: 36px;
+    border-radius: 50%; background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.85);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;
+    backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+    transition: opacity 0.2s ease, transform 0.2s ease; z-index: 2;
   }
-
-  @keyframes mark-breathe {
-    0%, 100% { transform: scale(0.92); opacity: 0.75; }
-    50% { transform: scale(1.08); opacity: 1; }
-  }
-
-  @media (prefers-reduced-motion: reduce) { .hero-glow-circle { animation: none; } }
+  .hero-video-play:hover { background: rgba(255,255,255,0.30); transform: scale(1.06); }
+  .hero-video-play svg { width: 15px; height: 15px; fill: #fff; margin-left: 2px; }
+  .hero-video-play.is-hidden { opacity: 0; pointer-events: none; }
 
   .hero .content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
-  .hero h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); max-width: 14em; }
+  .hero h1 { font-size: clamp(1.9rem, 4.2vw, 2.7rem); max-width: 16em; line-height: 1.15; }
 
   .hero-sub {
-    margin-top: 28px;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 20px;
     padding-right: 20px;
     font-family: 'Manrope', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.02rem;
     font-weight: 400;
     color: var(--ink-soft);
     max-width: 46em;
@@ -123,12 +126,11 @@
     .book-teaser-grid .book-cover-wrap { max-width: 180px; margin: 0 auto; transform: translateX(6px); }
     .book-teaser-grid h2 { font-size: 1.45rem; }
 
-    .hero { padding-top: 32px; padding-bottom: 64px; }
-    .hero-mark-wrap { width: 130px; height: 130px; margin-bottom: 16px; }
-    .hero-mark-svg { width: 130px; height: 130px; }
-    .hero h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+    .hero { padding-top: 20px; padding-bottom: 24px; }
+    .hero-video-wrap { max-width: 100%; margin-bottom: 14px; border-radius: 12px; }
+    .hero h1 { font-size: clamp(1.7rem, 7vw, 2.2rem); }
     .hero h1 .hl { white-space: nowrap; }
-    .hero-sub { margin-top: 18px; font-size: 1.05rem; padding-left: 24px; padding-right: 24px; }
+    .hero-sub { margin-top: 10px; font-size: 0.95rem; padding-left: 24px; padding-right: 24px; }
   }
 
   /* BRAND DIVIDER (currently unused, kept for reuse)
@@ -183,23 +185,26 @@
 
 <section class="hero wrap" id="hero">
   <div class="content">
-    <div class="hero-mark-wrap">
-      <svg class="hero-mark-svg" viewBox="-50 -50 260 260" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#102EA0" stop-opacity="0.702"/>
-            <stop offset="45%" stop-color="#102EA0" stop-opacity="0.234"/>
-            <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle class="hero-glow-circle" cx="80" cy="80" r="150" fill="url(#heroGlow)"/>
-        <g class="hero-mark-shape">
-          <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
-            stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
-          <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
-        </g>
-      </svg>
+    <div class="hero-video-wrap">
+      <video id="hero-video" class="hero-video" poster="/assets/hero-video-poster.jpg" controls playsinline preload="metadata">
+        <source src="/assets/hero-video.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="hero-video-play" aria-label="Play video" onclick="document.getElementById('hero-video').play()">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="8,5 8,19 19,12"/></svg>
+      </button>
     </div>
+    <script>
+      (function(){
+        var v = document.getElementById('hero-video');
+        var btn = document.querySelector('.hero-video-play');
+        if (!v || !btn) return;
+        function hide(){ btn.classList.add('is-hidden'); }
+        function show(){ btn.classList.remove('is-hidden'); }
+        v.addEventListener('play', hide);
+        v.addEventListener('pause', show);
+        v.addEventListener('ended', show);
+      })();
+    </script>
 
     <h1>Lucid Dreaming <span class="hl">Is a Skill</span>.<br>You Can Learn It.</h1>
     <p class="hero-sub">I built a simple practice from thousands of my own lucid dreams.<br>This free Quick Start is the first step, with proven methods you can start using tonight.</p>
