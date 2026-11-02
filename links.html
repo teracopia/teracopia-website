@@ -28,13 +28,12 @@
 <style>
   .links-page { padding-top: 48px; padding-bottom: 64px; }
   .links-hero { text-align: center; margin-bottom: 36px; }
-  .links-hero .links-mark {
-    width: 64px; height: 64px; margin: 0 auto 18px;
+  .links-brand {
+    display: inline-flex; align-items: center; gap: 14px; justify-content: center;
+    text-decoration: none; margin-bottom: 18px;
   }
-  .links-hero h1 {
-    font-family: 'Jost', sans-serif; font-weight: 600; letter-spacing: 0.08em;
-    text-transform: uppercase; font-size: 1.4rem; margin: 0 0 10px; color: var(--ink);
-  }
+  .links-brand svg { width: 44px; height: 44px; flex-shrink: 0; }
+  .links-brand .brand-word { font-size: 1.5rem; }
   .links-hero p { color: var(--ink-soft); font-size: 1rem; max-width: 30em; margin: 0 auto; }
 
   .links-list {
@@ -42,7 +41,7 @@
     max-width: 420px; margin: 0 auto;
   }
   .link-card {
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
     width: 100%; padding: 18px 24px; border-radius: 4px;
     font-family: 'Jost', sans-serif; font-weight: 500; font-size: 1rem;
     letter-spacing: 0.02em; text-decoration: none; text-align: center;
@@ -55,16 +54,7 @@
     text-transform: uppercase; font-size: 0.92rem; letter-spacing: 0.08em; font-weight: 600;
   }
   .link-card.link-primary:hover { filter: brightness(1.25); box-shadow: 0 0 26px rgba(54,84,196,0.6); border-color: var(--deep-blue); color: var(--white); }
-
-  .links-social { display: flex; justify-content: center; gap: 16px; margin-top: 30px; }
-  .links-social a {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 48px; height: 48px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.25); color: var(--ink-soft);
-    font-family: 'Jost', sans-serif; font-weight: 600; font-size: 0.75rem;
-    text-decoration: none; letter-spacing: 0.02em; transition: border-color 0.2s ease, color 0.2s ease;
-  }
-  .links-social a:hover { border-color: var(--deep-blue); color: var(--deep-blue); }
+  .link-card svg { flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -108,35 +98,39 @@
 
 <section class="links-page wrap">
   <div class="links-hero">
-    <svg class="links-mark" viewBox="-20 -35 200 200" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="linksGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#3654C4" stop-opacity="0.95"/>
-          <stop offset="45%" stop-color="#102EA0" stop-opacity="0.45"/>
-          <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <circle cx="80" cy="80" r="115" fill="url(#linksGlow)"/>
-      <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
-        stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
-      <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
-    </svg>
-    <h1>Teracopia</h1>
-    <p>Unlocking your higher self through lucid dreaming, out of body experience, and sleep. Everything, in one place.</p>
+    <a class="links-brand" href="/">
+      <svg viewBox="-20 -35 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="linksGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#3654C4" stop-opacity="0.95"/>
+            <stop offset="45%" stop-color="#102EA0" stop-opacity="0.45"/>
+            <stop offset="72%" stop-color="#102EA0" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="80" cy="80" r="115" fill="url(#linksGlow)"/>
+        <path d="M 80,20 Q 94.3,71.8 132,110 Q 80,96.5 28,110 Q 65.7,71.8 80,20 Z"
+          stroke="#102EA0" stroke-width="8" fill="#FFFFFF" stroke-linejoin="miter" stroke-linecap="butt"/>
+        <circle cx="80" cy="80" r="17.75" stroke="#102EA0" stroke-width="5" fill="#FFFFFF"/>
+      </svg>
+      <span class="brand-word">TERACOPIA</span>
+    </a>
+    <p>Unlocking your higher self through lucid dreaming, out of body experience, and sleep.</p>
   </div>
 
   <div class="links-list">
-    <a class="link-card link-primary" href="/downloads/teracopia-lucid-dreaming-quick-start-guide.pdf">Get the Free Lucid Dreaming Guide</a>
-    <a class="link-card" href="/book.html">The Lucid Dreaming Book</a>
-    <a class="link-card" href="/coaching.html">1:1 Coaching</a>
-    <a class="link-card" href="https://www.youtube.com/@Teracopiamusic">Sleep &amp; Meditation Music (YouTube)</a>
-    <a class="link-card" href="/about.html">About Teracopia</a>
-  </div>
-
-  <div class="links-social">
-    <a href="https://www.tiktok.com/@teracopia" aria-label="TikTok">TT</a>
-    <a href="https://www.instagram.com/teracopia" aria-label="Instagram">IG</a>
-    <a href="mailto:hello@teracopia.com" aria-label="Email">@</a>
+    <a class="link-card link-primary" href="/downloads/teracopia-lucid-dreaming-quick-start-guide.pdf">Get the Free Quick Start</a>
+    <a class="link-card" href="/book.html">Buy <em>Your Simple Guide to Lucid Dreaming</em></a>
+    <a class="link-card" href="https://cal.com/teracopia/15min" target="_blank" rel="noopener">Book Your Free Intro Call for 1:1 Coaching</a>
+    <a class="link-card" href="https://www.youtube.com/@Teracopiamusic" target="_blank" rel="noopener">
+      <svg width="22" height="16" viewBox="0 0 28 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M27.4 3.1a3.5 3.5 0 0 0-2.46-2.48C22.74 0 14 0 14 0S5.26 0 3.06.62A3.5 3.5 0 0 0 .6 3.1 36.6 36.6 0 0 0 0 10a36.6 36.6 0 0 0 .6 6.9 3.5 3.5 0 0 0 2.46 2.48C5.26 20 14 20 14 20s8.74 0 10.94-.62a3.5 3.5 0 0 0 2.46-2.48A36.6 36.6 0 0 0 28 10a36.6 36.6 0 0 0-.6-6.9Z" fill="#FF0000"/>
+        <path d="M11.2 14.3 18.5 10l-7.3-4.3Z" fill="#FFFFFF"/>
+      </svg>
+      Sleep Music YouTube Channel
+    </a>
+    <a class="link-card" href="https://www.tiktok.com/@teracopia" target="_blank" rel="noopener">TikTok @Teracopia</a>
+    <a class="link-card" href="https://www.instagram.com/teracopia" target="_blank" rel="noopener">Instagram @Teracopia</a>
+    <a class="link-card" href="mailto:hello@teracopia.com">Email Hello@teracopia.com</a>
   </div>
 </section>
 
