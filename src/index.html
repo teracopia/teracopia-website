@@ -236,7 +236,9 @@
           function onMessage(e){
             var data;
             try { data = JSON.parse(e.data); } catch (err) { return; }
-            if (data.event === 'onStateChange' && data.info === 0) {
+            // The embed reports state through infoDelivery.info.playerState (0 = ended),
+            // not a standalone onStateChange postMessage like the full IFrame API gives you.
+            if (data.event === 'infoDelivery' && data.info && data.info.playerState === 0) {
               window.removeEventListener('message', onMessage);
               resetToPoster();
             }
