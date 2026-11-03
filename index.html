@@ -244,13 +244,24 @@
         function load(){
           var iframe = document.createElement('iframe');
           iframe.className = 'hero-video';
-          iframe.src = 'https://www.youtube-nocookie.com/embed/ruzL6SwruOE?autoplay=1&rel=0&modestbranding=1&playsinline=1&vq=hd1080';
+          var origin = encodeURIComponent(window.location.origin);
+          iframe.src = 'https://www.youtube-nocookie.com/embed/ruzL6SwruOE?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=' + origin;
           iframe.title = 'Welcome to Teracopia';
           iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
           iframe.setAttribute('allowfullscreen', '');
           poster.replaceWith(iframe);
           btn.classList.add('is-hidden');
           btn.setAttribute('tabindex', '-1');
+          // vq= is dead on the iframe embed; the only thing that still works is
+          // asking the player directly via postMessage once it's listening.
+          var tries = 0;
+          var hdTimer = setInterval(function(){
+            tries++;
+            if (iframe.contentWindow) {
+              iframe.contentWindow.postMessage(JSON.stringify({event:'command', func:'setPlaybackQuality', args:['hd1080']}), '*');
+            }
+            if (tries >= 8) clearInterval(hdTimer);
+          }, 400);
         }
         btn.addEventListener('click', load);
       })();
