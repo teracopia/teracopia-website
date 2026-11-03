@@ -71,9 +71,8 @@
     background: #000;
   }
 
-  .hero-video { display: block; width: 100%; height: auto; aspect-ratio: 1928 / 1080; }
-  .hero-video::-webkit-media-controls-overlay-play-button,
-  .hero-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+  .hero-video, .hero-video-poster { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border: 0; }
+  .hero-video-poster { object-fit: cover; cursor: pointer; }
 
   .hero-video-play {
     position: absolute; inset: 0; margin: auto; width: 36px; height: 36px;
@@ -196,23 +195,29 @@
 <section class="hero wrap" id="hero">
   <div class="content">
     <div class="hero-video-wrap">
-      <video id="hero-video" class="hero-video" poster="/assets/hero-video-poster.jpg" controls playsinline preload="metadata">
-        <source src="/assets/hero-video.mp4" type="video/mp4">
-      </video>
-      <button type="button" class="hero-video-play" aria-label="Play video" onclick="document.getElementById('hero-video').play()">
+      <img id="hero-video-poster" class="hero-video-poster" src="https://i.ytimg.com/vi/ruzL6SwruOE/maxresdefault.jpg" alt="Welcome to Teracopia" loading="lazy">
+      <button type="button" id="hero-video-play" class="hero-video-play" aria-label="Play video">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polygon points="8,5 8,19 19,12"/></svg>
       </button>
     </div>
     <script>
       (function(){
-        var v = document.getElementById('hero-video');
-        var btn = document.querySelector('.hero-video-play');
-        if (!v || !btn) return;
-        function hide(){ btn.classList.add('is-hidden'); }
-        function show(){ btn.classList.remove('is-hidden'); }
-        v.addEventListener('play', hide);
-        v.addEventListener('pause', show);
-        v.addEventListener('ended', show);
+        var wrap = document.querySelector('.hero-video-wrap');
+        var btn = document.getElementById('hero-video-play');
+        var poster = document.getElementById('hero-video-poster');
+        if (!wrap || !btn || !poster) return;
+        function load(){
+          var iframe = document.createElement('iframe');
+          iframe.className = 'hero-video';
+          iframe.src = 'https://www.youtube-nocookie.com/embed/ruzL6SwruOE?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+          iframe.title = 'Welcome to Teracopia';
+          iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+          iframe.setAttribute('allowfullscreen', '');
+          poster.replaceWith(iframe);
+          btn.classList.add('is-hidden');
+          btn.setAttribute('tabindex', '-1');
+        }
+        btn.addEventListener('click', load);
       })();
     </script>
 
