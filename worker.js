@@ -76,16 +76,6 @@ export default {
       return handleSignup(request, env);
     }
 
-    // TEMPORARY one-off setup route: creates the utm_source/utm_medium/
-    // utm_campaign custom fields in MailerLite (required before the API
-    // will accept those keys on a subscriber upsert). Safe to call more
-    // than once -- MailerLite just 422s on a field that already exists,
-    // which this reports but doesn't treat as fatal. Remove this route
-    // once it's been hit a single time after deploy.
-    if (url.pathname === "/admin/setup-utm-fields" && request.method === "POST") {
-      return handleSetupUtmFields(env);
-    }
-
     if (url.pathname === "/api/dashboard" && request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: dashboardCorsHeaders() });
     }
@@ -236,34 +226,6 @@ async function handleCheckSubscriber(request, env) {
 // filling every field usually does. A non-empty honeypot gets a 200
 // "success" response (so a bot doesn't learn anything useful) but is
 // never actually sent to MailerLite.
-async function handleSetupUtmFields(env) {
-  if (!env.MAILERLITE_API_KEY) {
-    return new Response(JSON.stringify({ error: "MAILERLITE_API_KEY not configured" }), { status: 500 });
-  }
-  const headers = {
-    Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  const results = {};
-  for (const name of ["utm_source", "utm_medium", "utm_campaign"]) {
-    try {
-      const res = await fetch("https://connect.mailerlite.com/api/fields", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ name, type: "text" }),
-      });
-      const body = await res.json().catch(() => ({}));
-      results[name] = { status: res.status, body };
-    } catch (err) {
-      results[name] = { error: String(err) };
-    }
-  }
-  return new Response(JSON.stringify(results, null, 2), {
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
 async function handleSignup(request, env) {
   const jsonResponse = (status, body) =>
     new Response(JSON.stringify(body), {
