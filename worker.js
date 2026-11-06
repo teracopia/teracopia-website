@@ -56,9 +56,25 @@ const EBOOK_DOWNLOAD_NAME = "Your-Simple-Guide-to-Lucid-Dreaming.pdf";
 const MAILERLITE_EBOOK_BUYERS_GROUP_ID = "199232136794867305"; // "Ebook Buyers" group
 const MAILERLITE_FREE_GUIDE_GROUP_ID = "198878190159004793"; // "Free Guide Signups" group
 
+// Short, clean bio links for social profiles. These redirect to the real
+// destination with UTM tags attached, so e.g. Instagram's bio (which
+// truncates long query strings visually) can show a tidy
+// "teracopia.com/ig" while the attribution dashboard still sees which
+// platform sent the click.
+const SOCIAL_REDIRECTS = {
+  "/ig": "https://teracopia.com/?utm_source=instagram&utm_medium=bio",
+  "/fb": "https://teracopia.com/?utm_source=facebook&utm_medium=bio",
+  "/tt": "https://teracopia.com/?utm_source=tiktok&utm_medium=bio",
+  "/yt": "https://teracopia.com/?utm_source=youtube&utm_medium=bio",
+};
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (Object.prototype.hasOwnProperty.call(SOCIAL_REDIRECTS, url.pathname)) {
+      return Response.redirect(SOCIAL_REDIRECTS[url.pathname], 302);
+    }
 
     if (url.pathname === "/download/ebook") {
       return handleEbookDownload(request, env);
