@@ -66,6 +66,7 @@ const SOCIAL_REDIRECTS = {
   "/fb": "https://teracopia.com/?utm_source=facebook&utm_medium=bio",
   "/tt": "https://teracopia.com/?utm_source=tiktok&utm_medium=bio",
   "/yt": "https://teracopia.com/?utm_source=youtube&utm_medium=bio",
+  "/rd": "https://teracopia.com/?utm_source=reddit&utm_medium=bio",
 };
 
 export default {
