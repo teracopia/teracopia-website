@@ -1,3 +1,31 @@
+// First-touch UTM capture: records where a visitor first arrived from
+// (utm_source/utm_medium/utm_campaign) so the signup form on any page can
+// attribute a later signup back to the channel that actually brought them
+// in, even if they land on a blog post or /links.html first and sign up
+// from the homepage minutes later. First touch wins -- never overwritten
+// by a later visit -- and expires after 30 days like a normal attribution
+// window.
+(function () {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var source = params.get('utm_source');
+    if (!source) return;
+    var existing = null;
+    try { existing = JSON.parse(localStorage.getItem('teracopia_utm') || 'null'); } catch (e) {}
+    var THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+    if (existing && existing.ts && (Date.now() - existing.ts) < THIRTY_DAYS) return;
+    localStorage.setItem('teracopia_utm', JSON.stringify({
+      source: source,
+      medium: params.get('utm_medium') || '',
+      campaign: params.get('utm_campaign') || '',
+      ts: Date.now()
+    }));
+  } catch (e) {
+    // localStorage unavailable (private mode, etc.) -- attribution is a
+    // nice-to-have, never block anything on it.
+  }
+})();
+
 (function () {
   var toggle = document.querySelector('.nav-toggle');
   var menu = document.getElementById('nav-menu');

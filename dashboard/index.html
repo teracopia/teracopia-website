@@ -226,6 +226,14 @@
       <div class="insight-line" id="email-subs-insight"></div>
     </div>
 
+    <div class="card" id="card-email-source" style="--cat:var(--warn)">
+      <div class="panel-head">
+        <div class="panel-title"><span class="cat-dot"></span><span>Signups by Source (30d)</span></div>
+      </div>
+      <div id="email-source-list" style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px; margin-top:4px;"></div>
+      <div class="insight-line" id="email-source-insight"></div>
+    </div>
+
     <div class="card" id="card-email-sent" style="--cat:var(--warn)">
       <div class="panel-head">
         <div class="panel-title"><span class="cat-dot"></span><span>Emails Sent</span></div>
@@ -626,6 +634,36 @@
     $("email-subs-insight").innerHTML = `<b>${fmt(mail.totalActiveSubscribers)}</b> total active subscribers`;
   }
 
+  // Simple ranked bar-list, not a time chart -- the question this answers
+  // is "which channel", not "which day", so a chart axis would be noise.
+  function renderEmailSource(mail) {
+    const list = $("email-source-list");
+    const rows = mail.sourceCountsLast30Days || [];
+    if (mail.error) {
+      list.innerHTML = `<div style="color:var(--muted);font-size:13px;">Unavailable</div>`;
+      return;
+    }
+    if (!rows.length) {
+      list.innerHTML = `<div style="color:var(--muted);font-size:13px;">No signups in the last 30 days</div>`;
+      $("email-source-insight").innerHTML = "";
+      return;
+    }
+    const max = Math.max(...rows.map((r) => r.count));
+    const total = rows.reduce((sum, r) => sum + r.count, 0);
+    list.innerHTML = rows.slice(0, 6).map((r) => {
+      const pct = max > 0 ? Math.round((r.count / max) * 100) : 0;
+      return `
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:92px; flex:none; font-size:12.5px; color:var(--fg); text-transform:capitalize; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${r.source}</div>
+          <div style="flex:1; height:8px; background:var(--accent-soft); border-radius:4px; overflow:hidden;">
+            <div style="width:${pct}%; height:100%; background:var(--warn);"></div>
+          </div>
+          <div style="width:24px; flex:none; text-align:right; font-size:12.5px; font-weight:700; color:var(--fg);">${r.count}</div>
+        </div>`;
+    }).join("");
+    $("email-source-insight").innerHTML = `<b>${fmt(total)}</b> signups attributed, last 30 days`;
+  }
+
   function renderEmailSent(mail, cfg) {
     if (mail.error) return statError("email-sent", mail.error);
     // Campaign sends aren't a continuous hourly feed -- always daily data.
@@ -680,6 +718,7 @@
     renderWeb(data.cloudflareAnalytics || {}, cfg);
     renderYoutube(data.youtube || {}, cfg);
     renderEmailSubs(data.mailerlite || {}, cfg);
+    renderEmailSource(data.mailerlite || {});
     renderEmailSent(data.mailerlite || {}, cfg);
     renderCTR(data.mailerlite || {}, cfg);
   }

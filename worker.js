@@ -76,6 +76,16 @@ export default {
       return handleSignup(request, env);
     }
 
+    // TEMPORARY one-off setup route: creates the utm_source/utm_medium/
+    // utm_campaign custom fields in MailerLite (required before the API
+    // will accept those keys on a subscriber upsert). Safe to call more
+    // than once -- MailerLite just 422s on a field that already exists,
+    // which this reports but doesn't treat as fatal. Remove this route
+    // once it's been hit a single time after deploy.
+    if (url.pathname === "/admin/setup-utm-fields" && request.method === "POST") {
+      return handleSetupUtmFields(env);
+    }
+
     if (url.pathname === "/api/dashboard" && request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: dashboardCorsHeaders() });
     }
@@ -226,6 +236,34 @@ async function handleCheckSubscriber(request, env) {
 // filling every field usually does. A non-empty honeypot gets a 200
 // "success" response (so a bot doesn't learn anything useful) but is
 // never actually sent to MailerLite.
+async function handleSetupUtmFields(env) {
+  if (!env.MAILERLITE_API_KEY) {
+    return new Response(JSON.stringify({ error: "MAILERLITE_API_KEY not configured" }), { status: 500 });
+  }
+  const headers = {
+    Authorization: `Bearer ${env.MAILERLITE_API_KEY}`,
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  };
+  const results = {};
+  for (const name of ["utm_source", "utm_medium", "utm_campaign"]) {
+    try {
+      const res = await fetch("https://connect.mailerlite.com/api/fields", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ name, type: "text" }),
+      });
+      const body = await res.json().catch(() => ({}));
+      results[name] = { status: res.status, body };
+    } catch (err) {
+      results[name] = { error: String(err) };
+    }
+  }
+  return new Response(JSON.stringify(results, null, 2), {
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
 async function handleSignup(request, env) {
   const jsonResponse = (status, body) =>
     new Response(JSON.stringify(body), {
@@ -250,6 +288,18 @@ async function handleSignup(request, env) {
   const email = typeof body.email === "string" ? body.email.trim() : "";
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const honeypot = typeof body.website === "string" ? body.website.trim() : "";
+  // First-touch attribution, captured client-side (assets/nav.js) from the
+  // visitor's original ?utm_source=... link and replayed here at signup
+  // time, however many pages/days later that happens. Capped at 64 chars
+  // and limited to a safe charset so a malformed/abusive value can't blow
+  // up the MailerLite call or stuff junk into reporting.
+  const cleanUtm = (v) => {
+    const s = typeof v === "string" ? v.trim().slice(0, 64) : "";
+    return /^[A-Za-z0-9 _.-]*$/.test(s) ? s : "";
+  };
+  const utmSource = cleanUtm(body.utm_source);
+  const utmMedium = cleanUtm(body.utm_medium);
+  const utmCampaign = cleanUtm(body.utm_campaign);
 
   // Bot caught by the honeypot: pretend success, do nothing.
   if (honeypot) {
@@ -264,6 +314,12 @@ async function handleSignup(request, env) {
   try {
     const fields = {};
     if (name) fields.name = name;
+    // Only ever set on first touch -- MailerLite upserts by email, and a
+    // later signup attempt (different session, no utm params) must not
+    // blank out attribution that's already recorded for this subscriber.
+    if (utmSource) fields.utm_source = utmSource;
+    if (utmMedium) fields.utm_medium = utmMedium;
+    if (utmCampaign) fields.utm_campaign = utmCampaign;
 
     const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
@@ -752,6 +808,12 @@ async function fetchMailerLiteData(env) {
   const dailyMap = new Map();
   const hourlyMap = new Map();
   const hourlyCutoff = now - HOURLY_WINDOW_DAYS * 24 * 60 * 60 * 1000;
+  // Signups by first-touch UTM source, last 30 days -- this is what
+  // actually answers "which channel is bringing people in," as opposed to
+  // the daily/hourly totals above which don't break out where anyone came
+  // from. Subscribers from before this was wired up (or who arrived with
+  // no utm_source, e.g. typed the URL in directly) land in "direct / unknown".
+  const sourceCountsMap = new Map();
   let cursor = null;
   let fetched = 0;
 
@@ -791,7 +853,12 @@ async function fetchMailerLiteData(env) {
         break;
       }
       if (createdAt >= sevenDaysAgo) newLast7Days++;
-      if (createdAt >= thirtyDaysAgo) newLast30Days++;
+      if (createdAt >= thirtyDaysAgo) {
+        newLast30Days++;
+        const src = (sub.fields && sub.fields.utm_source) ? String(sub.fields.utm_source).trim().toLowerCase() : "";
+        const label = src || "direct / unknown";
+        sourceCountsMap.set(label, (sourceCountsMap.get(label) || 0) + 1);
+      }
       const dKey = dayKey(new Date(createdAt));
       dailyMap.set(dKey, (dailyMap.get(dKey) || 0) + 1);
       if (createdAt >= hourlyCutoff) {
@@ -875,8 +942,13 @@ async function fetchMailerLiteData(env) {
 
   const clickThroughDaily = [...clicksDailyMap.values()].sort((a, b) => a.date.localeCompare(b.date));
 
+  const sourceCountsLast30Days = [...sourceCountsMap.entries()]
+    .map(([source, count]) => ({ source, count }))
+    .sort((a, b) => b.count - a.count);
+
   return {
     totalActiveSubscribers,
+    sourceCountsLast30Days,
     newLast7Days,
     newLast30Days,
     newSubscribersDaily,

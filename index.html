@@ -486,6 +486,9 @@
     var nameInput = form.querySelector('input[name="fields[name]"]');
     var honeypotInput = form.querySelector('input[name="website"]');
 
+    var utm = null;
+    try { utm = JSON.parse(localStorage.getItem('teracopia_utm') || 'null'); } catch (e) {}
+
     checkAlreadySubscribed(email).then(function (alreadySubscribed) {
       return fetch('/signup', {
         method: 'POST',
@@ -493,7 +496,10 @@
         body: JSON.stringify({
           name: nameInput ? nameInput.value : '',
           email: email,
-          website: honeypotInput ? honeypotInput.value : ''
+          website: honeypotInput ? honeypotInput.value : '',
+          utm_source: utm ? utm.source : '',
+          utm_medium: utm ? utm.medium : '',
+          utm_campaign: utm ? utm.campaign : ''
         })
       })
         .then(function (res) { return res.json().catch(function () { return {}; }); })
